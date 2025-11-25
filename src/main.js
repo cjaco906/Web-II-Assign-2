@@ -40,9 +40,8 @@ const Product = {
   },
 };
 
-
 function singleProductView(product) {
-  const view = document.querySelector("#single-product-view");
+  const view = document.querySelector("#view");
 
   // clear old content
   view.innerHTML = "";
@@ -92,14 +91,13 @@ function singleProductView(product) {
   addBtn.id = "add-to-cart";
   addBtn.textContent = "Add to Cart";
 
-  // append 
+  // append
   info.appendChild(title);
   info.appendChild(description);
   info.appendChild(price);
   info.appendChild(qtyLabel);
   info.appendChild(addBtn);
 
-  
   main.appendChild(mainImg);
   main.appendChild(info);
 
@@ -134,10 +132,7 @@ document.querySelector("#test-product-btn").addEventListener("click", () => {
     title: "Test Product",
     description: "Testing view ",
     price: 39.99,
-    images: [
-      "https://picsum.photos/100?1",
-      "https://picsum.photos/100?2"
-    ]
+    images: ["https://picsum.photos/100?1", "https://picsum.photos/100?2"],
   };
 
   singleProductView(p);
