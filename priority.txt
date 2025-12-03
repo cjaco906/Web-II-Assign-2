@@ -1,6 +1,6 @@
 Todo first
 1. Single Product View
-2. Home View
-3. Shopping Cart View
+2. Shopping Cart View
+3. Browse View
 4. About Us View
-5. Browse View
+5. Home View
