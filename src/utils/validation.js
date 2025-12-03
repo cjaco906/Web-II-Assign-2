@@ -1,7 +1,9 @@
+import { Result } from "index";
+
 export const Validation = {
   getArray(name, value) {
     if (!name) {
-      return Result.error("No name found to validate for array", {
+      return Result.error("No name found to validate for type array", {
         name,
         value,
       });
@@ -15,7 +17,7 @@ export const Validation = {
   },
   getNumber(name, value) {
     if (!name) {
-      return Result.error("No name found to validate for number", {
+      return Result.error("No name found to validate for type number", {
         name,
         value,
       });
@@ -27,7 +29,7 @@ export const Validation = {
   },
   getString(name, value) {
     if (!name) {
-      return Result.error("No name found to validate for string", {
+      return Result.error("No name found to validate for type string", {
         name,
         value,
       });
