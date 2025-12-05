@@ -37,6 +37,24 @@ export const Result = {
       error: null,
     };
   },
+  short(result) {
+    return {
+      success(callback) {
+        if (result.ok) {
+          callback(result.data);
+        }
+
+        return result;
+      },
+      error(callback) {
+        if (result.error) {
+          callback(result.error);
+        }
+
+        return result;
+      },
+    };
+  },
 };
 
 export const Validation = {
@@ -114,7 +132,7 @@ export const Validation = {
       if (!(typeof value === "number")) {
         return Result.error(`Non-number '${name}' found`, { name, value });
       } else {
-        return Result.ok(value);
+        return Result.ok(+value);
       }
     }
 
@@ -147,27 +165,41 @@ function present(name, value, type) {
 }
 
 export const UIElements = {
-  getByIds(ids) {
-    return ids.map((value) => {
-      const element = document.getElementById(value);
+  create(parent, type, callback) {
+    const element = document.createElement(type);
+    parent.append(element);
 
-      if (element) {
-        return Result.ok(element);
-      } else {
-        return Result.error("HTML element not found by identifier", value);
-      }
-    });
+    if (callback) {
+      callback(element);
+    }
+
+    return element;
+  },
+  getByIds(ids) {
+    return Result.short(
+      ids.map((value) => {
+        const element = document.getElementById(value);
+
+        if (element) {
+          return Result.ok(element);
+        } else {
+          return Result.error("HTML element not found by identifier", value);
+        }
+      }),
+    );
   },
   getByClasses(classes) {
-    return classes.map((value) => {
-      const element = document.getElementsByClassName(value);
+    return Result.short(
+      classes.map((value) => {
+        const element = document.getElementsByClassName(value);
 
-      if (element) {
-        return Result.ok(element);
-      } else {
-        return Result.error("HTML element not found by class", value);
-      }
-    });
+        if (element) {
+          return Result.ok(element);
+        } else {
+          return Result.error("HTML element not found by class", value);
+        }
+      }),
+    );
   },
 };
 

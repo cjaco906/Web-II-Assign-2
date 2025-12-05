@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./src/style.css" rel="stylesheet" />
+    <link href="/src/style.css" rel="stylesheet" />
     <title>spa-js</title>
   </head>
   <body>
-    <header>
+    <header class="hidden">
       <nav>Hamburger Menu</nav>
-      <div class="logo mt-1"></div>
+      <div class="mt-1"></div>
       <nav>
         <ul>
           <li>Home</li>
@@ -21,22 +21,24 @@
       <div>Cart</div>
     </header>
     <main>
-        <button id="test-product-btn">Test Product View</button>
-        <button id="test-cart-btn">Test Cart View</button>
+      <!-- <button id="test-product-btn">Test Product View</button> -->
+      <!-- <button id="test-cart-btn">Test Cart View</button> -->
 
-      <article id="home"></article>
-      <article id="browse"></article>
-      <article id="product"></article>
-      <article id="shopping-cart"></article>
-      <dialog id="about-us"></dialog>
+      <article id="home" class="hidden"></article>
+      <article id="browse" class="hidden"></article>
+      <article id="product" class="hidden">
+        <div id="thumbnail" class="bg-green-500"></div>
+      </article>
+      <article id="shopping-cart" class="hidden"></article>
+      <dialog id="about-us" class="hidden"></dialog>
     </main>
     <footer>
-      <nav>
-        <ul>
-          <li>GitHub link</li>
-          <li>GitHub link</li>
-        </ul>
-      </nav>
+      <!-- <nav> -->
+      <!--   <ul> -->
+      <!--     <li>GitHub link</li> -->
+      <!--     <li>GitHub link</li> -->
+      <!--   </ul> -->
+      <!-- </nav> -->
     </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
