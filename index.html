@@ -9,46 +9,61 @@
     <title>spa-js</title>
   </head>
   <body>
-    <header class="hidden">
-      <nav>Hamburger Menu</nav>
-      <div class="mt-1"></div>
-      <nav>
-        <ul>
-          <li>Home</li>
-          <li>Browse</li>
-          <li>About Us</li>
-        </ul>
-      </nav>
-      <div>Cart</div>
-    </header>
+<header>
+  <nav class="navbar is-white" role="navigation">
+    
+
+    <!-- Logo generated using AI and website:logo.com -->
+     <div class="navbar-brand">
+      <a class="navbar-item">
+        <img src="/src/images/RamanLogo.png" alt="Raman Logo" style="height: 70px; width: auto;">
+      </a>
+    </div>
+
+    <div class="navbar-menu is-active">
+
+      <!-- CENTER LINKS -->
+      <div class="navbar-start is-flex is-justify-content-center" style="flex: 1;">
+        <a class="navbar-item" id="nav-home">Home</a>
+        <a class="navbar-item" id="nav-browse">Browse</a>
+        <a class="navbar-item" id="nav-about">About Us</a>
+      </div>
+
+      <!-- RIGHT SIDE CART -->
+<div class="navbar-end">
+  <a class="navbar-item" id="nav-cart">
+    <span class="icon">
+      <img src="/src/images/CartIcon.png" 
+           alt="Cart" 
+           style="height: 24px; width: auto;">
+    </span>
+  </a>
+</div>
+
+    </div>
+  </nav>
+</header>
+
+
+
     <main>
       <!-- <button id="test-product-btn">Test Product View</button> -->
       <!-- <button id="test-cart-btn">Test Cart View</button> -->
+<section class="section py-0 mt-4" id="hero">
+  <div class="container">
+    <div class="columns is-vcentered">
 
-      <article id="home" class="hidden">
-          <section class="hero is-fullheight-with-navbar">
-            <section
-  class="hero is-fullheight-with-navbar"
-  style="background-image: url('/src/images/background.webp'); 
-         background-size: contain; 
-         background-position: center;
-         background-repeat: no-repeat;">
-
-
-         
-
-    <div class="hero-body">
-      <div class="container has-text-centered">
-
-        <h1 class="title is-1 has-text-weight-light mb-5">
+      <!-- LEFT SIDE TEXT -->
+      <div class="column is-6">
+        <h1 class="title is-1 has-text-weight-light mb-4">
           Welcome to RAMAN
         </h1>
 
-        <p class="subtitle is-4 has-text-grey mb-6">
+        <p class="subtitle is-4 has-text-grey mb-5">
           Best Quality Clothes in the world
         </p>
 
-        <div class="buttons is-centered">
+        <div class="buttons">
           <button id="browse-btn" class="button is-black is-medium">
             Browse Products
           </button>
@@ -56,6 +71,22 @@
             About Us
           </button>
         </div>
+      </div>
+
+      <!-- RIGHT SIDE IMAGE -->
+      <div class="column is-6">
+        <figure class="image is-4by5">
+          <img 
+            src="/src/images/background.webp"
+            alt="Fashion model"
+            style="object-fit: cover; width: 100%; height: 100%; border-radius: 8px;"
+          >
+        </figure>
+      </div>
+
+    </div>
+  </div>
+</section>
      
 
       </div>
@@ -140,14 +171,29 @@
       <article id="shopping-cart" class="hidden"></article>
       <dialog id="about-us" class="hidden"></dialog>
     </main>
-    <footer>
-      <!-- <nav> -->
-      <!--   <ul> -->
-      <!--     <li>GitHub link</li> -->
-      <!--     <li>GitHub link</li> -->
-      <!--   </ul> -->
-      <!-- </nav> -->
-    </footer>
+
+ <footer class="footer has-background-light mt-6 py-6">
+  <div class="content has-text-centered">
+
+
+    <figure class="image is-128x128 is-inline-block">
+      <img src="/src/images/RamanLogo.png" alt="Raman Logo">
+    </figure>
+
+    <p class="has-text-grey mt-1">
+      Quality Clothing For Everyone
+    </p>
+
+     <p class="has-text-grey mt-1">
+      Github links
+    </p>
+
+    <p class="has-text-grey mt-5">
+      Made by Manjot and Ramos
+    </p>
+  </div>
+</footer>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

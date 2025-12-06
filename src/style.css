@@ -4,9 +4,64 @@
 }
 
 .card {
-  transition: box-shadow 0.5s ease;
+  transition: all 0.25s ease;
+  transform: scale(1);
 }
 
 .card:hover {
-  box-shadow: 0 20px 200px rgba(242, 1, 1, 0.1);
+  transform: scale(1.04);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
 }
+
+.navbar-item {
+  font-weight: 400;
+  transition: all 0.25s ease;
+}
+
+.navbar-item:hover {
+  font-weight: 600;
+  transform: scale(1.06);
+  color: black;
+}
+
+.navbar {
+  letter-spacing: 0.4px;
+}
+
+.navbar-item {
+  font-size: 1.05rem;
+}
+
+.navbar-item {
+  position: relative;
+}
+
+.navbar-item::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: black;
+  transition: width 0.25s ease;
+}
+
+.navbar-item:hover::after {
+  width: 100%;
+}
+
+.button {
+  transition: all 0.25s ease;
+}
+
+.button:hover {
+  transform: scale(1.06);
+  font-weight: 600;
+}
+
+.button {
+  border-radius: 10px;
+}
+
