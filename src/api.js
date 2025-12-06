@@ -10,7 +10,7 @@ export const ProductStorage = {
 
     if (cache.ok) {
       try {
-        return Result.ok(cache.data);
+        return Result.ok(JSON.parse(cache.data));
       } catch (error) {
         return Result.error("Failed to parse the products cache", {
           cache,
