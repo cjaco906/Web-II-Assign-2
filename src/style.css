@@ -52,6 +52,26 @@
   width: 100%;
 }
 
+
+.navbar {
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+}
+
+.navbar-item {
+  font-size: 1.15rem;      /* Bigger text */
+  padding: 0.8rem 1.4rem;  /* More padding */
+}
+
+.navbar-brand img {
+  height: 90px !important; /* Bigger logo */
+}
+
+#nav-cart img {
+  height: 28px !important; /* Bigger cart icon */
+}
+
+
 .button {
   transition: all 0.25s ease;
 }
