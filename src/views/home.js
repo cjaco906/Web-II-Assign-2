@@ -1,5 +1,5 @@
 import { UIClasses, UIAttributes, UIElements, UIStyles } from "../utils";
-import { ProductOverview } from "product";
+import { ProductOverview } from "./product";
 
 export const HomeViewIdentifiers = {
   VIEW: "home",
