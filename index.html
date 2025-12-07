@@ -4,166 +4,167 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
     <link href="/src/style.css" rel="stylesheet" />
     <title>spa-js</title>
   </head>
   <body>
-<header>
-  <nav class="navbar is-white" role="navigation">
-    
+    <header>
+      <nav class="navbar is-white" role="navigation">
+        <!-- Logo generated using AI and website:logo.com -->
+        <div class="navbar-brand">
+          <a class="navbar-item">
+            <img
+              src="/src/images/RamanLogo.png"
+              alt="Raman Logo"
+              style="height: 70px; width: auto"
+            />
+          </a>
+        </div>
 
-    <!-- Logo generated using AI and website:logo.com -->
-     <div class="navbar-brand">
-      <a class="navbar-item">
-        <img src="/src/images/RamanLogo.png" alt="Raman Logo" style="height: 70px; width: auto;">
-      </a>
-    </div>
+        <div class="navbar-menu is-active">
+          <!-- CENTER LINKS -->
+          <div
+            class="navbar-start is-flex is-justify-content-center"
+            style="flex: 1"
+          >
+            <a class="navbar-item" id="nav-home">Home</a>
+            <a class="navbar-item" id="nav-browse">Browse</a>
+            <a class="navbar-item" id="nav-about">About Us</a>
+          </div>
 
-    <div class="navbar-menu is-active">
-
-      <!-- CENTER LINKS -->
-      <div class="navbar-start is-flex is-justify-content-center" style="flex: 1;">
-        <a class="navbar-item" id="nav-home">Home</a>
-        <a class="navbar-item" id="nav-browse">Browse</a>
-        <a class="navbar-item" id="nav-about">About Us</a>
-      </div>
-
-      <!-- RIGHT SIDE CART -->
-<div class="navbar-end">
-  <a class="navbar-item" id="nav-cart">
-    <span class="icon">
-      <img src="/src/images/CartIcon.png" 
-           alt="Cart" 
-           style="height: 24px; width: auto;">
-    </span>
-  </a>
-</div>
-
-    </div>
-  </nav>
-</header>
-
-
+          <!-- RIGHT SIDE CART -->
+          <div class="navbar-end">
+            <a class="navbar-item" id="nav-cart">
+              <span class="icon">
+                <img
+                  src="/src/images/CartIcon.png"
+                  alt="Cart"
+                  style="height: 24px; width: auto"
+                />
+              </span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
 
     <main>
       <!-- <button id="test-product-btn">Test Product View</button> -->
       <!-- <button id="test-cart-btn">Test Cart View</button> -->
-<section class="section py-0 mt-4" id="hero">
-  <div class="container">
-    <div class="columns is-vcentered">
+      <section class="section py-0 mt-4" id="hero">
+        <div class="container">
+          <div class="columns is-vcentered">
+            <!-- LEFT SIDE TEXT -->
+            <div class="column is-6">
+              <h1 class="title is-1 has-text-weight-light mb-4">
+                Welcome to RAMAN
+              </h1>
 
-      <!-- LEFT SIDE TEXT -->
-      <div class="column is-6">
-        <h1 class="title is-1 has-text-weight-light mb-4">
-          Welcome to RAMAN
-        </h1>
+              <p class="subtitle is-4 has-text-grey mb-5">
+                Best Quality Clothes in the world
+              </p>
 
-        <p class="subtitle is-4 has-text-grey mb-5">
-          Best Quality Clothes in the world
-        </p>
-
-        <div class="buttons">
-          <button id="browse-btn" class="button is-black is-medium">
-            Browse Products
-          </button>
-          <button id="about-btn" class="button is-light is-medium">
-            About Us
-          </button>
-        </div>
-      </div>
-
-      <!-- RIGHT SIDE IMAGE -->
-      <div class="column is-6">
-        <figure class="image is-4by5">
-          <img 
-            src="/src/images/background.webp"
-            alt="Fashion model"
-            style="object-fit: cover; width: 100%; height: 100%; border-radius: 8px;"
-          >
-        </figure>
-      </div>
-
-    </div>
-  </div>
-</section>
-     
-
-      </div>
-    </div>
-  </section>
-    <section class="section">
-    <div class="container">
-      <h2 class="title is-3 has-text-weight-light mb-6">Featured Picks</h2>
-
-      <div class="columns is-multiline">
-
-        <!-- PRODUCT CARD 1 -->
-        <div class="column is-one-quarter">
-          <div class="card">
-            <div class="card-image">
-              <figure class="image is-3by4">
-                <img src="https://picsum.photos/400?1">
-              </figure>
+              <div class="buttons">
+                <button id="browse-btn" class="button is-black is-medium">
+                  Browse Products
+                </button>
+                <button id="about-btn" class="button is-light is-medium">
+                  About Us
+                </button>
+              </div>
             </div>
-            <div class="card-content">
-              <p class="title is-6 has-text-weight-light">Comfort Tee</p>
-              <p class="subtitle is-6 has-text-grey">$19.99</p>
+
+            <!-- RIGHT SIDE IMAGE -->
+            <div class="column is-6">
+              <figure class="image is-4by5">
+                <img
+                  src="/src/images/background.webp"
+                  alt="Fashion model"
+                  style="
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 8px;
+                  "
+                />
+              </figure>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- PRODUCT CARD 2 -->
-        <div class="column is-one-quarter">
-          <div class="card">
-            <div class="card-image">
-              <figure class="image is-3by4">
-                <img src="https://picsum.photos/400?2">
-              </figure>
+      <section class="section">
+        <div class="container">
+          <h2 class="title is-3 has-text-weight-light mb-6">Featured Picks</h2>
+
+          <div class="columns is-multiline">
+            <!-- PRODUCT CARD 1 -->
+            <div class="column is-one-quarter">
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-3by4">
+                    <img src="https://picsum.photos/400?1" />
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <p class="title is-6 has-text-weight-light">Comfort Tee</p>
+                  <p class="subtitle is-6 has-text-grey">$19.99</p>
+                </div>
+              </div>
             </div>
-            <div class="card-content">
-              <p class="title is-6 has-text-weight-light">Denim Jacket</p>
-              <p class="subtitle is-6 has-text-grey">$49.99</p>
+
+            <!-- PRODUCT CARD 2 -->
+            <div class="column is-one-quarter">
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-3by4">
+                    <img src="https://picsum.photos/400?2" />
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <p class="title is-6 has-text-weight-light">Denim Jacket</p>
+                  <p class="subtitle is-6 has-text-grey">$49.99</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- PRODUCT CARD 3 -->
+            <div class="column is-one-quarter">
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-3by4">
+                    <img src="https://picsum.photos/400?3" />
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <p class="title is-6 has-text-weight-light">Linen Shirt</p>
+                  <p class="subtitle is-6 has-text-grey">$29.99</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- PRODUCT CARD 4 -->
+            <div class="column is-one-quarter">
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-3by4">
+                    <img src="https://picsum.photos/400?4" />
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <p class="title is-6 has-text-weight-light">Cotton Shorts</p>
+                  <p class="subtitle is-6 has-text-grey">$24.99</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- PRODUCT CARD 3 -->
-        <div class="column is-one-quarter">
-          <div class="card">
-            <div class="card-image">
-              <figure class="image is-3by4">
-                <img src="https://picsum.photos/400?3">
-              </figure>
-            </div>
-            <div class="card-content">
-              <p class="title is-6 has-text-weight-light">Linen Shirt</p>
-              <p class="subtitle is-6 has-text-grey">$29.99</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- PRODUCT CARD 4 -->
-        <div class="column is-one-quarter">
-          <div class="card">
-            <div class="card-image">
-              <figure class="image is-3by4">
-                <img src="https://picsum.photos/400?4">
-              </figure>
-            </div>
-            <div class="card-content">
-              <p class="title is-6 has-text-weight-light">Cotton Shorts</p>
-              <p class="subtitle is-6 has-text-grey">$24.99</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-      </article>
       <article id="browse" class="hidden"></article>
       <article id="product" class="hidden">
         <div id="thumbnail" class="bg-green-500"></div>
@@ -172,22 +173,23 @@
       <dialog id="about-us" class="hidden"></dialog>
     </main>
 
-<footer class="footer has-background-light mt-6 py-4">
-  <div class="has-text-centered">
+    <footer class="footer has-background-light mt-6 py-4">
+      <div class="has-text-centered">
+        <figure class="is-inline-block" style="margin: 0">
+          <img
+            src="/src/images/RamanLogo.png"
+            alt="Raman Logo"
+            style="height: 70px; width: auto"
+          />
+        </figure>
 
-    <figure class="is-inline-block" style="margin:0;">
-      <img src="/src/images/RamanLogo.png" alt="Raman Logo" style="height:70px; width:auto;">
+        <p class="has-text-grey mt-1">Quality Clothing For Everyone</p>
 
-    </figure>
+        <p class="has-text-grey mt-1">Github links</p>
 
-    <p class="has-text-grey mt-1">Quality Clothing For Everyone</p>
-
-    <p class="has-text-grey mt-1">Github links</p>
-
-    <p class="has-text-grey mt-3">Made by Manjot and Ramos</p>
-  </div>
-</footer>
-
+        <p class="has-text-grey mt-3">Made by Manjot and Ramos</p>
+      </div>
+    </footer>
 
     <script type="module" src="/src/main.js"></script>
   </body>
