@@ -1,7 +1,7 @@
 import { UIClasses, UIAttributes, UIElements, UIStyles } from "../utils";
 import { ProductOverview } from "./product";
 
-export const HomeViewIdentifiers = {
+const Identifiers = {
   VIEW: "home",
   FEATURED_PICKS: "home-featured-picks",
   BUTTON_BROWSE: "home-browse-button",
@@ -9,36 +9,22 @@ export const HomeViewIdentifiers = {
 };
 
 export const HomeView = {
-  show(products) {
-    UIElements.getByIds([HomeViewIdentifiers.VIEW], (view) => {
-      UIClasses.toggle(view, ["is-hidden"]);
-
-      UIElements.getByIds([HomeViewIdentifiers.FEATURED_PICKS], (picks) => {
-        // https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
-        const limit = 4;
-        const range = Math.random() * (products.length + limit);
-
-        ProductOverview.create(
-          picks,
-          "Featured Picks",
-          products.slice(range, range + limit),
-        );
-      });
+  create() {
+    UIElements.getByIds([Identifiers.VIEW], ([view]) => {
+      CreateSubviews.hero(view);
+      CreateSubviews.featured(view);
     });
   },
-  create() {
-    UIElements.getByIds([HomeViewIdentifiers.VIEW], (view) => {
-      PrivateMethods.hero(view);
-      PrivateMethods.featured(view);
-    });
+  update(products) {
+    UpdateSubviews.picks(products);
   },
 };
 
-const PrivateMethods = {
+const CreateSubviews = {
   featured(view) {
     UIElements.create(view, "section", (featured) => {
       UIClasses.set(featured, ["section"]);
-      UIElements.setId(featured, HomeViewIdentifiers.FEATURED_PICKS);
+      UIElements.setId(featured, Identifiers.FEATURED_PICKS);
     });
   },
   hero(view) {
@@ -73,12 +59,12 @@ const PrivateMethods = {
               UIElements.create(buttons, "button", (browse) => {
                 UIClasses.set(browse, ["button", "is-black", "is-medium"]);
                 UIStyles.setText(browse, "Browse Products");
-                UIElements.setId(browse, HomeViewIdentifiers.BROWSE);
+                UIElements.setId(browse, Identifiers.BROWSE);
               });
               UIElements.create(buttons, "button", (aboutus) => {
                 UIClasses.set(aboutus, ["button", "is-black", "is-medium"]);
                 UIStyles.setText(aboutus, "Browse Products");
-                UIElements.setId(aboutus, HomeViewIdentifiers.BUTTON_ABOUT_US);
+                UIElements.setId(aboutus, Identifiers.BUTTON_ABOUT_US);
               });
             });
           });
@@ -97,6 +83,22 @@ const PrivateMethods = {
           });
         });
       });
+    });
+  },
+};
+
+const UpdateSubviews = {
+  picks(products) {
+    UIElements.getByIds([Identifiers.FEATURED_PICKS], ([picks]) => {
+      // https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
+      const limit = 4;
+      const range = Math.random() * (products.length + limit);
+
+      ProductOverview.create(
+        picks,
+        "Featured Picks",
+        products.slice(range, range + limit),
+      );
     });
   },
 };
