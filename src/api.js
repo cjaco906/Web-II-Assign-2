@@ -132,13 +132,13 @@ export const ShoppingCart = {
 
     return Result.compute(
       [Validation.getByLocalStorage(SHOPPING_CART_KEY)],
-      (cart) => {
+      ([cart]) => {
         return Result.ok(cart);
       },
       () => {
         return Result.compute(
           [Validation.setByLocalStorage(SHOPPING_CART_KEY, [])],
-          (cart) => {
+          ([cart]) => {
             return Result.ok(cart);
           },
         );
