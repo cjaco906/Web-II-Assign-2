@@ -19,13 +19,7 @@ export const Result = {
       error: new Error(message, { cause }),
     };
 
-    console.error(
-      "ERROR\n",
-      "MESSAGE",
-      message + "\n",
-      "CAUSE",
-      cause,
-    );
+    console.error("ERROR\n", "MESSAGE", message + "\n", "CAUSE", cause);
 
     return result;
   },
@@ -176,26 +170,28 @@ export const UIElements = {
     }
   },
   getByIds(ids, callback) {
-    return ids.map((value) => {
+    const results = ids.map((value) => {
       const element = document.getElementById(value);
 
       if (element) {
-        try {
-          if (callback) {
-            callback(element);
-          }
-        } catch (error) {
-          return Result.error(
-            "Failed to finish callback on element id retrieval",
-            { value, error },
-          );
-        }
-
         return Result.ok(element);
       } else {
         return Result.error("HTML element not found by identifier", value);
       }
     });
+
+    try {
+      if (callback) {
+        Result.satisfy(results, callback);
+      }
+
+      return results;
+    } catch (error) {
+      return Result.error("Failed to finish callback on element id retrieval", {
+        results,
+        error,
+      });
+    }
   },
   getByClasses(classes) {
     return classes.map((value) => {
