@@ -7,7 +7,8 @@ import {
   UIEvents,
 } from "../utils";
 
-export const ProductViewIdentifiers = {
+const Identifiers = {
+  VIEW: "product",
   IMAGE_MAIN: "details-main-image",
   IMAGE_OTHER_SECOND: "details-other-second",
   IMAGE_OTHER_THIRD: "details-other-third",
@@ -21,108 +22,20 @@ export const ProductViewIdentifiers = {
 
 export const ProductView = {
   create() {
-    return UIElements.getByIds(["product"], (view) => {
-      UIElements.create(view, "div", (images) => {
-        UIElements.create(images, "img", (main) => {
-          UIAttributes.set(main, [["src", "placeholder"]]);
-          UIClasses.add(main, ["placeholder"]);
-          UIElements.setId(main, ProductViewIdentifiers.IMAGE_MAIN);
-        });
-        UIElements.create(images, "img", (second) => {
-          UIAttributes.set(second, [["src", "placeholder"]]);
-          UIClasses.add(second, ["placeholder"]);
-          UIElements.setId(second, ProductViewIdentifiers.IMAGE_OTHER_SECOND);
-        });
-        UIElements.create(images, "img", (third) => {
-          UIAttributes.set(third, [["src", "placeholder"]]);
-          UIClasses.add(third, ["placeholder"]);
-          UIElements.setId(third, ProductViewIdentifiers.IMAGE_OTHER_THIRD);
-        });
-      });
-      UIElements.create(view, "form", (details) => {
-        UIElements.create(details, "h2", (title) => {
-          UIElements.setId(title, ProductViewIdentifiers.TITLE);
-        });
-        UIElements.create(details, "h3", (price) => {
-          UIElements.setId(price, ProductViewIdentifiers.PRICE);
-        });
-        UIElements.create(details, "p", (description) => {
-          UIElements.setId(description, ProductViewIdentifiers.DESCRIPTION);
-        });
-        UIElements.create(details, "div", (material) => {
-          UIElements.create(material, "p", (title) => {
-            UIStyles.setText(title, "Material");
-          });
-          UIElements.create(material, "p", (value) => {
-            UIElements.setId(value, ProductViewIdentifiers.MATERIAL);
-          });
-        });
-        UIElements.create(details, "label", (quantity) => {
-          UIStyles.setText(quantity, "Quantity");
-          UIElements.create(quantity, "input", (value) => {
-            UIElements.setId(value, ProductViewIdentifiers.QUANTITY);
-            UIAttributes.set(value, [
-              ["type", "number"],
-              ["min", "1"],
-              ["value", "1"],
-            ]);
-          });
-        });
-        UIElements.create(details, "input", (value) => {
-          UIAttributes.set(value, [
-            ["type", "submit"],
-            ["value", "Add to Cart"],
-          ]);
-        });
-        UIEvents.listen([details], "submit", () => {
-          // cart
-        });
-      });
-      UIElements.create(view, "section", (recommendations) => {
-        UIClasses.set(recommendations, ["section"]);
-        UIElements.setId(
-          recommendations,
-          ProductViewIdentifiers.RECOMMENDATIONS,
-        );
-      });
+    UIElements.getByIds([Identifiers.VIEW], (view) => {
+      CreateSubviews.images(view);
+      CreateSubviews.details(view);
+      CreateSubviews.recommendations(view);
     });
   },
-  show(product) {
-    UIElements.getByIds([ProductViewIdentifiers.TITLE], (title) => {
-      UIStyles.setText(title, product.name);
-    });
-    UIElements.getByIds([ProductViewIdentifiers.PRICE], (price) =>
-      UIStyles.setText(price, product.price),
-    );
-    UIElements.getByIds([ProductViewIdentifiers.DESCRIPTION], (description) =>
-      UIStyles.setText(description, product.description),
-    );
-    UIElements.getByIds([ProductViewIdentifiers.MATERIAL], (material) =>
-      UIStyles.setText(material, product.material),
-    );
-    UIElements.getByIds(
-      [ProductViewIdentifiers.RECOMMENDATIONS],
-      async (recommendations) => {
-        const related = await ProductBrowsing.getRecommendations(product, 4);
-
-        if (related.ok) {
-          ProductOverview.create(
-            recommendations,
-            "Related Products",
-            related.data,
-          );
-        }
-      },
-    );
-    UIElements.getByIds(["product"], (view) => {
-      UIClasses.toggle(view, ["is-hidden"]);
-    });
+  update(product) {
+    UpdateSubview.details(product);
   },
 };
 
 export const ProductOverview = {
   create(parent, title, products) {
-    return UIElements.create(parent, "div", (container) => {
+    UIElements.create(parent, "div", (container) => {
       UIClasses.set(container, ["container"]);
       UIElements.create(container, "h2", (header) => {
         UIClasses.add(header, [
@@ -136,7 +49,7 @@ export const ProductOverview = {
       UIElements.create(container, "div", (columns) => {
         UIClasses.add(columns, ["columns", "is-multiline"]);
 
-        products.forEach((product, index) => {
+        for (const [index, product] of Object.entries(products)) {
           UIElements.create(columns, "div", (container) => {
             UIClasses.add(container, ["column", "is-one-quarter"]);
             UIElements.create(container, "div", (card) => {
@@ -169,8 +82,105 @@ export const ProductOverview = {
               });
             });
           });
-        });
+        }
       });
     });
+  },
+};
+
+const CreateSubviews = {
+  images(view) {
+    UIElements.create(view, "div", (images) => {
+      UIElements.create(images, "img", (main) => {
+        UIAttributes.set(main, [["src", "https://picsum.photos/400?0"]]);
+        UIElements.setId(main, Identifiers.IMAGE_MAIN);
+      });
+      UIElements.create(images, "img", (other) => {
+        UIAttributes.set(other, [["src", "https://picsum.photos/400?1"]]);
+        UIElements.setId(Identifiers.IMAGE_OTHER_SECOND);
+      });
+      UIElements.create(images, "img", (other) => {
+        UIAttributes.set(other, [["src", "https://picsum.photos/400?1"]]);
+        UIElements.setId(Identifiers.IMAGE_OTHER_THIRD);
+      });
+    });
+  },
+  details(view) {
+    UIElements.create(view, "form", (details) => {
+      UIElements.create(details, "h2", (title) => {
+        UIElements.setId(title, Identifiers.TITLE);
+      });
+      UIElements.create(details, "h3", (price) => {
+        UIElements.setId(price, Identifiers.PRICE);
+      });
+      UIElements.create(details, "p", (description) => {
+        UIElements.setId(description, Identifiers.DESCRIPTION);
+      });
+      UIElements.create(details, "div", (material) => {
+        UIElements.create(material, "p", (title) => {
+          UIStyles.setText(title, "Material");
+        });
+        UIElements.create(material, "p", (value) => {
+          UIElements.setId(value, Identifiers.MATERIAL);
+        });
+      });
+      UIElements.create(details, "label", (quantity) => {
+        UIStyles.setText(quantity, "Quantity");
+        UIElements.create(quantity, "input", (value) => {
+          UIElements.setId(value, Identifiers.QUANTITY);
+          UIAttributes.set(value, [
+            ["type", "number"],
+            ["min", "1"],
+            ["value", "1"],
+          ]);
+        });
+      });
+      UIElements.create(details, "input", (value) => {
+        UIAttributes.set(value, [
+          ["type", "submit"],
+          ["value", "Add to Cart"],
+        ]);
+      });
+      UIEvents.listen([details], "submit", () => {
+        // route to cart
+      });
+    });
+  },
+  recommendations(view) {
+    UIElements.create(view, "section", (recommendations) => {
+      UIClasses.set(recommendations, ["section"]);
+      UIElements.setId(recommendations, Identifiers.RECOMMENDATIONS);
+    });
+  },
+};
+
+const UpdateSubview = {
+  details(product) {
+    UIElements.getByIds([Identifiers.TITLE], ([title]) => {
+      UIStyles.setText(title, product.name);
+    });
+    UIElements.getByIds([Identifiers.PRICE], ([price]) => {
+      UIStyles.setText(price, product.price);
+    });
+    UIElements.getByIds([Identifiers.DESCRIPTION], ([description]) => {
+      UIStyles.setText(description, product.description);
+    });
+    UIElements.getByIds([Identifiers.MATERIAL], ([material]) => {
+      UIStyles.setText(material, product.material);
+    });
+    UIElements.getByIds(
+      [Identifiers.RECOMMENDATIONS],
+      async ([recommendations]) => {
+        const related = await ProductBrowsing.getRecommendations(product, 4);
+
+        if (related.ok) {
+          ProductOverview.create(
+            recommendations,
+            "Related Products",
+            related.data,
+          );
+        }
+      },
+    );
   },
 };
