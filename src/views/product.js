@@ -20,8 +20,8 @@ const Identifiers = {
 };
 
 export const ProductView = {
-  create() {
-    UIElements.getByIds([Identifiers.VIEW], ([view]) => {
+  create(id) {
+    return UIElements.getByIds([id], ([view]) => {
       CreateSubviews.images(view);
       CreateSubviews.details(view);
       CreateSubviews.recommendations(view);
@@ -96,11 +96,11 @@ const CreateSubviews = {
       });
       UIElements.create(images, "img", (other) => {
         UIAttributes.set(other, [["src", "https://picsum.photos/400?1"]]);
-        UIElements.setId(Identifiers.IMAGE_OTHER_SECOND);
+        UIElements.setId(other, Identifiers.IMAGE_OTHER_SECOND);
       });
       UIElements.create(images, "img", (other) => {
         UIAttributes.set(other, [["src", "https://picsum.photos/400?1"]]);
-        UIElements.setId(Identifiers.IMAGE_OTHER_THIRD);
+        UIElements.setId(other, Identifiers.IMAGE_OTHER_THIRD);
       });
     });
   },

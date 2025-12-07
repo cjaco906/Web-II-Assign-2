@@ -20,8 +20,8 @@ const Identifiers = {
 };
 
 export const ShoppingCartView = {
-  create() {
-    UIElements.getByIds([Identifiers.VIEW], ([view]) => {
+  create(id) {
+    return UIElements.getByIds([id], ([view]) => {
       CreateSubviews.items(view);
       CreateSubviews.shipping(view);
       CreateSubviews.summary(view);

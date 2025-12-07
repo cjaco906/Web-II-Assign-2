@@ -10,7 +10,7 @@ export const ProductStorage = {
       [Validation.getByLocalStorage(LOCAL_STORAGE_KEY)],
       ([cache]) => {
         try {
-          return Result.ok(JSON.parse(cache.data));
+          return Result.ok(JSON.parse(cache));
         } catch (error) {
           return Result.error("Failed to parse the products cache", {
             cache,
@@ -31,7 +31,7 @@ export const ProductStorage = {
             (response) => {
               return Result.compute([response], async ([response]) => {
                 return Result.compute(
-                  [Validation.getArray(await response.data)],
+                  [Validation.getArray(await response)],
                   ([products]) => {
                     try {
                       return Validation.setByLocalStorage(

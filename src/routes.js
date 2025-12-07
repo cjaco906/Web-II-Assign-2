@@ -1,10 +1,10 @@
-import { UIClasses, UIElements } from "./utils";
+import { UIClasses } from "./utils";
 import { HomeView, ProductView, ShoppingCartView } from "./views";
 
-const ViewIdentifiers = {
-  HOME: "home",
-  PRODUCT: "product",
-  SHOPPING_CART: "shopping-cart",
+const Views = {
+  home: HomeView.create("home"),
+  product: ProductView.create("product"),
+  cart: ShoppingCartView.create("shopping-cart"),
 };
 
 const Router = {
@@ -14,23 +14,23 @@ const Router = {
 export const Routes = {
   home(products) {
     HomeView.update(products);
-    UpdateView.toggle(ViewIdentifiers.HOME);
+    UpdateView.toggle(Views.home);
   },
   product(product) {
     ProductView.update(product);
-    UpdateView.toggle(ViewIdentifiers.PRODUCT);
+    UpdateView.toggle(Views.product);
   },
   cart(order) {
     ShoppingCartView.update(order);
-    UpdateView.toggle(ViewIdentifiers.SHOPPING_CART);
+    UpdateView.toggle(Views.cart);
   },
 };
 
 const UpdateView = {
-  toggle(id) {
-    UIElements.getByIds([id], ([view]) => {
+  toggle(view) {
+    if (view.ok) {
       UIClasses.toggle(Router.view ?? view, ["is-hidden"]);
       Router.view = view;
-    });
+    }
   },
 };
