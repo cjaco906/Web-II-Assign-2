@@ -27,8 +27,8 @@ export const Routes = {
 };
 
 const UpdateView = {
-  toggle(view) {
-    if (view.ok) {
+  toggle([{ data: view }]) {
+    if (view) {
       UIClasses.toggle(Router.view ?? view, ["is-hidden"]);
       Router.view = view;
     }

@@ -2,7 +2,7 @@ import { ProductStorage } from "./api";
 import { Routes } from "./routes";
 import { Result } from "./utils";
 
-Result.compute([await ProductStorage.fetch()], (products) => {
+Result.compute([ProductStorage.fetch()], ([products]) => {
   Routes.home(products);
 });
 // ProductView.create();
