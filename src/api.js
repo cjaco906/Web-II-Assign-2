@@ -121,7 +121,9 @@ export const ProductBrowsing = {
         }
       }
 
-      const sorted = scores.sort((a, b) => b.score - a.score);
+      const sorted = scores
+        .sort((a, b) => b.score - a.score)
+        .map(({ product }) => product);
 
       if (limit) {
         sorted.length = limit;
@@ -131,5 +133,75 @@ export const ProductBrowsing = {
     }
 
     return products;
+  },
+};
+
+export const ShoppingCart = {
+  get() {
+    const SHOPPING_CART_KEY = "cart";
+
+    return Validation.getByLocalStorage(SHOPPING_CART_KEY);
+  },
+  getOrder(product) {
+    return Result.satisfy(
+      [this.get(), Validation.getObject(product)],
+      ([cart, product]) => {
+        const order = cart.find((order) => order.id === product.id);
+
+        return Result.ok(order ?? null);
+      },
+    );
+  },
+  getCountryTypes() {
+    return ["Canada", "United States", "International"];
+  },
+  getTaxCost(country, subtotal) {
+    return Result.satisfy([Validation.getNumber(country)], ([country]) => {
+      if ("Canada" === this.getCountryTypes()[country]) {
+        return Result.ok(subtotal * 0.05);
+      } else {
+        return Result.error("Invalid country index", { country, subtotal });
+      }
+    });
+  },
+  getShippingTypes() {
+    return ["Standard", "Express", "Priority"];
+  },
+  getShippingCost(type, country) {
+    return Result.satisfy(
+      [Validation.getNumber(type), Validation.getNumber(country)],
+      ([type, country]) => {
+        const base = 10 * (type + 1);
+        const extra = 5 * country;
+
+        if (base < 30) {
+          return Result.ok(base + extra);
+        } else if (extra === 0) {
+          return Result.ok(base + 5);
+        } else {
+          return Result.ok(50);
+        }
+      },
+    );
+  },
+  add(product, unit) {
+    Result.satisfy(
+      [this.get(), Validation.getObject(product)],
+      ([cart, product]) => {
+        const { data: order } = this.getOrder(product);
+
+        if (order) {
+          order.unit += unit;
+        } else {
+          // https://stackoverflow.com/questions/728360/how-do-i-correctly-clone-a-javascript-object
+          const order = {
+            ...product,
+            unit,
+          };
+
+          cart.push(order);
+        }
+      },
+    );
   },
 };
