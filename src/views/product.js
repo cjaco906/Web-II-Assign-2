@@ -22,7 +22,7 @@ const Identifiers = {
 
 export const ProductView = {
   create() {
-    UIElements.getByIds([Identifiers.VIEW], (view) => {
+    UIElements.getByIds([Identifiers.VIEW], ([view]) => {
       CreateSubviews.images(view);
       CreateSubviews.details(view);
       CreateSubviews.recommendations(view);
