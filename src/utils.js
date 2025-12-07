@@ -7,7 +7,7 @@ export const Result = {
     };
 
     if (log) {
-      console.log("SUCCESS\n", "DATA", data + "\n", result);
+      console.log("SUCCESS\n", "DATA", data);
     }
 
     return result;
@@ -24,7 +24,7 @@ export const Result = {
       "MESSAGE",
       message + "\n",
       "CAUSE",
-      JSON.stringify(cause) + "\n",
+      cause,
     );
 
     return result;
@@ -102,7 +102,7 @@ export const Validation = {
     }
   },
   getNumber(value) {
-    if (!value) {
+    if (value === undefined || value === null) {
       return Result.error("No number found", value);
     } else if (!(typeof +value === "number")) {
       return Result.error(`Non-number value found`, value);
