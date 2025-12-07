@@ -2,7 +2,6 @@ import { UIClasses, UIAttributes, UIElements, UIStyles } from "../utils";
 import { ProductOverview } from "./product";
 
 const Identifiers = {
-  VIEW: "home",
   FEATURED_PICKS: "home-featured-picks",
   BUTTON_BROWSE: "home-browse-button",
   BUTTON_ABOUT_US: "home-about-us",

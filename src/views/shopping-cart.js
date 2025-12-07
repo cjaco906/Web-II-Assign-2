@@ -10,7 +10,6 @@ import {
 } from "../utils";
 
 const Identifiers = {
-  VIEW: "shopping-cart",
   ORDERS: "cart-orders",
   SELECT_SHIPPING_TYPE: "cart-shipping-type",
   SELECT_SHIPPING_DEST: "cart-shipping-dest",
@@ -28,7 +27,11 @@ export const ShoppingCartView = {
       CreateSubviews.summary(view);
     });
   },
-  show() {
+  update(order) {
+    if (order) {
+      ShoppingCart.add(order);
+    }
+
     const summaries = {
       subtotal: 0,
       total: 0,
@@ -41,7 +44,7 @@ export const ShoppingCartView = {
 
 const UpdateSubviews = {
   items(summaries) {
-    Result.satisfy([ShoppingCart.get()], (cart) => {
+    Result.compute([ShoppingCart.get()], ([cart]) => {
       UIElements.renew(Identifiers.ORDERS, (orders) => {
         for (const [index, order] of Object.entries(cart)) {
           UIElements.create(orders, "div", (row) => {
@@ -56,7 +59,7 @@ const UpdateSubviews = {
               UIStyles.setText(title, order.name);
             });
             UIElements.create(row, "div", (sizes) => {
-              Result.satisfy([Validation.getArray(order.sizes)], (values) => {
+              Result.compute([Validation.getArray(order.sizes)], ([values]) => {
                 for (const value of values) {
                   UIElements.create(sizes, "p", (size) => {
                     UIStyles.setText(size, value);
@@ -65,13 +68,16 @@ const UpdateSubviews = {
               });
             });
             UIElements.create(row, "div", (colors) => {
-              Result.satisfy([Validation.getArray(order.colors)], (values) => {
-                for (const value of values) {
-                  UIElements.create(colors, "p", (color) => {
-                    UIStyles.setText(color, value);
-                  });
-                }
-              });
+              Result.compute(
+                [Validation.getArray(order.colors)],
+                ([values]) => {
+                  for (const value of values) {
+                    UIElements.create(colors, "p", (color) => {
+                      UIStyles.setText(color, value);
+                    });
+                  }
+                },
+              );
             });
             UIElements.create(row, "p", (price) => {
               UIStyles.setText(price, order.price);
@@ -99,9 +105,9 @@ const UpdateSubviews = {
       [Identifiers.SELECT_SHIPPING_TYPE, Identifiers.SELECT_SHIPPING_DEST],
       ([shipping, destination]) => {
         UIElements.renew(Identifiers.SUMMARY_SHIPPING, (text) => {
-          Result.satisfy(
+          Result.compute(
             [ShoppingCart.getShippingCost(shipping.value, destination.value)],
-            (cost) => {
+            ([cost]) => {
               summaries.total += cost;
 
               UIStyles.setText(text, cost);
@@ -109,9 +115,9 @@ const UpdateSubviews = {
           );
         });
         UIElements.renew(Identifiers.SUMMARY_TAX, (text) => {
-          Result.satisfy(
+          Result.compute(
             [ShoppingCart.getTaxCost(destination.value, summaries.subtotal)],
-            (cost) => {
+            ([cost]) => {
               summaries.total += cost;
 
               UIStyles.setText(text, cost);

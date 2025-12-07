@@ -8,7 +8,6 @@ import {
 } from "../utils";
 
 const Identifiers = {
-  VIEW: "product",
   IMAGE_MAIN: "details-main-image",
   IMAGE_OTHER_SECOND: "details-other-second",
   IMAGE_OTHER_THIRD: "details-other-third",
