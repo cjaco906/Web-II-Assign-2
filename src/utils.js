@@ -23,14 +23,18 @@ export const Result = {
 
     return result;
   },
-  satisfy(results, callback) {
+  compute(results, onsuccess, onfail) {
     for (const result of results) {
       if (!result.ok) {
-        return result;
+        if (onfail) {
+          return onfail(result.error);
+        } else {
+          return result;
+        }
       }
     }
 
-    return callback(results.map((result) => result.data));
+    return onsuccess(results.map((result) => result.data));
   },
 };
 
@@ -182,7 +186,7 @@ export const UIElements = {
 
     try {
       if (callback) {
-        Result.satisfy(results, callback);
+        Result.compute(results, callback);
       }
 
       return results;
