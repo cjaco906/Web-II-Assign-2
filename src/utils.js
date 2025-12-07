@@ -29,12 +29,14 @@ export const Result = {
 
     return result;
   },
-  empty() {
-    return {
-      ok: false,
-      data: null,
-      error: null,
-    };
+  satisfy(results, callback) {
+    for (const result of results) {
+      if (!result.ok) {
+        return result;
+      }
+    }
+
+    return callback(results.map((result) => result.data));
   },
 };
 
