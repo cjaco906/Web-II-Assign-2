@@ -18,7 +18,7 @@ const Identifiers = {
   PRICE: "details-price",
   DESCRIPTION: "details-description",
   MATERIAL: "details-material",
-  COLORS: "details-colors",
+  COLORS: "details-color",
   SIZES: "details-sizes",
   QUANTITY: "details-quantity",
   RECOMMENDATIONS: "details-recommendations",
@@ -173,7 +173,7 @@ const CreateSubviews = {
 
       UIElements.create(details, "div", (sizes) => {
         UIClasses.set(sizes, ["placeholder"]);
-        UIElements.set(sizes, Identifiers.SIZES);
+        UIElements.setId(sizes, Identifiers.SIZES);
       });
 
       // Quantity
@@ -218,7 +218,7 @@ const UpdateSubview = {
       UIStyles.setText(material, product.material);
     });
     UIElements.getByIds([Identifiers.COLORS], ([colors]) => {
-      Result.compute([Validation.getArray(product.colors)], ([values]) => {
+      Result.compute([Validation.getArray(product.color)], ([values]) => {
         for (const value of values) {
           UIElements.create(colors, "button", (color) => {
             UIClasses.set(color, ["button"]);
@@ -227,6 +227,7 @@ const UpdateSubview = {
       });
     });
     UIElements.getByIds([Identifiers.SIZES], ([sizes]) => {
+      console.log(sizes);
       Result.compute([Validation.getArray(product.sizes)], ([values]) => {
         for (const value of values) {
           UIElements.create(sizes, "button", (size) => {
