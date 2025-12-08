@@ -12,3 +12,4 @@ cart delete button
 Breadcrumbs in product View
 toaster message when added to cart
 updating shipping info
+qty button in cart view not working
