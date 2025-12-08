@@ -1,4 +1,11 @@
-import { UIClasses, UIAttributes, UIElements, UIStyles } from "../utils";
+import { Routes } from "../routes";
+import {
+  UIClasses,
+  UIAttributes,
+  UIElements,
+  UIStyles,
+  UIEvents,
+} from "../utils";
 import { ProductOverview } from "./product";
 
 const Identifiers = {
@@ -59,11 +66,17 @@ const CreateSubviews = {
                 UIClasses.set(browse, ["button", "is-black", "is-medium"]);
                 UIStyles.setText(browse, "Browse Products");
                 UIElements.setId(browse, Identifiers.BROWSE);
+                UIEvents.listen([browse], "click", () => {
+                  Routes.browse();
+                });
               });
               UIElements.create(buttons, "button", (aboutus) => {
                 UIClasses.set(aboutus, ["button", "is-light", "is-medium"]);
                 UIStyles.setText(aboutus, "About Us");
                 UIElements.setId(aboutus, Identifiers.BUTTON_ABOUT_US);
+                UIEvents.listen([aboutus], "click", () => {
+                  Routes.aboutus();
+                });
               });
             });
           });
@@ -88,7 +101,7 @@ const CreateSubviews = {
 
 const UpdateSubviews = {
   picks(products) {
-    UIElements.getByIds([Identifiers.FEATURED_PICKS], ([picks]) => {
+    UIElements.renew(Identifiers.FEATURED_PICKS, (picks) => {
       // https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
       const limit = 4;
       const range = Math.random() * products.length + limit;
