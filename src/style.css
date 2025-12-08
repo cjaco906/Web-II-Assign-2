@@ -105,3 +105,14 @@
 .thumbnail-row img:hover {
   opacity: 1;
 }
+
+.product-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.product-card .card-content {
+  flex-grow: 1;
+}

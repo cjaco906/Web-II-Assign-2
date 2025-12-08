@@ -65,7 +65,7 @@ export const ProductOverview = {
           UIElements.create(columns, "div", (container) => {
             UIClasses.add(container, ["column", "is-one-quarter"]);
             UIElements.create(container, "div", (card) => {
-              UIClasses.add(card, ["card"]);
+              UIClasses.add(card, ["card", "product-card",]);
               UIElements.create(card, "div", (imagec) => {
                 UIClasses.add(imagec, ["card-image"]);
                 UIElements.create(imagec, "figure", (figure) => {
