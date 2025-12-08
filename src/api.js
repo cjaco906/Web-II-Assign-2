@@ -36,26 +36,31 @@ export const ProductStorage = {
                     try {
                       return Validation.setByLocalStorage(
                         LOCAL_STORAGE_KEY,
-                        JSON.stringify(products)
+                        JSON.stringify(products),
                       );
                     } catch (error) {
                       return Result.error(
                         "Failed to stringify the downloaded products",
-                        { products, error }
+                        { products, error },
                       );
                     }
-                  }
+                  },
                 );
               });
             },
-            (error) => Result.error("Non-JSON format found", error)
+            (error) => Result.error("Non-JSON format found", error),
           );
-      }
+      },
     );
   },
 };
 
 export const ProductBrowsing = {
+  getById(products, id) {
+    return Result.compute([Validation.getNumber(id.slice(1))], (index) => {
+      return Validation.getObject(products[index]);
+    });
+  },
   getScore(base, target) {
     return Result.compute(
       [Validation.getObject(base), Validation.getObject(target)],
@@ -76,7 +81,7 @@ export const ProductBrowsing = {
                     }
                   }
                 }
-              }
+              },
             );
           } else if (typeof bvalue === "object") {
             const subscore = this.getScore(bvalue, tvalue);
@@ -94,7 +99,7 @@ export const ProductBrowsing = {
         }
 
         return Result.ok({ score, product: target });
-      }
+      },
     );
   },
   getRecommendations(base, limit) {
@@ -116,9 +121,9 @@ export const ProductBrowsing = {
                   scores.push(score);
 
                   return Result.ok(score);
-                }
+                },
               );
-            }
+            },
           );
 
           if (!result.ok) {
@@ -141,22 +146,24 @@ export const ProductBrowsing = {
 };
 
 export const ShoppingCart = {
+  getKey() {
+    return "shopping-cart";
+  },
   get() {
-    const SHOPPING_CART_KEY = "shopping-cart";
-
+    const key = this.getKey();
     return Result.compute(
-      [Validation.getByLocalStorage(SHOPPING_CART_KEY)],
+      [Validation.getByLocalStorage(key)],
       ([cart]) => {
         return Result.ok(cart);
       },
       () => {
         return Result.compute(
-          [Validation.setByLocalStorage(SHOPPING_CART_KEY, [])],
+          [Validation.setByLocalStorage(key, [])],
           ([cart]) => {
             return Result.ok(cart);
-          }
+          },
         );
-      }
+      },
     );
   },
   getOrder(product) {
@@ -166,7 +173,7 @@ export const ShoppingCart = {
         const order = cart.find((order) => order.id === product.id);
 
         return Result.ok(order ?? null);
-      }
+      },
     );
   },
   getCountryTypes() {
@@ -198,27 +205,32 @@ export const ShoppingCart = {
         } else {
           return Result.ok(50);
         }
-      }
+      },
     );
   },
-  add(order) {
+  order(order) {
     return Result.compute(
       [this.get(), Validation.getObject(order)],
-      ([cart, order]) => {
-        return Result.compute(
-          [this.getOrder(order.product)],
-          ([old]) => {
-            old.unit += order.unit;
+      ([cart, { product, selection }]) => {
+        const order = {
+          name: product.name,
+          price: product.price,
+          quantity: selection.quantity,
+          sizes: selection.sizes,
+          color: selection.color,
+        };
 
-            return Result.ok(order);
-          },
-          () => {
-            cart.push(order);
+        try {
+          cart.push(order);
+        } catch (error) {
+          console.error(error);
+        }
 
-            return Result.ok(order);
-          }
+        return Validation.setByLocalStorage(
+          this.getKey(),
+          JSON.stringify(cart),
         );
-      }
+      },
     );
   },
 };

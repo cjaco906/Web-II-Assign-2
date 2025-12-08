@@ -211,14 +211,13 @@ export const UIElements = {
 };
 
 export const UIStyles = {
+  getText(element) {
+    return Validation.getStringOrNumber(element.textContent);
+  },
   setText(element, value) {
-    const result = Validation.getStringOrNumber(value);
-
-    if (result.ok) {
-      element.textContent = value;
-    }
-
-    return result;
+    return Result.compute([Validation.getStringOrNumber(value)], (text) => {
+      element.textContent = text;
+    });
   },
 };
 
@@ -265,6 +264,9 @@ export const UIAttributes = {
 };
 
 export const UIClasses = {
+  select(selectors) {
+    return Array.from(document.querySelectorAll(selectors));
+  },
   add(element, classes) {
     classes.forEach((value) => element.classList.add(value));
   },

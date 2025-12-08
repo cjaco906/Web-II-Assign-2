@@ -26,7 +26,7 @@ export const Routes = {
         UIEvents.listen([home, logo], "click", () => {
           this.home(products);
         });
-      }
+      },
     );
     Result.compute([...NavigationBar.BROWSE], ([browse]) => {
       UIEvents.listen([browse], "click", () => {
@@ -43,8 +43,8 @@ export const Routes = {
     HomeView.update(products);
     UpdateView.toggle(Views.HOME);
   },
-  aboutus() {},
-  browse() {},
+  aboutus() { },
+  browse() { },
   product(product) {
     ProductView.update(product);
     UpdateView.toggle(Views.PRODUCT);

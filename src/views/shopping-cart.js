@@ -22,14 +22,14 @@ const Identifiers = {
 export const ShoppingCartView = {
   create(id) {
     return UIElements.getByIds([id], ([view]) => {
-      CreateSubviews.items(view);
+      CreateSubviews.orders(view);
       CreateSubviews.shipping(view);
       CreateSubviews.summary(view);
     });
   },
   update(order) {
     if (order) {
-      ShoppingCart.add(order);
+      ShoppingCart.order(order);
     }
 
     const summaries = {
@@ -37,16 +37,16 @@ export const ShoppingCartView = {
       total: 0,
     };
 
-    UpdateSubviews.items(summaries);
+    UpdateSubviews.orders(summaries);
     UpdateSubviews.summary(summaries);
   },
 };
 
 const UpdateSubviews = {
-  items(summaries) {
+  orders(summaries) {
     Result.compute([ShoppingCart.get()], ([cart]) => {
       UIElements.renew(Identifiers.ORDERS, (orders) => {
-        for (const [index, order] of Object.entries(cart)) {
+        for (const [index, order] of Object.entries(JSON.parse(cart))) {
           UIElements.create(orders, "div", (row) => {
             UIClasses.set(orders, ["cart-row"]);
             UIElements.create(row, "img", (thumbnail) => {
@@ -69,11 +69,11 @@ const UpdateSubviews = {
             });
             UIElements.create(row, "div", (colors) => {
               Result.compute(
-                [Validation.getArray(order.colors)],
+                [Validation.getObject(order.color)],
                 ([values]) => {
-                  for (const value of values) {
+                  for (const { name, hex } of values) {
                     UIElements.create(colors, "p", (color) => {
-                      UIStyles.setText(color, value);
+                      UIStyles.setText(color, name);
                     });
                   }
                 },
@@ -86,7 +86,7 @@ const UpdateSubviews = {
               UIStyles.setText(quantity, order.quantity);
             });
             UIElements.create(row, "p", (subtotal) => {
-              const value = order.price * order.unit;
+              const value = order.price * order.quantity;
 
               summaries.subtotal += value;
 
@@ -133,9 +133,9 @@ const UpdateSubviews = {
 };
 
 const CreateSubviews = {
-  items(view) {
-    UIElements.create(view, "div", (items) => {
-      UIElements.setId(items, "cart-items");
+  orders(view) {
+    UIElements.create(view, "div", (orders) => {
+      UIElements.setId(orders, Identifiers.ORDERS);
     });
   },
   shipping(view) {
