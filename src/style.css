@@ -116,3 +116,48 @@
 .product-card .card-content {
   flex-grow: 1;
 }
+
+
+.color-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;      /* not round, just slightly curved */
+  border: 1px solid #ccc;
+  display: inline-block;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.color-box:hover {
+
+  transform: scale(1.15);
+}
+
+.color-box.selected {
+  
+  transform: scale(1.15);
+}
+
+.size-btn {
+  padding: 8px 14px;
+  margin-right: 8px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.size-btn:hover {
+  transform: scale(1.15);
+}
+
+.size-btn.selected {
+  transform: scale(1.12);
+  background: black;
+  color: white;
+  border-color: black;
+}
