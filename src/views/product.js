@@ -157,10 +157,19 @@ const CreateSubviews = {
         UIElements.setId(price, Identifiers.PRICE);
       });
 
-      UIElements.create(details, "p", (desc) => {
-        UIClasses.set(desc, ["mt-4"]);
-        UIElements.setId(desc, Identifiers.DESCRIPTION);
-      });
+      UIElements.create(details, "div", (divider) => {
+  UIClasses.add(divider, ["price-divider"]);
+});
+
+UIElements.create(details, "p", (desc) => {
+  UIClasses.add(desc, ["product-description"]);
+  UIElements.setId(desc, Identifiers.DESCRIPTION);
+});
+
+UIElements.create(details, "div", (divider) => {
+  UIClasses.add(divider, ["price-divider"]);
+});
+
 
       // Material
       UIElements.create(details, "p", (material) => {
@@ -184,21 +193,24 @@ const CreateSubviews = {
 
       // Quantity
       UIElements.create(details, "div", (quantity) => {
-        UIClasses.set(quantity, ["field", "mt-4"]);
-        UIElements.create(quantity, "label", (label) => {
-          UIClasses.set(label, ["label", "control"]);
-          UIStyles.setText(label, "Quantity");
-          UIElements.create(label, "input", (input) => {
-            UIClasses.set(input, ["input"]);
-            UIAttributes.set(input, [
-              ["type", "number"],
-              ["value", "1"],
-              ["min", "1"],
-            ]);
-            UIElements.setId(input, Identifiers.QUANTITY);
-          });
-        });
-      });
+  UIClasses.set(quantity, ["quantity-row", "mt-4"]);
+
+  UIElements.create(quantity, "label", (label) => {
+    UIClasses.set(label, ["label", "mr-3"]);
+    UIStyles.setText(label, "Quantity:");
+  });
+
+  UIElements.create(quantity, "input", (input) => {
+    UIClasses.set(input, ["input", "quantity-input"]);
+    UIAttributes.set(input, [
+      ["type", "number"],
+      ["value", "1"],
+      ["min", "1"],
+      ["id", Identifiers.QUANTITY],
+    ]);
+  });
+});
+
 
       // Add to Cart button
       UIElements.create(details, "button", (button) => {

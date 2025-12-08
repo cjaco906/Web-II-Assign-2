@@ -119,12 +119,12 @@
 
 
 .color-box {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;      /* not round, just slightly curved */
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;      
   border: 1px solid #ccc;
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -160,4 +160,34 @@
   background: black;
   color: white;
   border-color: black;
+}
+
+.product-description {
+  font-size: 1.2rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.price-divider {
+  height: 1px;
+  background: #e5e5e5;
+  margin: 0.8rem 0 1.3rem;
+}
+
+
+.quantity-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quantity-input {
+  width: 70px ;
+  height: 38px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+#details-add-to-cart {
+  margin-top: 3.5rem !important;
 }
