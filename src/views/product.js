@@ -254,7 +254,7 @@ const UpdateSubview = {
   },
 <<<<<<< HEAD
   recommendations(product) {
-    UIElements.renew(Identifiers.RECOMMENDATIONS, (recommendations) => {
+    UIElements.getByIds([Identifiers.RECOMMENDATIONS], ([recommendations]) => {
       Result.compute(
         [ProductBrowsing.getRecommendations(product, 4)],
         ([products]) => {
@@ -283,4 +283,3 @@ const UpdateSubview = {
     )
   }
 }
->>>>>>> b0b2f1a (styled product view color and size)
