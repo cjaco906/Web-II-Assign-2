@@ -154,7 +154,7 @@ export const ShoppingCart = {
     return Result.compute(
       [Validation.getByLocalStorage(key)],
       ([cart]) => {
-        return Result.ok(cart);
+        return Result.ok(JSON.parse(cart));
       },
       () => {
         return Result.compute(
@@ -220,11 +220,7 @@ export const ShoppingCart = {
           color: selection.color,
         };
 
-        try {
-          cart.push(order);
-        } catch (error) {
-          console.error(error);
-        }
+        cart.push(order);
 
         return Validation.setByLocalStorage(
           this.getKey(),
