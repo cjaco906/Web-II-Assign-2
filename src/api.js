@@ -36,21 +36,21 @@ export const ProductStorage = {
                     try {
                       return Validation.setByLocalStorage(
                         LOCAL_STORAGE_KEY,
-                        JSON.stringify(products),
+                        JSON.stringify(products)
                       );
                     } catch (error) {
                       return Result.error(
                         "Failed to stringify the downloaded products",
-                        { products, error },
+                        { products, error }
                       );
                     }
-                  },
+                  }
                 );
               });
             },
-            (error) => Result.error("Non-JSON format found", error),
+            (error) => Result.error("Non-JSON format found", error)
           );
-      },
+      }
     );
   },
 };
@@ -82,7 +82,7 @@ export const ProductBrowsing = {
         }
 
         return Result.ok({ score, product: target });
-      },
+      }
     );
   },
   getRecommendations(base, limit) {
@@ -92,7 +92,7 @@ export const ProductBrowsing = {
       return Result.compute([ProductStorage.fetch()], ([products]) => {
         const scores = [];
 
-        for (const target of products.data) {
+        for (const target of products) {
           if (base.id === target.id) continue;
 
           const result = Result.compute(
@@ -102,9 +102,11 @@ export const ProductBrowsing = {
                 [this.getScore(base, target)],
                 ([score]) => {
                   scores.push(score);
-                },
+
+                  return Result.ok(score);
+                }
               );
-            },
+            }
           );
 
           if (!result.ok) {
@@ -140,9 +142,9 @@ export const ShoppingCart = {
           [Validation.setByLocalStorage(SHOPPING_CART_KEY, [])],
           ([cart]) => {
             return Result.ok(cart);
-          },
+          }
         );
-      },
+      }
     );
   },
   getOrder(product) {
@@ -152,7 +154,7 @@ export const ShoppingCart = {
         const order = cart.find((order) => order.id === product.id);
 
         return Result.ok(order ?? null);
-      },
+      }
     );
   },
   getCountryTypes() {
@@ -184,7 +186,7 @@ export const ShoppingCart = {
         } else {
           return Result.ok(50);
         }
-      },
+      }
     );
   },
   add(order) {
@@ -202,9 +204,9 @@ export const ShoppingCart = {
             cart.push(order);
 
             return Result.ok(order);
-          },
+          }
         );
-      },
+      }
     );
   },
 };

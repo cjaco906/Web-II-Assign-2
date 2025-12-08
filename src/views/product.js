@@ -1,4 +1,5 @@
 import { ProductBrowsing } from "../api";
+import { Routes } from "../routes";
 import {
   UIClasses,
   UIAttributes,
@@ -22,22 +23,19 @@ const Identifiers = {
 export const ProductView = {
   create(id) {
     return UIElements.getByIds([id], ([view]) => {
+      UIElements.create(view, "div", (container) => {
+        UIClasses.set(container, ["columns", "is-variable", "is-8"]);
 
-  
-  UIElements.create(view, "div", (container) => {
-    UIClasses.set(container, ["columns", "is-variable", "is-8"]);
+        // left side images
+        CreateSubviews.images(container);
 
-    // left side images
-    CreateSubviews.images(container);
+        // right side details
+        CreateSubviews.details(container);
+      });
 
-    // right side details
-    CreateSubviews.details(container);
-  });
-
-  // recommendations under it
-  CreateSubviews.recommendations(view);
-});
-
+      // recommendations under it
+      CreateSubviews.recommendations(view);
+    });
   },
   update(product) {
     UpdateSubview.details(product);
@@ -48,7 +46,7 @@ export const ProductOverview = {
   create(parent, title, products) {
     UIElements.create(parent, "div", (container) => {
       UIClasses.set(container, ["container, is-variable, is-8"]);
-      
+
       UIElements.create(container, "h2", (header) => {
         UIClasses.add(header, [
           "title",
@@ -65,7 +63,7 @@ export const ProductOverview = {
           UIElements.create(columns, "div", (container) => {
             UIClasses.add(container, ["column", "is-one-quarter"]);
             UIElements.create(container, "div", (card) => {
-              UIClasses.add(card, ["card", "product-card",]);
+              UIClasses.add(card, ["card", "product-card"]);
               UIElements.create(card, "div", (imagec) => {
                 UIClasses.add(imagec, ["card-image"]);
                 UIElements.create(imagec, "figure", (figure) => {
@@ -92,6 +90,9 @@ export const ProductOverview = {
                   UIStyles.setText(price, product.price);
                 });
               });
+              UIEvents.listen([card], "click", () => {
+                Routes.product(product);
+              });
             });
           });
         }
@@ -101,87 +102,83 @@ export const ProductOverview = {
 };
 
 const CreateSubviews = {
- images(view) {
-  UIElements.create(view, "div", (images) => {
+  images(view) {
+    UIElements.create(view, "div", (images) => {
+      UIClasses.set(images, ["column", "is-half", "product-images"]);
 
-   
-    UIClasses.set(images, ["column", "is-half", "product-images"]);
-
-    
-    UIElements.create(images, "figure", (fig) => {
-      UIClasses.add(fig, ["image", "is-4by5"]);
-      UIElements.create(fig, "img", (main) => {
-        UIAttributes.set(main, [["id", Identifiers.IMAGE_MAIN]]);
-      });
-    });
-
-    
-    UIElements.create(images, "div", (thumbRow) => {
-      UIClasses.add(thumbRow, ["columns", "is-mobile", "thumbnail-row"]);
-
-      
-      UIElements.create(thumbRow, "div", (col) => {
-        UIClasses.add(col, ["column", "is-3"]);
-        UIElements.create(col, "img", (img) => {
-          UIAttributes.set(img, [["id", Identifiers.IMAGE_OTHER_SECOND]]);
+      UIElements.create(images, "figure", (fig) => {
+        UIClasses.add(fig, ["image", "is-4by5"]);
+        UIElements.create(fig, "img", (main) => {
+          UIAttributes.set(main, [["id", Identifiers.IMAGE_MAIN]]);
         });
       });
 
-      
-      UIElements.create(thumbRow, "div", (col) => {
-        UIClasses.add(col, ["column", "is-3"]);
-        UIElements.create(col, "img", (img) => {
-          UIAttributes.set(img, [["id", Identifiers.IMAGE_OTHER_THIRD]]);
+      UIElements.create(images, "div", (thumbRow) => {
+        UIClasses.add(thumbRow, ["columns", "is-mobile", "thumbnail-row"]);
+
+        UIElements.create(thumbRow, "div", (col) => {
+          UIClasses.add(col, ["column", "is-3"]);
+          UIElements.create(col, "img", (img) => {
+            UIAttributes.set(img, [["id", Identifiers.IMAGE_OTHER_SECOND]]);
+          });
+        });
+
+        UIElements.create(thumbRow, "div", (col) => {
+          UIClasses.add(col, ["column", "is-3"]);
+          UIElements.create(col, "img", (img) => {
+            UIAttributes.set(img, [["id", Identifiers.IMAGE_OTHER_THIRD]]);
+          });
         });
       });
-
     });
-  });
-},
+  },
 
-details(view) {
-  UIElements.create(view, "div", (details) => {
-    UIClasses.set(details, ["column", "is-half", "product-details"]);
+  details(view) {
+    UIElements.create(view, "div", (details) => {
+      UIClasses.set(details, ["column", "is-half", "product-details"]);
 
-    UIElements.create(details, "h1", (title) => {
-      UIClasses.set(title, ["title", "is-2"]);
-      UIElements.setId(title, Identifiers.TITLE);
-    });
+      UIElements.create(details, "h1", (title) => {
+        UIClasses.set(title, ["title", "is-2"]);
+        UIElements.setId(title, Identifiers.TITLE);
+      });
 
-    UIElements.create(details, "p", (price) => {
-      UIClasses.set(price, ["title", "is-4", "has-text-weight-semibold"]);
-      UIElements.setId(price, Identifiers.PRICE);
-    });
+      UIElements.create(details, "p", (price) => {
+        UIClasses.set(price, ["title", "is-4", "has-text-weight-semibold"]);
+        UIElements.setId(price, Identifiers.PRICE);
+      });
 
-    UIElements.create(details, "p", (desc) => {
-      UIClasses.set(desc, ["mt-4"]);
-      UIElements.setId(desc, Identifiers.DESCRIPTION);
-    });
+      UIElements.create(details, "p", (desc) => {
+        UIClasses.set(desc, ["mt-4"]);
+        UIElements.setId(desc, Identifiers.DESCRIPTION);
+      });
 
-    // Material
-    UIElements.create(details, "p", (material) => {
-      UIClasses.set(material, ["mt-3"]);
-      material.innerHTML = "<strong>Material:</strong> <span id='" + Identifiers.MATERIAL + "'></span>";
-    });
+      // Material
+      UIElements.create(details, "p", (material) => {
+        UIClasses.set(material, ["mt-3"]);
+        material.innerHTML =
+          "<strong>Material:</strong> <span id='" +
+          Identifiers.MATERIAL +
+          "'></span>";
+      });
 
-    // Quantity
-    UIElements.create(details, "div", (qtyBox) => {
-      UIClasses.set(qtyBox, ["field", "mt-4"]);
-      qtyBox.innerHTML = `
+      // Quantity
+      UIElements.create(details, "div", (qtyBox) => {
+        UIClasses.set(qtyBox, ["field", "mt-4"]);
+        qtyBox.innerHTML = `
         <label class="label">Quantity</label>
         <div class="control">
           <input id="${Identifiers.QUANTITY}" class="input" type="number" value="1" min="1">
         </div>
       `;
-    });
+      });
 
-    // Add to Cart button
-    UIElements.create(details, "button", (btn) => {
-      UIClasses.set(btn, ["button", "is-black", "is-medium", "mt-4"]);
-      btn.textContent = "Add to Cart";
+      // Add to Cart button
+      UIElements.create(details, "button", (btn) => {
+        UIClasses.set(btn, ["button", "is-black", "is-medium", "mt-4"]);
+        btn.textContent = "Add to Cart";
+      });
     });
-  });
-},
+  },
 
   recommendations(view) {
     UIElements.create(view, "section", (recommendations) => {
@@ -190,7 +187,6 @@ details(view) {
     });
   },
 };
-
 
 const UpdateSubview = {
   details(product) {
@@ -215,10 +211,10 @@ const UpdateSubview = {
           ProductOverview.create(
             recommendations,
             "Related Products",
-            related.data,
+            related.data
           );
         }
-      },
+      }
     );
   },
 };
