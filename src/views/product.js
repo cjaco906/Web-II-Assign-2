@@ -227,7 +227,6 @@ const UpdateSubview = {
       });
     });
     UIElements.getByIds([Identifiers.SIZES], ([sizes]) => {
-      console.log(sizes);
       Result.compute([Validation.getArray(product.sizes)], ([values]) => {
         for (const value of values) {
           UIElements.create(sizes, "button", (size) => {

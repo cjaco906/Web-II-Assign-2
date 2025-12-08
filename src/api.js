@@ -64,13 +64,21 @@ export const ProductBrowsing = {
 
         for (const [key, bvalue] of Object.entries(base)) {
           const tvalue = target[key];
-          const isObject = typeof bvalue === "object";
 
-          Result.compute(
-            [Validation.getArray(bvalue), Validation.getArray(tvalue)],
-            ([barray, tarray]) => {}
-          );
-          if (isObject) {
+          if (Array.isArray(bvalue)) {
+            Result.compute(
+              [Validation.getArray(bvalue), Validation.getArray(tvalue)],
+              ([barray, tarray]) => {
+                for (const bitem of barray.sort()) {
+                  for (const titem of tarray.sort()) {
+                    if (bitem === titem) {
+                      ++score;
+                    }
+                  }
+                }
+              }
+            );
+          } else if (typeof bvalue === "object") {
             const subscore = this.getScore(bvalue, tvalue);
 
             if (subscore.ok) {
