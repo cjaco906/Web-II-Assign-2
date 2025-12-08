@@ -252,7 +252,6 @@ const UpdateSubview = {
       sizesBox.appendChild(btn)
     })
   },
-<<<<<<< HEAD
   recommendations(product) {
     UIElements.getByIds([Identifiers.RECOMMENDATIONS], ([recommendations]) => {
       Result.compute(
@@ -263,8 +262,6 @@ const UpdateSubview = {
       );
     });
   },
-};
-=======
 
   recommendations (product) {
     UIElements.getByIds(
