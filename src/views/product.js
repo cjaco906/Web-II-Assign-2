@@ -254,7 +254,7 @@ const UpdateSubview = {
   },
 <<<<<<< HEAD
   recommendations(product) {
-    UIElements.getByIds([Identifiers.RECOMMENDATIONS], ([recommendations]) => {
+    UIElements.renew(Identifiers.RECOMMENDATIONS, (recommendations) => {
       Result.compute(
         [ProductBrowsing.getRecommendations(product, 4)],
         ([products]) => {
