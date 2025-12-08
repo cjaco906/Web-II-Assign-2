@@ -237,19 +237,13 @@ const UpdateSubview = {
     });
   },
   recommendations(product) {
-    UIElements.getByIds(
-      [Identifiers.RECOMMENDATIONS],
-      async ([recommendations]) => {
-        const related = await ProductBrowsing.getRecommendations(product, 4);
-
-        if (related.ok) {
-          ProductOverview.create(
-            recommendations,
-            "Related Products",
-            related.data
-          );
+    UIElements.getByIds([Identifiers.RECOMMENDATIONS], ([recommendations]) => {
+      Result.compute(
+        [ProductBrowsing.getRecommendations(product, 4)],
+        ([products]) => {
+          ProductOverview.create(recommendations, "Related Products", products);
         }
-      }
-    );
+      );
+    });
   },
 };
