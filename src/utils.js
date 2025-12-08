@@ -215,8 +215,13 @@ export const UIStyles = {
     return Validation.getStringOrNumber(element.textContent);
   },
   setText(element, value) {
-    return Result.compute([Validation.getStringOrNumber(value)], (text) => {
+    return Result.compute([Validation.getStringOrNumber(value)], ([text]) => {
       element.textContent = text;
+    });
+  },
+  setBackgroundColor(element, value) {
+    return Result.compute([Validation.getString(value)], ([color]) => {
+      element.style.backgroundColor = color;
     });
   },
 };
@@ -267,20 +272,33 @@ export const UIClasses = {
   select(selectors) {
     return Array.from(document.querySelectorAll(selectors));
   },
+  has(element, classes) {
+    return classes.some((value) => {
+      return element.classList.contains(value);
+    });
+  },
   add(element, classes) {
-    classes.forEach((value) => element.classList.add(value));
+    classes.forEach((value) => {
+      element.classList.add(value);
+    });
   },
   set(element, classes) {
     element.classList = classes.join(" ");
   },
   remove(element, classes) {
-    classes.forEach((value) => element.classList.remove(value));
+    classes.forEach((value) => {
+      element.classList.remove(value);
+    });
   },
   toggle(element, classes) {
-    classes.forEach((value) => element.classList.toggle(value));
+    classes.forEach((value) => {
+      element.classList.toggle(value);
+    });
   },
   replace(element, entries) {
-    entries.forEach(([old, change]) => element.classList.replace(old, change));
+    entries.forEach(([old, change]) => {
+      element.classList.replace(old, change);
+    });
   },
 };
 

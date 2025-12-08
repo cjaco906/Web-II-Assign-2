@@ -7,6 +7,7 @@ import {
   UIStyles,
   UIEvents,
   Result,
+  Validation,
 } from "../utils";
 
 const Identifiers = {
@@ -175,11 +176,12 @@ const CreateSubviews = {
       // Material
       UIElements.create(details, "p", (material) => {
         UIClasses.set(material, ["mt-3"]);
-
-        material.innerHTML =
-          "<strong>Material:</strong> <span id='" +
-          Identifiers.MATERIAL +
-          "'></span>";
+        UIElements.create(material, "strong", (strong) => {
+          UIStyles.setText(strong, "Material");
+          UIElements.create(strong, "span", (span) => {
+            UIElements.setId(span, Identifiers.MATERIAL);
+          });
+        });
       });
 
       UIElements.create(details, "div", (colors) => {
@@ -258,7 +260,6 @@ const CreateSubviews = {
             Result.compute(
               [ProductBrowsing.getById(products, id)],
               ([product]) => {
-                console.log(selection);
                 Routes.cart({ product, selection });
               },
             );
@@ -290,48 +291,46 @@ const UpdateSubview = {
     UIElements.getByIds([Identifiers.MATERIAL], ([material]) => {
       UIStyles.setText(material, product.material);
     });
-
-    //color box
-    const colorsBox = document.querySelector(`#${Identifiers.COLORS}`);
-    colorsBox.innerHTML = "<p class='label mt-4'>Color:</p>";
-
-    product.color.forEach((c) => {
-      const box = document.createElement("div");
-      box.className = "color-box";
-      box.setAttribute("name", c.name);
-      box.setAttribute("hex", c.hex);
-      box.style.backgroundColor = c.hex;
-
-      box.addEventListener("click", () => {
-        colorsBox
-          .querySelectorAll(".color-box")
-          .forEach((el) => el.classList.remove("selected"));
-        box.classList.add("selected");
+    UIElements.getByIds([Identifiers.COLORS], ([colors]) => {
+      UIElements.create(colors, "p", (label) => {
+        UIClasses.set(label, ["label", "mt-4"]);
+        UIStyles.setText(label, "Color");
       });
 
-      colorsBox.appendChild(box);
+      Result.compute([Validation.getArray(product.color)], ([values]) => {
+        for (const value of values) {
+          UIElements.create(colors, "button", (box) => {
+            UIClasses.set(box, ["color-button"]);
+            UIAttributes.set(box, [
+              ["name", value.name],
+              ["hex", value.hex],
+            ]);
+            UIStyles.setBackgroundColor(box, value.hex);
+            UIEvents.listen([box], "click", () => {
+              UIClasses.toggle(box, ["selected"]);
+            });
+          });
+        }
+      });
     });
-
-    //size box
-    const sizesBox = document.querySelector(`#${Identifiers.SIZES}`);
-    sizesBox.innerHTML = "<p class='label mt-4'>Size:</p>";
-
-    product.sizes.forEach((s) => {
-      const btn = document.createElement("button");
-      console.log(s);
-      btn.className = "size-btn";
-      btn.textContent = s;
-
-      btn.addEventListener("click", () => {
-        sizesBox
-          .querySelectorAll(".size-btn")
-          .forEach((el) => el.classList.remove("selected"));
-        btn.classList.add("selected");
+    UIElements.getByIds([Identifiers.SIZES], ([sizes]) => {
+      UIElements.create(sizes, "p", (label) => {
+        UIClasses.set(label, ["label", "mt-4"]);
+        UIStyles.setText(label, "Size");
       });
 
-      sizesBox.appendChild(btn);
+      Result.compute([Validation.getArray(product.sizes)], ([values]) => {
+        for (const value of values) {
+          UIElements.create(sizes, "button", (box) => {
+            UIClasses.set(box, ["size-button"]);
+            UIStyles.setText(box, value);
+            UIEvents.listen([box], "click", () => {
+              UIClasses.toggle(box, ["selected"]);
+            });
+          });
+        }
+      });
     });
-
     UIElements.getByIds([Identifiers.ADD_TO_CART], ([button]) => {
       UIAttributes.set(button, [["product", product.id]]);
     });

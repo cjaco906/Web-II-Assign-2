@@ -94,14 +94,17 @@
 .product-page-container {
   padding: 2rem 1.5rem;
 }
+
 .product-images img {
   border-radius: 8px;
 }
+
 .thumbnail-row img {
   border-radius: 6px;
   cursor: pointer;
   opacity: 0.85;
 }
+
 .thumbnail-row img:hover {
   opacity: 1;
 }
@@ -112,16 +115,14 @@
   flex-direction: column;
 }
 
-
 .product-card .card-content {
   flex-grow: 1;
 }
 
-
-.color-box {
+.color-button {
   width: 60px;
   height: 60px;
-  border-radius: 8px;      
+  border-radius: 8px;
   border: 1px solid #ccc;
   display: inline-block;
   margin-right: 12px;
@@ -129,17 +130,15 @@
   transition: all 0.2s ease;
 }
 
-.color-box:hover {
-
+.color-button:hover {
   transform: scale(1.15);
 }
 
-.color-box.selected {
-  
+.color-button.selected {
   transform: scale(1.15);
 }
 
-.size-btn {
+.size-button {
   padding: 8px 14px;
   margin-right: 8px;
   margin-top: 6px;
@@ -151,11 +150,11 @@
   font-weight: 500;
 }
 
-.size-btn:hover {
+.size-button:hover {
   transform: scale(1.15);
 }
 
-.size-btn.selected {
+.size-button.selected {
   transform: scale(1.12);
   background: black;
   color: white;
@@ -173,7 +172,6 @@
   margin: 0.8rem 0 1.3rem;
 }
 
-
 .quantity-row {
   display: flex;
   align-items: center;
@@ -181,7 +179,7 @@
 }
 
 .quantity-input {
-  width: 70px ;
+  width: 70px;
   height: 38px;
   padding: 6px 8px;
   border-radius: 6px;
@@ -254,13 +252,12 @@
   background: #fafafa;
 }
 
-
 .summary {
   background: white;
   padding: 24px;
   border-radius: 12px;
   border: 1px solid #e6e6e6;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   width: 100%;
 }
 
@@ -293,12 +290,9 @@
   border-top: 1px solid #ddd;
 }
 
-
-
 .cart-summary-column {
   padding-left: 20px;
 }
-
 
 .shipping-section {
   margin-bottom: 20px;
@@ -307,13 +301,11 @@
   gap: 12px;
 }
 
-
 .shipping-section-label {
   font-weight: 600;
   font-size: 1rem;
   margin-bottom: 6px;
 }
-
 
 .shipping-section select {
   padding: 10px 14px;
@@ -324,13 +316,11 @@
   transition: 0.25s ease;
 }
 
-
 .cart-summary-title {
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 18px;
 }
-
 
 .summary {
   padding: 28px;
