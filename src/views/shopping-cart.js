@@ -22,9 +22,28 @@ const Identifiers = {
 export const ShoppingCartView = {
   create(id) {
     return UIElements.getByIds([id], ([view]) => {
-      CreateSubviews.orders(view);
-      CreateSubviews.shipping(view);
-      CreateSubviews.summary(view);
+      
+      UIElements.create(view, "div", (container) => {
+        UIClasses.set(container, ["container", "mt-6"]);
+
+        
+        UIElements.create(container, "div", (columns) => {
+          UIClasses.set(columns, ["columns", "is-variable", "is-8"]);
+
+          
+          UIElements.create(columns, "div", (left) => {
+            UIClasses.set(left, ["column", "is-two-thirds"]);
+            CreateSubviews.orders(left);
+            CreateSubviews.shipping(left);
+          });
+
+          
+          UIElements.create(columns, "div", (right) => {
+            UIClasses.set(right, ["column", "is-one-third", "cart-summary-column"]);
+            CreateSubviews.summary(right);
+          });
+        });
+      });
     });
   },
   update(order) {
@@ -47,56 +66,79 @@ const UpdateSubviews = {
     Result.compute([ShoppingCart.get()], ([cart]) => {
       UIElements.renew(Identifiers.ORDERS, (orders) => {
         for (const [index, order] of Object.entries(JSON.parse(cart))) {
-          UIElements.create(orders, "div", (row) => {
-            UIClasses.set(orders, ["cart-row"]);
-            UIElements.create(row, "img", (thumbnail) => {
-              UIAttributes.set(thumbnail, [
-                ["src", "https://picsum.photos/400?" + index],
-              ]);
-              UIClasses.set(thumbnail, ["cart-thumb"]);
-            });
-            UIElements.create(row, "p", (title) => {
-              UIStyles.setText(title, order.name);
-            });
-            UIElements.create(row, "div", (sizes) => {
-              Result.compute([Validation.getArray(order.sizes)], ([values]) => {
-                for (const value of values) {
-                  UIElements.create(sizes, "p", (size) => {
-                    UIStyles.setText(size, value);
-                  });
-                }
-              });
-            });
-            UIElements.create(row, "div", (colors) => {
-              Result.compute(
-                [Validation.getObject(order.color)],
-                ([values]) => {
-                  for (const { name, hex } of values) {
-                    UIElements.create(colors, "p", (color) => {
-                      UIStyles.setText(color, name);
-                    });
-                  }
-                },
-              );
-            });
-            UIElements.create(row, "p", (price) => {
-              UIStyles.setText(price, order.price);
-            });
-            UIElements.create(row, "p", (quantity) => {
-              UIStyles.setText(quantity, order.quantity);
-            });
-            UIElements.create(row, "p", (subtotal) => {
-              const value = order.price * order.quantity;
+UIElements.create(orders, "div", (row) => {
+  UIClasses.set(row, ["columns", "is-vcentered", "py-4", "cart-row"]);
+  
 
-              summaries.subtotal += value;
+  // IMAGE
+  UIElements.create(row, "div", (colImg) => {
+    UIClasses.set(colImg, ["column", "is-2"]);
+    UIElements.create(colImg, "figure", (fig) => {
+      UIClasses.set(fig, ["image", "is-96x96"]);
+      UIElements.create(fig, "img", (thumbnail) => {
+        UIAttributes.set(thumbnail, [
+          ["src", "https://picsum.photos/200?" + index],
+        ]);
+        UIClasses.set(thumbnail, );
+      });
+    });
+  });
 
-              UIStyles.setText(subtotal, value);
+  // PRODUCT INFO
+  UIElements.create(row, "div", (colInfo) => {
+    UIClasses.set(colInfo, ["column", "is-4"]);
+
+    UIElements.create(colInfo, "p", (title) => {
+      UIClasses.set(title, ["cart-product-title", "mb-1"]);
+      UIStyles.setText(title, order.name);
+    });
+
+    UIElements.create(colInfo, "p", (size) => {
+      UIClasses.set(size, ["cart-detail"]);
+      size.innerHTML = `<strong>Size:</strong> ${order.sizes.join(", ")}`;
+    });
+
+    UIElements.create(colInfo, "p", (color) => {
+      UIClasses.set(color, ["cart-detail"]);
+
+      color.innerHTML = `<strong>Color:</strong> ${order.color[0].name}`;
+    });
+  });
+
+  // PRICE
+  UIElements.create(row, "div", (colPrice) => {
+    UIClasses.set(colPrice, ["column", "is-2", "has-text-right"]);
+    UIElements.create(colPrice, "p", (price) => {
+      UIStyles.setText(price, "$" + order.price.toFixed(2));
+    });
+  });
+
+  // QUANTITY
+  UIElements.create(row, "div", (colQty) => {
+    UIClasses.set(colQty, ["column", "is-2", "has-text-centered"]);
+    UIElements.create(colQty, "p", (quantity) => {
+      UIStyles.setText(quantity, order.quantity);
+    });
+  });
+
+  // SUBTOTAL
+  UIElements.create(row, "div", (colSub) => {
+    UIClasses.set(colSub, ["column", "is-2", "has-text-right"]);
+    UIElements.create(colSub, "p", (subtotal) => {
+      const value = order.price * order.quantity;
+      summaries.subtotal += value;
+      UIStyles.setText(subtotal, "$" + value.toFixed(2));
+   });
             });
+
           });
         }
       });
     });
-  },
+  }, 
+
+
+        
   summary(summaries) {
     UIElements.renew(Identifiers.SUMMARY_MERCH, (merch) => {
       UIStyles.setText(merch, summaries.subtotal);
@@ -133,11 +175,48 @@ const UpdateSubviews = {
 };
 
 const CreateSubviews = {
-  orders(view) {
-    UIElements.create(view, "div", (orders) => {
+orders(view) {
+  // WRAPPER
+  UIElements.create(view, "div", (wrapper) => {
+    UIClasses.set(wrapper, ["mb-4"]);
+
+    // HEADER ROW
+    UIElements.create(wrapper, "div", (header) => {
+      UIClasses.set(header, [
+        "columns",
+        "is-hidden-touch",
+        "py-3",
+        "mb-3",
+        "has-text-grey",
+        "has-text-weight-semibold",
+        "cart-header"
+      ]);
+
+      const labels = ["Product", "Price", "Qty", "Subtotal"];
+      const sizes = [
+        "column is-6",
+        "column is-2",
+        "column is-2 has-text-centered",
+        "column is-2 has-text-right"
+      ];
+
+      labels.forEach((text, i) => {
+        UIElements.create(header, "div", (col) => {
+          UIClasses.set(col, sizes[i].split(" "));
+          UIElements.create(col, "p", (p) => UIStyles.setText(p, text));
+        });
+      });
+    });
+
+    // REAL ORDERS LIST (this is the container that gets cleared + refilled)
+    UIElements.create(wrapper, "div", (orders) => {
       UIElements.setId(orders, Identifiers.ORDERS);
     });
-  },
+  });
+},
+
+
+  
   shipping(view) {
     UIElements.create(view, "div", (shipping) => {
       UIClasses.set(shipping, ["shipping-section"]);
