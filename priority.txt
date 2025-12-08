@@ -4,3 +4,11 @@ Todo first
 3. Browse View
 4. About Us View
 5. Home View
+
+
+
+dont forget:
+cart delete button
+Breadcrumbs in product View
+toaster message when added to cart
+updating shipping info
