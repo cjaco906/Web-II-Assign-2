@@ -31,7 +31,6 @@ export const ShoppingCartView = {
           UIElements.create(columns, "div", (left) => {
             UIClasses.set(left, ["column", "is-two-thirds"]);
             CreateSubviews.orders(left);
-            
           });
 
           UIElements.create(columns, "div", (right) => {
@@ -42,7 +41,6 @@ export const ShoppingCartView = {
             ]);
             CreateSubviews.shipping(right);
             CreateSubviews.summary(right);
-            
           });
         });
       });
@@ -80,7 +78,7 @@ const UpdateSubviews = {
                   UIAttributes.set(thumbnail, [
                     ["src", "https://picsum.photos/200?" + index],
                   ]);
-                  UIClasses.set(thumbnail);
+                  UIClasses.set(thumbnail, [""]);
                 });
               });
             });
@@ -151,7 +149,6 @@ const UpdateSubviews = {
               summaries.total += cost;
 
               UIStyles.setText(text, cost.toFixed(2));
-
             },
           );
         });
@@ -162,14 +159,16 @@ const UpdateSubviews = {
               summaries.total += cost;
 
               UIStyles.setText(text, cost.toFixed(2));
-
             },
           );
         });
       },
     );
     UIElements.renew(Identifiers.SUMMARY_TOTAL, (text) => {
-      UIStyles.setText(text, (summaries.total += summaries.subtotal).toFixed(2));
+      UIStyles.setText(
+        text,
+        (summaries.total += summaries.subtotal).toFixed(2),
+      );
     });
   },
 };
@@ -215,121 +214,117 @@ const CreateSubviews = {
     });
   },
 
-shipping(view) {
-  UIElements.create(view, "div", (shipping) => {
-    UIClasses.set(shipping, ["shipping-section"]);
+  shipping(view) {
+    UIElements.create(view, "div", (shipping) => {
+      UIClasses.set(shipping, ["shipping-section"]);
 
-    // Label
-    UIElements.create(shipping, "p", (label) => {
-      UIStyles.setText(label, "Select a Shipping Option:");
-      UIClasses.set(label, ["shipping-section-label"]);
-    });
+      // Label
+      UIElements.create(shipping, "p", (label) => {
+        UIStyles.setText(label, "Select a Shipping Option:");
+        UIClasses.set(label, ["shipping-section-label"]);
+      });
 
-    // Shipping type select
-    UIElements.create(shipping, "select", (type) => {
-      ["Standard", "Express", "Priority"].forEach((value, index) => {
-        UIElements.create(type, "option", (option) => {
-          UIAttributes.set(option, [["value", index]]);
-          UIStyles.setText(option, value);
+      // Shipping type select
+      UIElements.create(shipping, "select", (type) => {
+        ["Standard", "Express", "Priority"].forEach((value, index) => {
+          UIElements.create(type, "option", (option) => {
+            UIAttributes.set(option, [["value", index]]);
+            UIStyles.setText(option, value);
+          });
+        });
+        UIElements.setId(type, Identifiers.SELECT_SHIPPING_TYPE);
+        UIEvents.listen([type], "change", () => {
+          this.show();
         });
       });
-      UIElements.setId(type, Identifiers.SELECT_SHIPPING_TYPE);
-      UIEvents.listen([type], "change", () => {
-        this.show();
-      });
-    });
 
-    // Destination select
-    UIElements.create(shipping, "select", (destination) => {
-      ["Canada", "United States", "International"].forEach((value, index) => {
-        UIElements.create(destination, "option", (option) => {
-          UIAttributes.set(option, [["value", index]]);
-          UIStyles.setText(option, value);
+      // Destination select
+      UIElements.create(shipping, "select", (destination) => {
+        ["Canada", "United States", "International"].forEach((value, index) => {
+          UIElements.create(destination, "option", (option) => {
+            UIAttributes.set(option, [["value", index]]);
+            UIStyles.setText(option, value);
+          });
+        });
+        UIElements.setId(destination, Identifiers.SELECT_SHIPPING_DEST);
+        UIEvents.listen([destination], "change", () => {
+          this.show();
         });
       });
-      UIElements.setId(destination, Identifiers.SELECT_SHIPPING_DEST);
-      UIEvents.listen([destination], "change", () => {
-        this.show();
+    });
+  },
+
+  summary(view) {
+    UIElements.create(view, "div", (summary) => {
+      UIClasses.set(summary, ["summary"]);
+
+      // title
+      UIElements.create(summary, "h3", (title) => {
+        UIClasses.set(title, ["cart-summary-title"]);
+        UIStyles.setText(title, "Cart Totals");
+      });
+
+      // Divider
+      UIElements.create(summary, "hr", (line) => {
+        UIClasses.set(line, ["cart-summary-divider"]);
+      });
+
+      // Merchandise row
+      UIElements.create(summary, "div", (row) => {
+        UIClasses.set(row, ["summary-row"]);
+        UIElements.create(row, "p", (label) => {
+          UIClasses.set(label, ["summary-label"]);
+          UIStyles.setText(label, "Merchandise");
+        });
+        UIElements.create(row, "p", (value) => {
+          UIClasses.set(value, ["summary-value"]);
+          UIElements.setId(value, Identifiers.SUMMARY_MERCH);
+        });
+      });
+
+      // Shipping row
+      UIElements.create(summary, "div", (row) => {
+        UIClasses.set(row, ["summary-row"]);
+        UIElements.create(row, "p", (label) => {
+          UIClasses.set(label, ["summary-label"]);
+          UIStyles.setText(label, "Shipping");
+        });
+        UIElements.create(row, "p", (value) => {
+          UIClasses.set(value, ["summary-value"]);
+          UIElements.setId(value, Identifiers.SUMMARY_SHIPPING);
+        });
+      });
+
+      // Tax row
+      UIElements.create(summary, "div", (row) => {
+        UIClasses.set(row, ["summary-row"]);
+        UIElements.create(row, "p", (label) => {
+          UIClasses.set(label, ["summary-label"]);
+          UIStyles.setText(label, "Tax");
+        });
+        UIElements.create(row, "p", (value) => {
+          UIClasses.set(value, ["summary-value"]);
+          UIElements.setId(value, Identifiers.SUMMARY_TAX);
+        });
+      });
+
+      // Total row
+      UIElements.create(summary, "div", (row) => {
+        UIClasses.set(row, ["summary-row", "summary-total"]);
+        UIElements.create(row, "p", (label) => {
+          UIStyles.setText(label, "Total");
+        });
+        UIElements.create(row, "p", (value) => {
+          UIElements.setId(value, Identifiers.SUMMARY_TOTAL);
+        });
+      });
+
+      // Checkout button
+      UIElements.create(summary, "button", (btn) => {
+        UIClasses.set(btn, ["button", "is-black", "is-fullwidth", "mt-4"]);
+        UIStyles.setText(btn, "Checkout");
+        UIEvents.listen([btn], "click", () => alert("Order placed!"));
       });
     });
-  });
-},
-
-
-summary(view) {
-  UIElements.create(view, "div", (summary) => {
-    UIClasses.set(summary, ["summary"]);
-
-    // title
-    UIElements.create(summary, "h3", (title) => {
-      UIClasses.set(title, ["cart-summary-title"]);
-      UIStyles.setText(title, "Cart Totals");
-    });
-
-    // Divider 
-UIElements.create(summary, "hr", (line) => {
-  UIClasses.set(line, ["cart-summary-divider"]);
-});
-
-
-
-    // Merchandise row
-    UIElements.create(summary, "div", (row) => {
-      UIClasses.set(row, ["summary-row"]);
-      UIElements.create(row, "p", (label) => {
-        UIClasses.set(label, ["summary-label"]);
-        UIStyles.setText(label, "Merchandise");
-      });
-      UIElements.create(row, "p", (value) => {
-        UIClasses.set(value, ["summary-value"]);
-        UIElements.setId(value, Identifiers.SUMMARY_MERCH);
-      });
-    });
-
-    // Shipping row
-    UIElements.create(summary, "div", (row) => {
-      UIClasses.set(row, ["summary-row"]);
-      UIElements.create(row, "p", (label) => {
-        UIClasses.set(label, ["summary-label"]);
-        UIStyles.setText(label, "Shipping");
-      });
-      UIElements.create(row, "p", (value) => {
-        UIClasses.set(value, ["summary-value"]);
-        UIElements.setId(value, Identifiers.SUMMARY_SHIPPING);
-      });
-    });
-
-    // Tax row
-    UIElements.create(summary, "div", (row) => {
-      UIClasses.set(row, ["summary-row"]);
-      UIElements.create(row, "p", (label) => {
-        UIClasses.set(label, ["summary-label"]);
-        UIStyles.setText(label, "Tax");
-      });
-      UIElements.create(row, "p", (value) => {
-        UIClasses.set(value, ["summary-value"]);
-        UIElements.setId(value, Identifiers.SUMMARY_TAX);
-      });
-    });
-
-    // Total row
-    UIElements.create(summary, "div", (row) => {
-      UIClasses.set(row, ["summary-row", "summary-total"]);
-      UIElements.create(row, "p", (label) => {
-        UIStyles.setText(label, "Total");
-      });
-      UIElements.create(row, "p", (value) => {
-        UIElements.setId(value, Identifiers.SUMMARY_TOTAL);
-      });
-    });
-
-    // Checkout button
-    UIElements.create(summary, "button", (btn) => {
-      UIClasses.set(btn, ["button", "is-black", "is-fullwidth", "mt-4"]);
-      UIStyles.setText(btn, "Checkout");
-      UIEvents.listen([btn], "click", () => alert("Order placed!"));
-    });
-  });
-}
-
+  },
 };
