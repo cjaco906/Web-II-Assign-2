@@ -25,6 +25,10 @@ const Identifiers = {
   RECOMMENDATIONS: "details-recommendations",
 };
 
+function formatPrice(value) {
+  return "$" + Number(value).toFixed(2);
+}
+
 export const ProductView = {
   create(id) {
     return UIElements.getByIds([id], ([view]) => {
@@ -93,7 +97,7 @@ export const ProductOverview = {
                 });
                 UIElements.create(content, "p", (price) => {
                   UIClasses.add(price, ["subtitle", "is-6", "has-text-grey"]);
-                  UIStyles.setText(price, product.price);
+                  UIStyles.setText(price, formatPrice(product.price));
                 });
               });
               UIEvents.listen([card], "click", () => {
@@ -266,7 +270,7 @@ const UpdateSubview = {
       UIStyles.setText(title, product.name);
     });
     UIElements.getByIds([Identifiers.PRICE], ([price]) => {
-      UIStyles.setText(price, product.price);
+      UIStyles.setText(price, formatPrice(product.price));
     });
     UIElements.getByIds([Identifiers.DESCRIPTION], ([description]) => {
       UIStyles.setText(description, product.description);
