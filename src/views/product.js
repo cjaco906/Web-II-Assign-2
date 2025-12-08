@@ -6,6 +6,8 @@ import {
   UIElements,
   UIStyles,
   UIEvents,
+  Result,
+  Validation,
 } from "../utils";
 
 const Identifiers = {
@@ -16,6 +18,8 @@ const Identifiers = {
   PRICE: "details-price",
   DESCRIPTION: "details-description",
   MATERIAL: "details-material",
+  COLORS: "details-colors",
+  SIZES: "details-sizes",
   QUANTITY: "details-quantity",
   RECOMMENDATIONS: "details-recommendations",
 };
@@ -39,6 +43,7 @@ export const ProductView = {
   },
   update(product) {
     UpdateSubview.details(product);
+    UpdateSubview.recommendations(product);
   },
 };
 
@@ -161,6 +166,16 @@ const CreateSubviews = {
           "'></span>";
       });
 
+      UIElements.create(details, "div", (colors) => {
+        UIClasses.set(colors, ["placeholder"]);
+        UIElements.setId(colors, Identifiers.COLORS);
+      });
+
+      UIElements.create(details, "div", (sizes) => {
+        UIClasses.set(sizes, ["placeholder"]);
+        UIElements.set(sizes, Identifiers.SIZES);
+      });
+
       // Quantity
       UIElements.create(details, "div", (qtyBox) => {
         UIClasses.set(qtyBox, ["field", "mt-4"]);
@@ -202,6 +217,26 @@ const UpdateSubview = {
     UIElements.getByIds([Identifiers.MATERIAL], ([material]) => {
       UIStyles.setText(material, product.material);
     });
+    UIElements.getByIds([Identifiers.COLORS], ([colors]) => {
+      Result.compute([Validation.getArray(product.colors)], ([values]) => {
+        for (const value of values) {
+          UIElements.create(colors, "button", (color) => {
+            UIClasses.set(color, ["button"]);
+          });
+        }
+      });
+    });
+    UIElements.getByIds([Identifiers.SIZES], ([sizes]) => {
+      Result.compute([Validation.getArray(product.sizes)], ([values]) => {
+        for (const value of values) {
+          UIElements.create(sizes, "button", (size) => {
+            UIClasses.set(size, ["button"]);
+          });
+        }
+      });
+    });
+  },
+  recommendations(product) {
     UIElements.getByIds(
       [Identifiers.RECOMMENDATIONS],
       async ([recommendations]) => {

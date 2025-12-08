@@ -66,6 +66,10 @@ export const ProductBrowsing = {
           const tvalue = target[key];
           const isObject = typeof bvalue === "object";
 
+          Result.compute(
+            [Validation.getArray(bvalue), Validation.getArray(tvalue)],
+            ([barray, tarray]) => {}
+          );
           if (isObject) {
             const subscore = this.getScore(bvalue, tvalue);
 
