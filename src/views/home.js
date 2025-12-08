@@ -91,12 +91,12 @@ const UpdateSubviews = {
     UIElements.getByIds([Identifiers.FEATURED_PICKS], ([picks]) => {
       // https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
       const limit = 4;
-      const range = Math.random() * (products.length + limit);
+      const range = Math.random() * products.length + limit;
 
       ProductOverview.create(
         picks,
         "Featured Picks",
-        products.slice(range, range + limit),
+        products.slice(range, range + limit)
       );
     });
   },
