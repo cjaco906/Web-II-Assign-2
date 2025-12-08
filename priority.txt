@@ -10,6 +10,7 @@ Todo first
 dont forget:
 cart delete button
 Breadcrumbs in product View
-toaster message when added to cart
+toaster message when added to cart-------done
 updating shipping info
 qty button in cart view not working
+new bug. when i click on a product previous product color size is not deleted. 
