@@ -1,5 +1,6 @@
 import { ProductBrowsing, ProductStorage } from "../api";
 import { Routes } from "../routes";
+import { showToast } from "../toast";
 import {
   UIClasses,
   UIAttributes,
@@ -261,6 +262,7 @@ const CreateSubviews = {
               [ProductBrowsing.getById(products, id)],
               ([product]) => {
                 Routes.cart({ product, selection });
+                showToast("Product added to cart!");
               },
             );
           });

@@ -1,3 +1,5 @@
+/* CSS generated using AI based on our design ideas */
+
 @import "tailwindcss";
 
 .title.has-text-weight-light {
@@ -326,4 +328,28 @@
   padding: 28px;
   border: 1px solid #ddd;
   border-radius: 12px;
+}
+
+
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 14px;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+#snackbar.show {
+  visibility: visible;
+  opacity: 1;
 }
