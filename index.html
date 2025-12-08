@@ -11,6 +11,11 @@
     <link href="/src/style.css" rel="stylesheet" />
     <title>spa-js</title>
   </head>
+
+
+
+
+
   <body>
     <header>
       <nav class="navbar is-white" role="navigation">
@@ -55,9 +60,13 @@
     <main>
       <article id="home" class="is-hidden"></article>
       <article id="browse" class="is-hidden"></article>
-      <article id="product" class="is-hidden"></article>
+      <article id="product" class="is-hidden product-page"></article>
       <article id="shopping-cart" class="is-hidden"></article>
       <dialog id="about-us" class="is-hidden"></dialog>
+      <button id="test-product-button" class="button is-primary" style="margin: 20px;">
+  Test Product Page
+</button>
+
     </main>
 
     <footer class="footer has-background-light mt-6 py-4">
@@ -78,6 +87,68 @@
       </div>
     </footer>
 
+
+
     <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.js"></script>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("test-product-button");
+    if (!btn) {
+      console.error("test-product-button not found");
+      return;
+    }
+
+    const demoProduct = {
+      id: "P001",
+      name: "Silk Wrap Blouse",
+      description:
+        "Elegant wrap blouse crafted from luxurious silk with adjustable tie waist and feminine draping. Perfect for office or evening occasions.",
+      price: 89.99,
+      material: "100% Silk"
+    };
+
+    btn.addEventListener("click", () => {
+      console.log("Loading test product...");
+
+      // hide other pages
+      document.querySelector("#home")?.classList.add("is-hidden");
+      document.querySelector("#browse")?.classList.add("is-hidden");
+      document.querySelector("#shopping-cart")?.classList.add("is-hidden");
+
+      // show product page
+      const productPage = document.querySelector("#product");
+      productPage?.classList.remove("is-hidden");
+
+      // fill fields created by ProductView (if backend ran correctly)
+      const titleEl = document.getElementById("details-title");
+      const priceEl = document.getElementById("details-price");
+      const descEl = document.getElementById("details-description");
+      const matEl = document.getElementById("details-material");
+      const mainImg = document.getElementById("details-main-image");
+      const img2 = document.getElementById("details-other-second");
+      const img3 = document.getElementById("details-other-third");
+
+      if (!titleEl) {
+        console.error(
+          "Product detail elements not found. Check that ProductView.create('product') runs without errors."
+        );
+        return;
+      }
+
+      titleEl.textContent = demoProduct.name;
+      priceEl.textContent = "€" + demoProduct.price;
+      descEl.textContent = demoProduct.description;
+      matEl.textContent = demoProduct.material;
+
+      mainImg.src = "https://picsum.photos/700?random=1";
+      img2.src = "https://picsum.photos/200?random=2";
+      img3.src = "https://picsum.photos/200?random=3";
+    });
+  });
+</script>
+</body>
+
   </body>
 </html>

@@ -61,8 +61,8 @@ const CreateSubviews = {
                 UIElements.setId(browse, Identifiers.BROWSE);
               });
               UIElements.create(buttons, "button", (aboutus) => {
-                UIClasses.set(aboutus, ["button", "is-black", "is-medium"]);
-                UIStyles.setText(aboutus, "Browse Products");
+                UIClasses.set(aboutus, ["button", "is-light", "is-medium"]);
+                UIStyles.setText(aboutus, "About Us");
                 UIElements.setId(aboutus, Identifiers.BUTTON_ABOUT_US);
               });
             });
