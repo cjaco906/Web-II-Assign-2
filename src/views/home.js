@@ -1,23 +1,27 @@
-import { ShoppingCart } from "../api";
 import { Routes } from "../routes";
 import {
-  UIClasses,
   UIAttributes,
+  UIClasses,
   UIElements,
-  UIStyles,
   UIEvents,
-  Result,
+  UIStyles,
 } from "../utils";
 import { ProductOverview } from "./product";
 
+/**
+ * Subview (component) identifiers.
+ */
 const Identifiers = {
   FEATURED_PICKS: "home-featured-picks",
   BUTTON_BROWSE: "home-browse-button",
   BUTTON_ABOUT_US: "home-about-us",
 };
 
+/**
+ * Responsible for managing the Home view page.
+ */
 export const HomeView = {
-  create(products, id) {
+  create(id) {
     return UIElements.getByIds([id], ([view]) => {
       CreateSubviews.hero(view);
       CreateSubviews.featured(view);
@@ -28,6 +32,9 @@ export const HomeView = {
   },
 };
 
+/**
+ * Helper functions for creating and initial styling of home elements with validation.
+ */
 const CreateSubviews = {
   featured(view) {
     UIElements.create(view, "section", (featured) => {
@@ -101,6 +108,9 @@ const CreateSubviews = {
   },
 };
 
+/**
+ * Rebuilds the view skeleton dynamically.
+ */
 const UpdateSubviews = {
   picks(products) {
     UIElements.renew(Identifiers.FEATURED_PICKS, (picks) => {

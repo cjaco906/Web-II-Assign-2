@@ -1,4 +1,13 @@
+/**
+ * Inspired by Rust's Result module (https://doc.rust-lang.org/std/result/).
+ *
+ * Helper functions for error handling and debugging.
+ * Useful in JavaScript for debugging.
+ */
 export const Result = {
+  /**
+   * Returns successful data.
+   */
   ok(data, log) {
     const result = {
       ok: true,
@@ -12,6 +21,9 @@ export const Result = {
 
     return result;
   },
+  /**
+   * Returns error(s) for unsuccessful computation.
+   */
   error(message, cause) {
     const result = {
       ok: false,
@@ -23,6 +35,10 @@ export const Result = {
 
     return result;
   },
+  /**
+   * A utility function for handling computation for both successful and unsuccessful outcomes.
+   * For neat shortcuts and consistency.
+   */
   compute(results, onsuccess, onfail) {
     for (const result of results) {
       if (!result.ok) {
@@ -38,6 +54,10 @@ export const Result = {
   },
 };
 
+/**
+ * Validates the given inputs.
+ * Computations are wrapped in a result object.
+ */
 export const Validation = {
   getStringOrNumber(value) {
     return typeof value === "number"
@@ -121,6 +141,9 @@ export const Validation = {
   },
 };
 
+/**
+ * Utility functions for validating on creating, appending, removing, and retrieving elements.
+ */
 export const UIElements = {
   create(parent, type, callback) {
     const element = document.createElement(type);
@@ -223,19 +246,11 @@ export const UIElements = {
       });
     }
   },
-  getByClasses(classes) {
-    return classes.map((value) => {
-      const element = document.getElementsByClassName(value);
-
-      if (element) {
-        return Result.ok(element);
-      } else {
-        return Result.error("HTML element not found by class", value);
-      }
-    });
-  },
 };
 
+/**
+ * Utility functions for styling elements with validation.
+ */
 export const UIStyles = {
   getText(element) {
     return Validation.getStringOrNumber(element.textContent);
@@ -265,6 +280,9 @@ export const UIStyles = {
   },
 };
 
+/**
+ * Utility functions for assigning element attributes quickly.
+ */
 export const UIAttributes = {
   get(element, keys) {
     return keys.map((key) => element.getAttribute(key));
@@ -307,6 +325,9 @@ export const UIAttributes = {
   },
 };
 
+/**
+ * Utility functions for adding element (CSS) classes quickly.
+ */
 export const UIClasses = {
   select(selectors) {
     return Array.from(document.querySelectorAll(selectors));
@@ -341,6 +362,9 @@ export const UIClasses = {
   },
 };
 
+/**
+ * Utility functions for hooking up event listeners quickly.
+ */
 export const UIEvents = {
   listen(elements, name, callback) {
     elements.forEach((element) =>

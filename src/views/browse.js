@@ -1,5 +1,4 @@
-import { ProductBrowsing, ProductSortingTypes, ShoppingCart } from "../api";
-import { showToast } from "../toast";
+import { ProductBrowsing, ProductSortingTypes } from "../api";
 import {
   Result,
   UIAttributes,
@@ -10,6 +9,9 @@ import {
 } from "../utils";
 import { ProductOverview } from "./product";
 
+/**
+ * Subview (component) identifiers.
+ */
 const Identifiers = {
   DROPDOWN_GENDERS: "browse-genders",
   DROPDOWN_CATEGORIES: "browse-categories",
@@ -19,13 +21,26 @@ const Identifiers = {
   SELECTION_SORT: "browse-sort-select",
   PRODUCT_OVERVIEWS: "browse-product-overviews",
 };
+
+/**
+ * Returns the given dropdown identifier.
+ */
 const getDropdownIdentifier = (value) => {
   return `${Identifiers.FILTERS}-department-${value.toLowerCase()}`;
 };
 
+/**
+ * Helper functions for selecting/browsing via product properties.
+ */
 let BrowseSelector;
 
+/**
+ * Responsible for managing the Browse view page.
+ */
 export const BrowseView = {
+  /**
+   * Creates the view skeleton (placeholders).
+   */
   create(products, id) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "section", (section) => {
@@ -44,6 +59,9 @@ export const BrowseView = {
       });
     });
   },
+  /**
+   * Rebuilds the view skeleton.
+   */
   renew(products) {
     const selection = {
       genders: new Set(),
@@ -123,6 +141,9 @@ export const BrowseView = {
   },
 };
 
+/**
+ * Helper functions for creating and initial styling of browse elements with validation.
+ */
 const CreateSubview = {
   departments(products, section) {
     UIElements.create(section, "div", (panel) => {

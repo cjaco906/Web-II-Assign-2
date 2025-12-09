@@ -1,6 +1,12 @@
 import { UIClasses, UIElements, UIEvents, UIStyles } from "../utils";
 
+/**
+ * Responsible for managing the About Us view page.
+ */
 export const AboutUsView = {
+  /**
+   * Creates the view skeleton (placeholders).
+   */
   create(id) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "section", (section) => {
@@ -43,6 +49,9 @@ export const AboutUsView = {
   },
 };
 
+/**
+ * Helper functions for creating and initial styling of elements with validation.
+ */
 const CreateSubview = {
   titles(container) {
     UIElements.create(container, "p", (mini) => {

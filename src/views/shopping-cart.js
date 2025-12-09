@@ -9,6 +9,9 @@ import {
   Validation,
 } from "../utils";
 
+/**
+ * Subview (component) identifiers.
+ */
 const Identifiers = {
   ORDERS: "cart-orders",
   SELECT_SHIPPING_TYPE: "cart-shipping-type",
@@ -19,6 +22,9 @@ const Identifiers = {
   SUMMARY_TOTAL: "cart-summary-total",
 };
 
+/**
+ * Global constant for keeping track of product order cost summaries.
+ */
 let summaries = {
   subtotal: 0,
   shipping: 0,
@@ -26,8 +32,11 @@ let summaries = {
   total: 0,
 };
 
+/**
+ * Responsible for managing the Shopping-Cart view page.
+ */
 export const ShoppingCartView = {
-  create(product, id) {
+  create(id) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "div", (container) => {
         UIClasses.set(container, ["container", "mt-6"]);
@@ -70,6 +79,9 @@ export const ShoppingCartView = {
   },
 };
 
+/**
+ * Rebuilds the view skeleton dynamically.
+ */
 const UpdateSubviews = {
   orders(summaries) {
     Result.compute([ShoppingCart.get()], ([cart]) => {
@@ -238,6 +250,9 @@ const UpdateSubviews = {
   },
 };
 
+/**
+ * Helper functions for creating and initial styling of cart elements with validation.
+ */
 const CreateSubviews = {
   orders(view) {
     // WRAPPER

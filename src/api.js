@@ -1,5 +1,9 @@
 import { Result, UIElements, UIStyles, Validation } from "./utils";
 
+/**
+ * Fetches and stores product data.
+ * This caches the product data upon first download/visit.
+ */
 export const ProductStorage = {
   fetch() {
     const LOCAL_STORAGE_KEY = "products";
@@ -55,6 +59,9 @@ export const ProductStorage = {
   },
 };
 
+/**
+ * The sorting types for product browsing.
+ */
 export const ProductSortingTypes = {
   NAME_ASCENDING: "Name (Ascending)",
   NAME_DESCENDING: "Name (Descending)",
@@ -64,14 +71,24 @@ export const ProductSortingTypes = {
   CATEGORY_DESCENDING: "Category (Descending)",
 };
 
+/**
+ * Implements the functionalities related to browsing products.
+ */
 export const ProductBrowsing = {
+  /**
+   * Returns the product object by the given product identifier.
+   */
   getById(products, id) {
     return Result.compute([Validation.getNumber(id.slice(1))], (index) => {
       return Validation.getObject(products[index]);
     });
   },
-  // https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-a-javascript-array
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+  /**
+   * Returns all unique product types (properties) that exist.
+   *
+   * https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-a-javascript-array
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+   */
   getTypes(products) {
     const types = {
       genders: new Set(),
@@ -94,6 +111,10 @@ export const ProductBrowsing = {
 
     return types;
   },
+  /**
+   * Evaluates a score based on the given base product matching to the given target product to compare.
+   * Higher scores indicate higher relatability.
+   */
   getScoreByBaseAssociation(base, target) {
     return Result.compute(
       [Validation.getObject(base), Validation.getObject(target)],
@@ -135,6 +156,10 @@ export const ProductBrowsing = {
       },
     );
   },
+  /**
+   * Evaluates a score based on the given target product matching the given selection types (properties) to compare.
+   * Higher scores indicate higher relatability.
+   */
   getScoreBySelection(target, selection) {
     return Result.compute(
       [Validation.getObject(target), Validation.getObject(selection)],
@@ -180,6 +205,10 @@ export const ProductBrowsing = {
       },
     );
   },
+  /**
+   * Sorts the scores from highest to lowest number.
+   * The given limit constrains the amount of scored products; the limit parameter optional.
+   */
   getSortedScores(scores, limit) {
     const sorted = scores
       .sort((a, b) => b.score - a.score)
@@ -191,6 +220,11 @@ export const ProductBrowsing = {
 
     return Result.ok(sorted);
   },
+  /**
+   * Searches for products that matches the given selection criteria (i.e., product types such as categories, genders, sizes, colors, names, prices).
+   * Uses a scoring algorithim (see above).
+   * The given limit constrains the amount of scored products; the limit parameter is optional.
+   */
   getBySearch(products, selection, limit) {
     const sort = selection.sort;
     const scores = [];
@@ -224,6 +258,11 @@ export const ProductBrowsing = {
       );
     });
   },
+  /**
+   * Searches for product recommendations based on the given base product to compare to other products.
+   * Uses a scoring algorithim (see above).
+   * The given limit constrains the amount of scored products; the limit parameter is optional.
+   */
   getRecommendations(base, limit) {
     if (!base) {
       return Result.error("No product found for recommendations", base);
@@ -259,7 +298,13 @@ export const ProductBrowsing = {
   },
 };
 
+/**
+ * Responsible for holding and removing product order placements/removal.
+ */
 export const ShoppingCart = {
+  /**
+   * Updates the shoppng cart quantity counter.
+   */
   update(cart) {
     if (cart) {
       UIElements.getByIds(["nav-cart-quantity"], ([quantity]) => {
@@ -271,9 +316,15 @@ export const ShoppingCart = {
       });
     }
   },
+  /**
+   * The local storage key for the shopping cart.
+   */
   getKey() {
     return "shopping-cart";
   },
+  /**
+   * Returns the shopping cart from local storage and is wrapped in a result.
+   */
   get() {
     const key = this.getKey();
     return Result.compute(
@@ -291,6 +342,10 @@ export const ShoppingCart = {
       },
     );
   },
+  /**
+   * Returns the product orders (shopping cart items) from the shopping cart.
+   * If the specified order does not exist, it returns null.
+   */
   getOrder(product) {
     return Result.compute(
       [this.get(), Validation.getObject(product)],
@@ -301,9 +356,15 @@ export const ShoppingCart = {
       },
     );
   },
+  /**
+   * An immutable list of countries for order/product checkout.
+   */
   getCountryTypes() {
     return ["Canada", "United States", "International"];
   },
+  /**
+   * Returns the calculated tax costs based on the given country.
+   */
   getTaxCost(country, subtotal) {
     return Result.compute([Validation.getNumber(country)], ([country]) => {
       if ("Canada" === this.getCountryTypes()[country]) {
@@ -313,9 +374,15 @@ export const ShoppingCart = {
       }
     });
   },
+  /**
+   * An immutable list of shipping types for order/product checkout.
+   */
   getShippingTypes() {
     return ["Standard", "Express", "Priority"];
   },
+  /**
+   * Returns the shipping costs based on the given shipping type and country destination.
+   */
   getShippingCost(type, country) {
     return Result.compute(
       [Validation.getNumber(type), Validation.getNumber(country)],
@@ -333,6 +400,9 @@ export const ShoppingCart = {
       },
     );
   },
+  /*
+   * Places the given product order to the shopping cart and is saved to local storage.
+   */
   order(order) {
     return Result.compute(
       [this.get(), Validation.getObject(order)],
@@ -357,6 +427,10 @@ export const ShoppingCart = {
       },
     );
   },
+  /**
+   * Removes the given product order from the shopping cart.
+   * A reduction of product orders updates the local storage.
+   */
   remove(order) {
     return Result.compute(
       [this.get(), Validation.getObject(order)],
@@ -377,6 +451,10 @@ export const ShoppingCart = {
       },
     );
   },
+  /**
+   * clears all product orders from the shopping cart.
+   * Updates the local storage.
+   */
   clear() {
     return Result.compute(
       [Validation.setByLocalStorage(this.getKey(), [])],

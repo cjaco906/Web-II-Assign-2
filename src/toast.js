@@ -1,3 +1,6 @@
+/**
+ * A utility function for displaying toaster notifications.
+ */
 export function showToast(message) {
   const bar = document.querySelector("#snackbar");
 

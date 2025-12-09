@@ -11,6 +11,9 @@ import {
   Validation,
 } from "../utils";
 
+/**
+ * Subview (component) identifiers.
+ */
 const Identifiers = {
   IMAGE_MAIN: "details-main-image",
   IMAGE_OTHER_SECOND: "details-other-second",
@@ -26,12 +29,18 @@ const Identifiers = {
   RECOMMENDATIONS: "details-recommendations",
 };
 
+/**
+ * Formats the given price within two decimal places.
+ */
 function formatPrice(value) {
   return "$" + Number(value).toFixed(2);
 }
 
+/**
+ * Responsible for managing the Product view page.
+ */
 export const ProductView = {
-  create(product, id) {
+  create(id) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "div", (container) => {
         UIClasses.set(container, [
@@ -59,6 +68,9 @@ export const ProductView = {
   },
 };
 
+/**
+ * Responsible for managing the product overview cards (i.e., product recommendation and browse seach results).
+ */
 export const ProductOverview = {
   create(parent, title, products, order) {
     UIElements.create(parent, "div", (container) => {
@@ -149,6 +161,9 @@ export const ProductOverview = {
   },
 };
 
+/**
+ * Helper functions for creating and initial styling of product elements with validation.
+ */
 const CreateSubviews = {
   breadcrumb(parent) {
     UIElements.create(parent, "nav", (nav) => {
@@ -379,6 +394,9 @@ const CreateSubviews = {
   },
 };
 
+/**
+ * Rebuilds the view skeleton dynamically.
+ */
 const UpdateSubview = {
   updateBreadcrumb(product) {
     // Product

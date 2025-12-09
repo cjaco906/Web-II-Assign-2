@@ -1,18 +1,21 @@
-import { ProductStorage, ShoppingCart } from "./api";
-import { Result, UIClasses, UIElements, UIEvents, UIStyles } from "./utils";
+import { ProductStorage } from "./api";
+import { Result, UIClasses, UIElements, UIEvents } from "./utils";
 import {
+  AboutUsView,
+  BrowseView,
   HomeView,
   ProductView,
   ShoppingCartView,
-  BrowseView,
-  AboutUsView,
 } from "./views";
 
+/**
+ * Responsible for allowing other parts of the website for switching between views.
+ */
 export const Routes = Result.compute([ProductStorage.fetch()], ([products]) => {
   const Views = {
-    HOME: HomeView.create(products, "home"),
-    PRODUCT: ProductView.create(products, "product"),
-    CART: ShoppingCartView.create(products, "shopping-cart"),
+    HOME: HomeView.create("home"),
+    PRODUCT: ProductView.create("product"),
+    CART: ShoppingCartView.create("shopping-cart"),
     BROWSE: BrowseView.create(products, "browse"),
     ABOUT_US: AboutUsView.create("about-us"),
   };
@@ -23,7 +26,7 @@ export const Routes = Result.compute([ProductStorage.fetch()], ([products]) => {
     ABOUT_US: UIElements.getByIds(["nav-about"]),
     CART: UIElements.getByIds(["nav-cart"]),
   };
-  const methods = {
+  const paths = {
     home() {
       HomeView.update(products);
       UpdateView.switch(Views.HOME);
@@ -51,29 +54,32 @@ export const Routes = Result.compute([ProductStorage.fetch()], ([products]) => {
     [...NavigationBar.HOME, ...NavigationBar.HOME_LOGO],
     ([home, logo]) => {
       UIEvents.listen([home, logo], "click", () => {
-        methods.home(products);
+        paths.home(products);
       });
     },
   );
   Result.compute([...NavigationBar.BROWSE], ([browse]) => {
     UIEvents.listen([browse], "click", () => {
-      methods.browse(products);
+      paths.browse(products);
     });
   });
   Result.compute([...NavigationBar.ABOUT_US], ([aboutus]) => {
     UIEvents.listen([aboutus], "click", () => {
-      methods.aboutus();
+      paths.aboutus();
     });
   });
   Result.compute([...NavigationBar.CART], ([cart]) => {
     UIEvents.listen([cart], "click", () => {
-      methods.cart();
+      paths.cart();
     });
   });
 
-  return methods;
+  return paths;
 });
 
+/**
+ * Helper functions for switching views.
+ */
 const UpdateView = {
   selected: null,
   // https://stackoverflow.com/questions/1144805/scroll-to-the-top-of-the-page-using-javascript
