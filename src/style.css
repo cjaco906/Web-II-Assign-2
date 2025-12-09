@@ -372,3 +372,26 @@
   padding: 3rem; 
 }
 
+#about-us {
+  border: none;
+  padding: 0;
+  width: 80%;
+  max-width: 900px;
+  border-radius: 12px;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+#about-us::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+#about-us section {
+  max-height: 80vh;
+  overflow-y: auto;
+}

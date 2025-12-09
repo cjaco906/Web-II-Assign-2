@@ -9,7 +9,7 @@ Todo first
 
 dont forget:
 cart delete button
-Breadcrumbs in product View
+Breadcrumbs in product View--------------done
 toaster message when added to cart-------done
 updating shipping info
 qty button in cart view not working
