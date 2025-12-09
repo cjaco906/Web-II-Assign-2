@@ -209,6 +209,13 @@ const CreateSubview = {
       UIClasses.set(panel, ['mb-5', 'p-3', 'browse-top-bar'])
       UIElements.create(panel, 'div', sort => {
         UIClasses.set(sort, [
+          "is-flex",
+          "is-align-items-center",
+          "is-justify-content-space-between",
+          "mb-4",
+        ]);
+        UIElements.create(sort, "h3", (title) => {
+          UIStyles.setText(title, "Sort");
           'is-flex',
           'is-align-items-center',
           'is-justify-content-flex-end',

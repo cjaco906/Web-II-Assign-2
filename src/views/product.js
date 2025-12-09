@@ -106,6 +106,19 @@ export const ProductOverview = {
                   UIClasses.add(price, ["subtitle", "is-6", "has-text-grey"]);
                   UIStyles.setText(price, formatPrice(product.price));
                 });
+                UIElements.create(content, "a", (cart) => {
+                  UIClasses.set(cart, ["cart-wrapper"]);
+                  UIElements.create(cart, "span", (icon) => {
+                    UIClasses.set(icon, ["icon"]);
+                    UIElements.create(icon, "img", (img) => {
+                      UIAttributes.set(img, [
+                        ["src", "/src/images/CartIcon.png"],
+                        ["alt", "Cart"],
+                      ]);
+                      UIClasses.set(img, "cart-icon");
+                    });
+                  });
+                });
               });
               UIEvents.listen([card], "click", () => {
                 Routes.product(product);

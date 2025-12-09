@@ -55,6 +55,15 @@ export const ProductStorage = {
   },
 };
 
+export const ProductSortingTypes = {
+  NAME_ASCENDING: "Name (Ascending)",
+  NAME_DESCENDING: "Name (Descending)",
+  PRICE_LOWEST: "Price (Lowest)",
+  PRICE_HIGHEST: "Price (Highest)",
+  CATEGORY_ASCENDING: "Category (Ascending)",
+  CATEGORY_DESCENDING: "Category (Descending)",
+};
+
 export const ProductBrowsing = {
   getById(products, id) {
     return Result.compute([Validation.getNumber(id.slice(1))], (index) => {
@@ -139,6 +148,14 @@ export const ProductBrowsing = {
               .reduce((accumulator, current) => {
                 return accumulator + current;
               });
+          } else if (typeof target === "object") {
+            return Object.values(target)
+              .map((subtarget) => {
+                return evaluate(subtarget, values);
+              })
+              .reduce((accumulator, current) => {
+                return accumulator + current;
+              });
           } else {
             for (const value of values) {
               if (value === target) {
@@ -175,6 +192,7 @@ export const ProductBrowsing = {
     return Result.ok(sorted);
   },
   getBySearch(products, selection, limit) {
+    const sort = selection.sort;
     const scores = [];
 
     for (const target of products) {
@@ -185,7 +203,26 @@ export const ProductBrowsing = {
       }
     }
 
-    return this.getSortedScores(scores, limit);
+    return Result.compute([this.getSortedScores(scores, limit)], ([scores]) => {
+      return Result.ok(
+        scores.sort((a, b) => {
+          switch (sort) {
+            case ProductSortingTypes.NAME_ASCENDING:
+              return a.name > b.name;
+            case ProductSortingTypes.NAME_DESCENDING:
+              return a.name < b.name;
+            case ProductSortingTypes.CATEGORY_ASCENDING:
+              return a.category > b.category;
+            case ProductSortingTypes.CATEGORY_DESCENDING:
+              return a.category < b.category;
+            case ProductSortingTypes.PRICE_LOWEST:
+              return a.price - b.price;
+            case ProductSortingTypes.PRICE_HIGHEST:
+              return b.price - a.price;
+          }
+        }),
+      );
+    });
   },
   getRecommendations(base, limit) {
     if (!base) {
