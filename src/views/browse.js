@@ -126,11 +126,20 @@ const CreateSubview = {
   },
   top(section) {
     UIElements.create(section, "div", (panel) => {
+      UIClasses.set(panel, ["mb-5", "p-3", "browse-top-bar"]);
       UIElements.create(panel, "div", (sort) => {
+        UIClasses.set(sort, [
+        "is-flex",
+        "is-align-items-center",
+        "is-justify-content-space-between",
+        "mb-4"
+      ]);
         UIElements.create(sort, "h3", (title) => {
           UIStyles.setText(title, "Sort");
+          UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mr-3"]);
         });
         UIElements.create(sort, "select", (selection) => {
+          UIClasses.set(selection, ["select", "is-small"]);
           ["Name", "Price", "Category"].forEach((value, index) => {
             UIElements.create(selection, "option", (option) => {
               UIAttributes.set(option, ["value", index]);
@@ -140,17 +149,21 @@ const CreateSubview = {
         });
       });
       UIElements.create(panel, "div", (filters) => {
+        UIClasses.set(filters, ["mb-4"]);
         UIElements.create(filters, "h3", (title) => {
           UIStyles.setText(title, "Filters");
+          UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
         });
         UIElements.create(filters, "button", (clear) => {
           UIStyles.setText(clear, "Clear All");
+          UIClasses.set(clear, ["button", "is-small", "is-light", "mb-3"]);
           UIEvents.listen([clear], "click", () => {
             UIElements.renew(Identifiers.FILTERS);
           });
         });
         UIElements.create(filters, "div", (contents) => {
           UIElements.setId(contents, Identifiers.FILTERS);
+          UIClasses.set(contents, ["tags", "are-small"]);
         });
       });
     });
