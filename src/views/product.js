@@ -31,8 +31,12 @@ function formatPrice (value) {
 }
 
 export const ProductView = {
+
+  
   create (id) {
     return UIElements.getByIds([id], ([view]) => {
+      CreateSubviews.breadcrumb(view);
+
       UIElements.create(view, 'div', container => {
         UIClasses.set(container, ['columns', 'is-variable', 'is-8', 'product-container'])
 
@@ -50,6 +54,7 @@ export const ProductView = {
   update (product) {
     UpdateSubview.details(product)
     UpdateSubview.recommendations(product)
+    UpdateSubview.updateBreadcrumb(product)
   }
 }
 
@@ -113,6 +118,45 @@ export const ProductOverview = {
 }
 
 const CreateSubviews = {
+
+  breadcrumb(view) {
+  UIElements.create(view, "nav", (nav) => {
+    UIClasses.set(nav, ["breadcrumb", "has-succeeds-separator", "mb-4"]);
+    UIAttributes.set(nav, [["aria-label", "breadcrumbs"]]);
+
+    UIElements.create(nav, "ul", (list) => {
+      // Home
+      UIElements.create(list, "li", (li) => {
+        UIElements.create(li, "a", (a) => {
+          UIStyles.setText(a, "Home");
+        });
+      });
+
+      // Gender
+      UIElements.create(list, "li", (li) => {
+        UIElements.create(li, "a", (a) => {
+          UIElements.setId(a, "breadcrumb-gender");
+        });
+      });
+
+      // Category
+      UIElements.create(list, "li", (li) => {
+        UIElements.create(li, "a", (a) => {
+          UIElements.setId(a, "breadcrumb-category");
+        });
+      });
+
+      // Product Name
+      UIElements.create(list, "li", (li) => {
+        UIClasses.add(li, ["is-active"]);
+        UIElements.create(li, "a", (a) => {
+          UIElements.setId(a, "breadcrumb-product");
+        });
+      });
+    });
+  });
+},
+
   images (view) {
     UIElements.create(view, 'div', images => {
       UIClasses.set(images, ['column', 'is-half'])
@@ -299,6 +343,27 @@ const CreateSubviews = {
 }
 
 const UpdateSubview = {
+
+  updateBreadcrumb(product) {
+  // Product
+  UIElements.getByIds(["breadcrumb-product"], ([el]) => {
+    UIStyles.setText(el, product.name);
+  });
+
+  // Gender
+  UIElements.getByIds(["breadcrumb-gender"], ([el]) => {
+    const gender = product.gender.charAt(0).toUpperCase() + product.gender.slice(1);
+    UIStyles.setText(el, gender);
+    UIEvents.listen([el], "click", () => Routes.browseGender(product.gender));
+  });
+
+  // Category
+  UIElements.getByIds(["breadcrumb-category"], ([el]) => {
+    UIStyles.setText(el, product.category);
+    UIEvents.listen([el], "click", () => Routes.browseCategory(product.gender, product.category));
+  });
+},
+
   details (product) {
     UIElements.getByIds([Identifiers.TITLE], ([title]) => {
       UIStyles.setText(title, product.name)
