@@ -3,7 +3,7 @@ import { Routes } from "./routes";
 // https://github.com/vitejs/vite/discussions/12191
 // Forces loading all images from deployment
 Object.values(
-  import.meta.glob("./images/*.{png,webp}", {
+  import.meta.glob("./src/images/*.{png,webp}", {
     eager: true,
   }),
 );
