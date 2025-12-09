@@ -37,7 +37,7 @@ export const BrowseView = {
 
           UIElements.create(section, "div", (right) => {
             UIClasses.set(right, ["column", "is-9"]);
-            CreateSubview.top(products, right);
+            CreateSubview.top(right);
             CreateSubview.overviews(right);
           });
         });
@@ -49,7 +49,7 @@ export const BrowseView = {
       genders: new Set(),
       categories: new Set(),
       sizes: new Set(),
-      colors: new Set(),
+      color: new Set(),
     };
     const submit = () => {
       UIElements.renew(Identifiers.PRODUCT_OVERVIEWS, (overviews) => {
@@ -87,7 +87,6 @@ export const BrowseView = {
                 [getDropdownIdentifier(value)],
                 ([button]) => {
                   UIClasses.remove(button, ["selected"]);
-                  console.log(button);
                 },
               );
 
@@ -150,6 +149,7 @@ const CreateSubview = {
             ]);
           });
           UIElements.create(genders, "div", (contents) => {
+            UIElements.setId(contents, [Identifiers.DROPDOWN_GENDERS]);
             UIClasses.add(contents, ["browse-filter-options"]);
             for (const value of types.genders) {
               UIElements.create(contents, "button", (gender) => {
@@ -177,6 +177,7 @@ const CreateSubview = {
             ]);
           });
           UIElements.create(categories, "div", (contents) => {
+            UIElements.setId(categories, [Identifiers.DROPDOWN_CATEGORIES]);
             UIClasses.add(contents, ["browse-filter-options"]);
 
             for (const value of types.categories) {
@@ -206,6 +207,7 @@ const CreateSubview = {
           });
 
           UIElements.create(sizes, "div", (contents) => {
+            UIElements.setId(contents, [Identifiers.DROPDOWN_SIZES]);
             UIClasses.add(contents, ["browse-filter-options"]);
             for (const value of types.sizes) {
               UIElements.create(contents, "button", (size) => {
@@ -233,6 +235,7 @@ const CreateSubview = {
             ]);
           });
           UIElements.create(colors, "div", (contents) => {
+            UIElements.setId(contents, [Identifiers.DROPDOWN_COLORS]);
             UIClasses.add(contents, ["browse-filter-options"]);
 
             for (const { name, hex } of types.colors) {
@@ -244,6 +247,7 @@ const CreateSubview = {
                 UIAttributes.set(color, [["title", name]]);
                 UIEvents.listen([color], "click", () => {
                   BrowseSelector.color(name);
+
                   UIClasses.toggle(color, ["selected"]);
                 });
               });
@@ -253,7 +257,7 @@ const CreateSubview = {
       });
     });
   },
-  top(products, section) {
+  top(section) {
     UIElements.create(section, "div", (panel) => {
       UIClasses.set(panel, ["mb-5", "p-3", "browse-top-bar"]);
       UIElements.create(panel, "div", (sort) => {
@@ -299,7 +303,17 @@ const CreateSubview = {
             UIStyles.setText(clear, "Clear All");
             UIClasses.set(clear, ["button", "is-small", "is-light", "mb-3"]);
             UIEvents.listen([clear], "click", () => {
-              BrowseView.renew(products);
+              UIClasses.select(".browse-filter-options").map((filters) => {
+                Result.compute(
+                  [UIElements.getChildrens(filters)],
+                  ([children]) => {
+                    for (const element of children) {
+                      UIClasses.remove(element, ["selected"]);
+                    }
+                  },
+                );
+              });
+
               UIElements.renew(Identifiers.FILTERS);
             });
           });

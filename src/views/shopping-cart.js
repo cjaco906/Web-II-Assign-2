@@ -190,7 +190,10 @@ const UpdateSubviews = {
     });
   },
 
-  summary(summaries) {
+  summary() {
+    summaries.subtotal = 0;
+    summaries.total = 0;
+
     UIElements.renew(Identifiers.SUMMARY_MERCH, (merch) => {
       UIStyles.setText(merch, summaries.subtotal.toFixed(2));
     });
