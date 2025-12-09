@@ -395,3 +395,27 @@
   max-height: 80vh;
   overflow-y: auto;
 }
+
+.cart-wrapper {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+
+  background-color: #000000;      
+  color: white;
+
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 50%;
+
+  padding: 2px 6px;
+  min-width: 18px;
+
+  text-align: center;
+  line-height: 1;
+}
+

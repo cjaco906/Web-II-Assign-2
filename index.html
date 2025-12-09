@@ -45,16 +45,15 @@
 
           
           <div class="navbar-end">
-            <a class="navbar-item" id="nav-cart">
-              <span class="icon">
-                <img
-                  src="/src/images/CartIcon.png"
-                  alt="Cart"
-                  style="height: 24px; width: auto"
-                />
-              </span>
-              <p id='nav-cart-quantity'></p>
-            </a>
+            <a class="navbar-item cart-wrapper" id="nav-cart" style="position: relative;">
+            <span class="icon">
+              <img src="/src/images/CartIcon.png" alt="Cart" class="cart-icon"/>
+            </span>
+
+  
+            <span id="nav-cart-quantity" class="cart-badge">0</span>
+          </a>
+
           </div>
         </div>
       </nav>
