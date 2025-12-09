@@ -21,6 +21,8 @@ const Identifiers = {
 
 let summaries = {
   subtotal: 0,
+  shipping: 0,
+  tax: 0,
   total: 0,
 };
 
@@ -58,6 +60,8 @@ export const ShoppingCartView = {
 
     summaries = {
       subtotal: 0,
+      shipping: 0,
+      tax: 0,
       total: 0,
     };
 
@@ -190,10 +194,7 @@ const UpdateSubviews = {
     });
   },
 
-  summary() {
-    summaries.subtotal = 0;
-    summaries.total = 0;
-
+  summary(summaries) {
     UIElements.renew(Identifiers.SUMMARY_MERCH, (merch) => {
       UIStyles.setText(merch, summaries.subtotal.toFixed(2));
     });
@@ -208,7 +209,7 @@ const UpdateSubviews = {
             ],
             ([cart, cost]) => {
               if (cart.length > 0) {
-                summaries.total += cost;
+                summaries.shipping = cost;
               } else {
                 cost = 0;
               }
@@ -221,7 +222,7 @@ const UpdateSubviews = {
           Result.compute(
             [ShoppingCart.getTaxCost(destination.value, summaries.subtotal)],
             ([cost]) => {
-              summaries.total += cost;
+              summaries.tax = cost;
 
               UIStyles.setText(text, cost.toFixed(2));
             },
@@ -230,10 +231,9 @@ const UpdateSubviews = {
       },
     );
     UIElements.renew(Identifiers.SUMMARY_TOTAL, (text) => {
-      UIStyles.setText(
-        text,
-        (summaries.total += summaries.subtotal).toFixed(2),
-      );
+      const total = summaries.subtotal + summaries.shipping + summaries.tax;
+
+      UIStyles.setText(text, total.toFixed(2));
     });
   },
 };
@@ -401,7 +401,13 @@ const CreateSubviews = {
       UIElements.create(summary, "button", (btn) => {
         UIClasses.set(btn, ["button", "is-black", "is-fullwidth", "mt-4"]);
         UIStyles.setText(btn, "Checkout");
-        UIEvents.listen([btn], "click", () => alert("Order placed!"));
+        UIEvents.listen([btn], "click", () => {
+          Result.compute([ShoppingCart.clear()], () => {
+            ShoppingCartView.update();
+
+            alert("Order placed!");
+          });
+        });
       });
     });
   },

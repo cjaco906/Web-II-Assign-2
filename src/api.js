@@ -368,10 +368,22 @@ export const ShoppingCart = {
               JSON.stringify(cart.filter((order) => order.id !== target.id)),
             ),
           ],
-          () => {
+          ([cart]) => {
             this.update();
+
+            return Result.ok(cart);
           },
         );
+      },
+    );
+  },
+  clear() {
+    return Result.compute(
+      [Validation.setByLocalStorage(this.getKey(), [])],
+      ([cart]) => {
+        this.update();
+
+        return Result.ok(cart);
       },
     );
   },

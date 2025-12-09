@@ -126,6 +126,17 @@ export const ProductOverview = {
                   UIEvents.listen([cart], "click", () => {
                     if (order) {
                       order(product);
+                    } else {
+                      ShoppingCart.order({
+                        product,
+                        selection: {
+                          quantity: 1,
+                          sizes: [product.sizes[0]],
+                          color: [product.color[0]],
+                        },
+                      });
+
+                      showToast("Product added to cart!");
                     }
                   });
                 });
