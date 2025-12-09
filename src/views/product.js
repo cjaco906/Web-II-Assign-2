@@ -35,7 +35,7 @@ export const ProductView = {
   
   create (id) {
     return UIElements.getByIds([id], ([view]) => {
-      CreateSubviews.breadcrumb(view);
+      
 
       UIElements.create(view, 'div', container => {
         UIClasses.set(container, ['columns', 'is-variable', 'is-8', 'product-container'])
@@ -119,43 +119,42 @@ export const ProductOverview = {
 
 const CreateSubviews = {
 
-  breadcrumb(view) {
-  UIElements.create(view, "nav", (nav) => {
-    UIClasses.set(nav, ["breadcrumb", "has-succeeds-separator", "mb-4"]);
-    UIAttributes.set(nav, [["aria-label", "breadcrumbs"]]);
+  breadcrumb (parent) {
+    UIElements.create(parent, 'nav', nav => {
+      UIClasses.set(nav, ['breadcrumb', 'has-succeeds-separator', 'mb-4'])
 
-    UIElements.create(nav, "ul", (list) => {
-      // Home
-      UIElements.create(list, "li", (li) => {
-        UIElements.create(li, "a", (a) => {
-          UIStyles.setText(a, "Home");
-        });
-      });
+      UIElements.create(nav, 'ul', list => {
+        // Home
+        UIElements.create(list, 'li', li => {
+          UIElements.create(li, 'a', a => {
+            UIStyles.setText(a, 'Home')
+          })
+        })
 
-      // Gender
-      UIElements.create(list, "li", (li) => {
-        UIElements.create(li, "a", (a) => {
-          UIElements.setId(a, "breadcrumb-gender");
-        });
-      });
+        // Gender
+        UIElements.create(list, 'li', li => {
+          UIElements.create(li, 'a', a => {
+            UIElements.setId(a, 'breadcrumb-gender')
+          })
+        })
 
-      // Category
-      UIElements.create(list, "li", (li) => {
-        UIElements.create(li, "a", (a) => {
-          UIElements.setId(a, "breadcrumb-category");
-        });
-      });
+        // Category
+        UIElements.create(list, 'li', li => {
+          UIElements.create(li, 'a', a => {
+            UIElements.setId(a, 'breadcrumb-category')
+          })
+        })
 
-      // Product Name
-      UIElements.create(list, "li", (li) => {
-        UIClasses.add(li, ["is-active"]);
-        UIElements.create(li, "a", (a) => {
-          UIElements.setId(a, "breadcrumb-product");
-        });
-      });
-    });
-  });
-},
+        // Product (active)
+        UIElements.create(list, 'li', li => {
+          UIElements.create(li, 'a', a => {
+            UIElements.setId(a, 'breadcrumb-product')
+          })
+        })
+      })
+    })
+  },
+
 
   images (view) {
     UIElements.create(view, 'div', images => {
@@ -213,6 +212,8 @@ const CreateSubviews = {
   details (view) {
     UIElements.create(view, 'div', details => {
       UIClasses.set(details, ['column', 'is-half', 'product-details'])
+
+        CreateSubviews.breadcrumb(details)
 
       UIElements.create(details, 'h1', title => {
         UIClasses.set(title, ['title', 'is-2'])
