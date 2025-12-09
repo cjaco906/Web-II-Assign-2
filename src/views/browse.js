@@ -215,7 +215,7 @@ const CreateSubview = {
           'mb-4'
         ])
         UIElements.create(sort, 'h3', title => {
-          UIStyles.setText(title, 'Sort')
+          UIStyles.setText(title, 'Sort By')
           UIClasses.set(title, [
             'is-size-6',
             'has-text-weight-semibold',
