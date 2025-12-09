@@ -77,8 +77,11 @@ export const Routes = {
 };
 
 const UpdateView = {
+  // https://stackoverflow.com/questions/1144805/scroll-to-the-top-of-the-page-using-javascript
   switch([{ data: view }]) {
     if (view) {
+      window.scrollTo(0, 0);
+
       if (Router.view) {
         UIClasses.toggle(view, ["is-hidden"]);
       }
