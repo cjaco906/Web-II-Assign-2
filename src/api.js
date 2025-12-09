@@ -129,7 +129,7 @@ export const ProductBrowsing = {
   getScoreBySelection(target, selection) {
     return Result.compute(
       [Validation.getObject(target), Validation.getObject(selection)],
-      ([selection]) => {
+      ([target, selection]) => {
         const evaluate = (target, values) => {
           if (Array.isArray(target)) {
             return target

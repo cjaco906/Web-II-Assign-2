@@ -73,7 +73,7 @@ export const BrowseView = {
         submit(selection.genders, gender);
       },
       category(category) {
-        submit(selection.category, category);
+        submit(selection.categories, category);
       },
       size(size) {
         submit(selection.sizes, size);
