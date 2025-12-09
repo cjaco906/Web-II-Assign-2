@@ -128,7 +128,7 @@ export const BrowseView = {
         select(selection.sizes, size);
       },
       color(color) {
-        select(selection.colors, color);
+        select(selection.color, color);
       },
       sort(type) {
         selection.sort = type;
