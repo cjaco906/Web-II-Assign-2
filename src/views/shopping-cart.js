@@ -143,6 +143,15 @@ const UpdateSubviews = {
                 summaries.subtotal += value;
                 UIStyles.setText(subtotal, "$" + value.toFixed(2));
               });
+              UIElements.create(colSub, "button", (remove) => {
+                UIClasses.set(remove, [
+                  "button",
+                  "is-black",
+                  "is-fullwidth",
+                  "mt-4",
+                ]);
+                UIStyles.setText(remove, "Remove Order");
+              });
             });
           });
         }
@@ -206,18 +215,31 @@ const CreateSubviews = {
           "cart-header",
         ]);
 
-        const labels = ["Product", "Price", "Qty", "Subtotal"];
-        const sizes = [
-          "column is-6",
-          "column is-2",
-          "column is-2 has-text-centered",
-          "column is-2 has-text-right",
-        ];
+        UIElements.create(header, "div", (column) => {
+          UIClasses.set(column, ["column", "is-6"]);
+          UIElements.create(column, "p", (label) => {
+            UIStyles.setText(label, "Product");
+          });
+        });
 
-        labels.forEach((text, i) => {
-          UIElements.create(header, "div", (col) => {
-            UIClasses.set(col, sizes[i].split(" "));
-            UIElements.create(col, "p", (p) => UIStyles.setText(p, text));
+        UIElements.create(header, "div", (column) => {
+          UIClasses.set(column, ["column", "is-2"]);
+          UIElements.create(column, "p", (label) => {
+            UIStyles.setText(label, "Price");
+          });
+        });
+
+        UIElements.create(header, "div", (column) => {
+          UIClasses.set(column, ["column", "is-2", "has-text-centered"]);
+          UIElements.create(column, "p", (label) => {
+            UIStyles.setText(label, "Qty");
+          });
+        });
+
+        UIElements.create(header, "div", (column) => {
+          UIClasses.set(column, ["column", "is-2", "has-text-right"]);
+          UIElements.create(column, "p", (label) => {
+            UIStyles.setText(label, "Subtotal");
           });
         });
       });
