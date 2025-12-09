@@ -19,7 +19,7 @@ const Identifiers = {
   SUMMARY_TOTAL: "cart-summary-total",
 };
 
-const summaries = {
+let summaries = {
   subtotal: 0,
   total: 0,
 };
@@ -55,6 +55,11 @@ export const ShoppingCartView = {
     if (order) {
       ShoppingCart.order(order);
     }
+
+    summaries = {
+      subtotal: 0,
+      total: 0,
+    };
 
     UpdateSubviews.orders(summaries);
     UpdateSubviews.summary(summaries);
@@ -151,6 +156,10 @@ const UpdateSubviews = {
                   "mt-4",
                 ]);
                 UIStyles.setText(remove, "Remove Order");
+                UIEvents.listen([remove], "click", () => {
+                  ShoppingCart.remove(order);
+                  ShoppingCartView.update();
+                });
               });
             });
           });

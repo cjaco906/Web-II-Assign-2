@@ -330,6 +330,7 @@ const CreateSubviews = {
               [ProductBrowsing.getById(products, id)],
               ([product]) => {
                 Routes.cart({ product, selection });
+
                 showToast("Product added to cart!");
               },
             );

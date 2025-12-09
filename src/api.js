@@ -213,6 +213,7 @@ export const ShoppingCart = {
       [this.get(), Validation.getObject(order)],
       ([cart, { product, selection }]) => {
         const order = {
+          id: product.id,
           name: product.name,
           price: product.price,
           quantity: selection.quantity,
@@ -225,6 +226,17 @@ export const ShoppingCart = {
         return Validation.setByLocalStorage(
           this.getKey(),
           JSON.stringify(cart),
+        );
+      },
+    );
+  },
+  remove(order) {
+    return Result.compute(
+      [this.get(), Validation.getObject(order)],
+      ([cart, target]) => {
+        return Validation.setByLocalStorage(
+          this.getKey(),
+          JSON.stringify(cart.filter((order) => order.id !== target.id)),
         );
       },
     );
