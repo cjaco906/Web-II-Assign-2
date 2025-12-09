@@ -178,6 +178,13 @@ export const UIElements = {
       return Result.ok(target);
     }
   },
+  getChildrens(target) {
+    if (!target) {
+      return Result.error("No element found", target);
+    } else {
+      return Result.ok(target.children);
+    }
+  },
   setId(element, id) {
     if (!element) {
       return Result.error("No element found", { element, id });
@@ -194,7 +201,10 @@ export const UIElements = {
       if (element) {
         return Result.ok(element);
       } else {
-        return Result.error("HTML element not found by identifier", value);
+        return Result.error("No element found by identifier", {
+          element,
+          value,
+        });
       }
     });
 

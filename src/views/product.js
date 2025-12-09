@@ -390,21 +390,30 @@ const UpdateSubview = {
         UIClasses.set(label, ["label", "mt-4"]);
         UIStyles.setText(label, "Color");
       });
+      UIElements.create(colors, "div", (boxes) => {
+        Result.compute([Validation.getArray(product.color)], ([values]) => {
+          for (const value of values) {
+            UIElements.create(boxes, "button", (box) => {
+              UIClasses.set(box, ["color-button"]);
+              UIAttributes.set(box, [
+                ["name", value.name],
+                ["hex", value.hex],
+              ]);
+              UIStyles.setBackgroundColor(box, value.hex);
+              UIEvents.listen([box], "click", () => {
+                Result.compute([UIElements.getChildrens(colors)], ([boxes]) => {
+                  if (boxes.length > 1) {
+                    for (const box of boxes) {
+                      UIClasses.remove(box, ["selected"]);
+                    }
+                  }
+                });
 
-      Result.compute([Validation.getArray(product.color)], ([values]) => {
-        for (const value of values) {
-          UIElements.create(colors, "button", (box) => {
-            UIClasses.set(box, ["color-button"]);
-            UIAttributes.set(box, [
-              ["name", value.name],
-              ["hex", value.hex],
-            ]);
-            UIStyles.setBackgroundColor(box, value.hex);
-            UIEvents.listen([box], "click", () => {
-              UIClasses.toggle(box, ["selected"]);
+                UIClasses.toggle(box, ["selected"]);
+              });
             });
-          });
-        }
+          }
+        });
       });
     });
     UIElements.renew(Identifiers.SIZES, (sizes) => {
@@ -412,17 +421,26 @@ const UpdateSubview = {
         UIClasses.set(label, ["label", "mt-4"]);
         UIStyles.setText(label, "Size");
       });
+      UIElements.create(sizes, "div", (boxes) => {
+        Result.compute([Validation.getArray(product.sizes)], ([values]) => {
+          for (const value of values) {
+            UIElements.create(boxes, "button", (box) => {
+              UIClasses.set(box, ["size-button"]);
+              UIStyles.setText(box, value);
+              UIEvents.listen([box], "click", () => {
+                Result.compute([UIElements.getChildrens(boxes)], ([boxes]) => {
+                  if (boxes.length > 1) {
+                    for (const box of boxes) {
+                      UIClasses.remove(box, ["selected"]);
+                    }
+                  }
+                });
 
-      Result.compute([Validation.getArray(product.sizes)], ([values]) => {
-        for (const value of values) {
-          UIElements.create(sizes, "button", (box) => {
-            UIClasses.set(box, ["size-button"]);
-            UIStyles.setText(box, value);
-            UIEvents.listen([box], "click", () => {
-              UIClasses.toggle(box, ["selected"]);
+                UIClasses.toggle(box, ["selected"]);
+              });
             });
-          });
-        }
+          }
+        });
       });
     });
     UIElements.getByIds([Identifiers.ADD_TO_CART], ([button]) => {
