@@ -22,11 +22,20 @@ export const BrowseView = {
   create(id, products) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "section", (section) => {
-        CreateSubview.departments(section, products);
-        CreateSubview.top(section, products);
-        CreateSubview.overviews(section, products);
+         UIClasses.set(section, ["columns", "mt-6"]) 
+
+ UIElements.create(section, "div", left => {
+        UIClasses.set(left, ["column", "is-3"])
+        CreateSubview.departments(left, products)
+
+          UIElements.create(section, "div", right => {
+        UIClasses.set(right, ["column", "is-9"])
+        CreateSubview.top(right, products)
+        CreateSubview.overviews(right, products)
       });
     });
+  });
+  });
   },
   update() {},
 };
@@ -34,17 +43,23 @@ export const BrowseView = {
 const CreateSubview = {
   departments(section) {
     UIElements.create(section, "div", (panel) => {
+       UIClasses.set(panel, ["box", "p-5", "mb-5", "browse-sidebar"])
       UIElements.create(panel, "h2", (title) => {
+       
         UIStyles.setText(title, "Departments");
+         UIClasses.set(title, ["is-size-5", "has-text-weight-bold", "mb-4"]);
       });
       UIElements.create(panel, "div", (dropdowns) => {
         const types = ProductBrowsing.getTypes();
 
         UIElements.create(dropdowns, "div", (genders) => {
+           UIClasses.add(genders, ["mb-5"]); 
           UIElements.create(genders, "h3", (title) => {
             UIStyles.setText(title, "Gender");
+            UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
           });
           UIElements.create(genders, "div", (contents) => {
+             UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
             for (const value of types.genders) {
               UIElements.create(contents, "button", (gender) => {
                 UIStyles.setText(gender, value);
@@ -55,10 +70,13 @@ const CreateSubview = {
           });
         });
         UIElements.create(dropdowns, "div", (categories) => {
+          UIClasses.add(categories, ["mb-5"]);
           UIElements.create(categories, "h3", (title) => {
             UIStyles.setText(title, "Category");
+            UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
           });
           UIElements.create(categories, "div", (contents) => {
+            UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
             for (const value of types.categories) {
               UIElements.create(contents, "button", (category) => {
                 UIStyles.setText(category, value);
@@ -69,10 +87,14 @@ const CreateSubview = {
           });
         });
         UIElements.create(dropdowns, "div", (sizes) => {
+          UIClasses.add(sizes, ["mb-5"]);
           UIElements.create(sizes, "h3", (title) => {
             UIStyles.setText(title, "Size");
+            UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
           });
+
           UIElements.create(sizes, "div", (contents) => {
+            UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
             for (const value of types.sizes) {
               UIElements.create(contents, "button", (size) => {
                 UIStyles.setText(size, value);
@@ -83,10 +105,13 @@ const CreateSubview = {
           });
         });
         UIElements.create(dropdowns, "div", (colors) => {
+          UIClasses.add(colors, ["mb-5"]);
           UIElements.create(colors, "h3", (title) => {
             UIStyles.setText(title, "Size");
+            UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
           });
           UIElements.create(colors, "div", (contents) => {
+            UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
             for (const value of types.colors) {
               UIElements.create(contents, "button", (color) => {
                 UIStyles.setText(color, value);
