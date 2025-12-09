@@ -470,16 +470,6 @@
   margin-top: 8px;
 }
 
-.color-circle {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  margin: 4px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  display: inline-block;
-}
-
 .browse-sidebar {
   position: relative;
   background: #ffffff;
@@ -516,9 +506,7 @@
 }
 
 .browse-filter-options button {
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease;
+  transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .browse-filter-options button:hover {
@@ -531,15 +519,6 @@
   color: white;
   border-color: #222;
   transform: scale(1.06);
-}
-
-.color-circle {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  margin: 3px;
 }
 
 #browse-filters {
@@ -561,4 +540,22 @@
 .filter-delete:hover {
   background: #ffe5e5;
   border-color: #ffb3b3;
+}
+
+.color-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border 0.25s ease, transform 0.2s ease;
+}
+
+.color-circle:hover {
+  transform: scale(1.1);
+}
+
+.color-circle.selected {
+  border: 2px solid #222;
+  transform: scale(1.15);
 }
