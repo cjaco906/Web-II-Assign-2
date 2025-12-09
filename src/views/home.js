@@ -96,7 +96,7 @@ const CreateSubviews = {
               UIElements.create(figure, "img", (image) => {
                 UIClasses.set(image, ["hero-right-side-image"]);
                 UIAttributes.set(image, [
-                  ["src", "/src/images/background.webp"],
+                  ["src", new URL("/background.webp", import.meta.url)],
                   ["alt", "Fashion Model"],
                 ]);
               });
@@ -115,14 +115,7 @@ const UpdateSubviews = {
   picks(products) {
     UIElements.renew(Identifiers.FEATURED_PICKS, (picks) => {
       // https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
-      const limit = 4;
-      const range = Math.random() * products.length + limit;
-
-      ProductOverview.create(
-        picks,
-        "Featured Picks",
-        products.slice(range, range + limit),
-      );
+      ProductOverview.create(picks, "Featured Picks", products.slice(0, 4));
     });
   },
 };

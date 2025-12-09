@@ -506,7 +506,9 @@
 }
 
 .browse-filter-options button {
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
 }
 
 .browse-filter-options button:hover {
@@ -548,7 +550,9 @@
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: border 0.25s ease, transform 0.2s ease;
+  transition:
+    border 0.25s ease,
+    transform 0.2s ease;
 }
 
 .color-circle:hover {

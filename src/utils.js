@@ -278,6 +278,11 @@ export const UIStyles = {
       UIClasses.toggle(button, ["selected"]);
     });
   },
+  // https://stackoverflow.com/questions/66419471/vue-3-vite-dynamic-image-src
+  // https://vite.dev/guide/assets.html#the-public-directory
+  getImagePath(name, base) {
+    return new URL(name, base).href;
+  },
 };
 
 /**
@@ -285,16 +290,15 @@ export const UIStyles = {
  */
 export const UIAttributes = {
   get(element, keys) {
-    return keys.map((key) => element.getAttribute(key));
+    return keys.map((key) => {
+      return element.getAttribute(key);
+    });
   },
   set(element, entries) {
     entries.forEach(([key, value]) => {
-      const rkey = Validation.getString(key);
-      const rvalue = Validation.getStringOrNumber(value);
-
-      if (rkey.ok && rvalue.ok) {
-        element.setAttribute(key, value);
-      }
+      Result.compute([Validation.getString(key)], ([key]) => {
+        element.setAttribute(key, value.toString());
+      });
     });
   },
   remove(element, keys) {
@@ -306,21 +310,11 @@ export const UIAttributes = {
       }
     });
   },
-  replace(element, key, [old, change]) {
-    const rold = Validation.getStringOrNumber(old);
-    const rchange = Validation.getStringOrNumber(change);
-
-    if (rold.ok && rchange.ok && element.hasAttribute(key, old)) {
-      element.setAttribute(key, change);
-    }
-  },
   toggle(element, keys) {
     keys.forEach((key) => {
-      const result = Validation.getString(key);
-
-      if (result.ok) {
+      Result.compute([Validation.getString(key)], ([key]) => {
         element.toggleAttribute(key);
-      }
+      });
     });
   },
 };

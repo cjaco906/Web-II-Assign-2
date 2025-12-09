@@ -129,7 +129,7 @@ export const ProductOverview = {
                     UIClasses.set(icon, ["icon"]);
                     UIElements.create(icon, "img", (img) => {
                       UIAttributes.set(img, [
-                        ["src", "/src/images/CartIcon.png"],
+                        ["src", new URL("/CartIcon.png", import.meta.url)],
                         ["alt", "Cart"],
                       ]);
                       UIClasses.set(img, ["cart-icon"]);

@@ -115,7 +115,7 @@ const UpdateSubviews = {
                   UIClasses.set(remove, ["cart-remove-button"]);
                   UIElements.create(remove, "img", (icon) => {
                     UIAttributes.set(icon, [
-                      ["src", "/src/images/DeleteIcon.png"],
+                      ["src", new URL("/DeleteIcon.png", import.meta.url)],
                       ["style", "width:20px; height:20px;"],
                     ]);
                   });

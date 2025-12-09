@@ -32,7 +32,7 @@ export const AboutUsView = {
             {
               title: "Technology Used",
               content:
-                "The project is built using JavaScript and Bulma CSS framework.",
+                "The project is built using JavaScript, Tailwind and Bulma CSS frameworks.",
             },
             {
               title: "Use of AI",
