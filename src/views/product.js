@@ -313,7 +313,7 @@ const CreateSubviews = {
                 } else {
                   array.push(color);
                 }
-              },
+              }
             );
             UIClasses.select(`#${Identifiers.SIZES} .selected`).map(
               (selected) => {
@@ -326,14 +326,14 @@ const CreateSubviews = {
                     array.push(size);
                   }
                 });
-              },
+              }
             );
             UIElements.getByIds([Identifiers.QUANTITY], ([quantity]) => {
               Result.compute(
                 [Validation.getNumber(quantity.value)],
                 ([value]) => {
                   selection.quantity = value;
-                },
+                }
               );
             });
 
@@ -345,7 +345,7 @@ const CreateSubviews = {
                 Routes.cart({ product, selection });
 
                 showToast("Product added to cart!");
-              },
+              }
             );
           });
         });
@@ -380,7 +380,7 @@ const UpdateSubview = {
     UIElements.getByIds(["breadcrumb-category"], ([el]) => {
       UIStyles.setText(el, product.category);
       UIEvents.listen([el], "click", () =>
-        Routes.browseCategory(product.gender, product.category),
+        Routes.browseCategory(product.gender, product.category)
       );
     });
   },
@@ -466,7 +466,7 @@ const UpdateSubview = {
         [ProductBrowsing.getRecommendations(product, 4)],
         ([products]) => {
           ProductOverview.create(recommendations, "Related Products", products);
-        },
+        }
       );
     });
   },
