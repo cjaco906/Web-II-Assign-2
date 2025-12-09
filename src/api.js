@@ -309,7 +309,7 @@ export const ShoppingCart = {
       if ("Canada" === this.getCountryTypes()[country]) {
         return Result.ok(subtotal * 0.05);
       } else {
-        return Result.error("Invalid country index", { country, subtotal });
+        return Result.ok(0);
       }
     });
   },

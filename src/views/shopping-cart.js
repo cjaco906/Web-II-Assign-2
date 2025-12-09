@@ -199,9 +199,16 @@ const UpdateSubviews = {
       ([shipping, destination]) => {
         UIElements.renew(Identifiers.SUMMARY_SHIPPING, (text) => {
           Result.compute(
-            [ShoppingCart.getShippingCost(shipping.value, destination.value)],
-            ([cost]) => {
-              summaries.total += cost;
+            [
+              ShoppingCart.get(),
+              ShoppingCart.getShippingCost(shipping.value, destination.value),
+            ],
+            ([cart, cost]) => {
+              if (cart.length > 0) {
+                summaries.total += cost;
+              } else {
+                cost = 0;
+              }
 
               UIStyles.setText(text, cost.toFixed(2));
             },
