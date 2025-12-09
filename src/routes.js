@@ -1,4 +1,4 @@
-import { ProductStorage } from "./api";
+import { ProductStorage, ShoppingCart } from "./api";
 import { Result, UIClasses, UIElements, UIEvents } from "./utils";
 import {
   AboutUsView,
@@ -87,6 +87,8 @@ const UpdateView = {
   selected: null,
   // https://stackoverflow.com/questions/1144805/scroll-to-the-top-of-the-page-using-javascript
   switch([{ data: selected }]) {
+    ShoppingCart.update();
+
     if (selected) {
       window.scrollTo(0, 0);
 
