@@ -70,6 +70,15 @@ const UpdateSubviews = {
   orders (summaries) {
     Result.compute([ShoppingCart.get()], ([cart]) => {
       UIElements.renew(Identifiers.ORDERS, orders => {
+
+         if (cart.length === 0) {
+        UIElements.create(orders, 'p', msg => {
+          UIClasses.set(msg, ['has-text-centered', 'py-6', 'is-size-3'])
+          UIStyles.setText(msg, 'Your cart is empty. Please add some items!')
+        })
+        return
+      }
+
         for (const [index, order] of Object.entries(cart)) {
           UIElements.create(orders, 'div', row => {
             UIClasses.set(row, ['columns', 'is-vcentered', 'py-4', 'cart-row'])
