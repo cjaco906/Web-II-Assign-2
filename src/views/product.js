@@ -401,7 +401,7 @@ const UpdateSubview = {
               ]);
               UIStyles.setBackgroundColor(box, value.hex);
               UIEvents.listen([box], "click", () => {
-                Result.compute([UIElements.getChildrens(colors)], ([boxes]) => {
+                Result.compute([UIElements.getChildrens(boxes)], ([boxes]) => {
                   if (boxes.length > 1) {
                     for (const box of boxes) {
                       UIClasses.remove(box, ["selected"]);
