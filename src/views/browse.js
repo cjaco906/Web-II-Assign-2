@@ -1,4 +1,4 @@
-import { ProductBrowsing } from "../api";
+import { ProductBrowsing, ProductSortingTypes } from "../api";
 import {
   Result,
   UIAttributes,
@@ -17,6 +17,9 @@ const Identifiers = {
   FILTERS: "browse-filters",
   SELECTION_SORT: "browse-sort-select",
   PRODUCT_OVERVIEWS: "browse-product-overviews",
+};
+const getDropdownIdentifier = (value) => {
+  return `${Identifiers.FILTERS}-department-${value.toLowerCase()}`;
 };
 
 let BrowseSelector;
@@ -47,18 +50,7 @@ export const BrowseView = {
       sizes: new Set(),
       colors: new Set(),
     };
-    const submit = (set, value) => {
-      set.add(value);
-
-      UIElements.getByIds([Identifiers.FILTERS], ([filters]) => {
-        UIElements.create(filters, "button", (filter) => {
-          UIStyles.setText(filter, value);
-          UIClasses.set(filter, ["filter-delete"]);
-          UIEvents.listen([filter], "click", () => {
-            filter.remove();
-          });
-        });
-      });
+    const submit = () => {
       UIElements.renew(Identifiers.PRODUCT_OVERVIEWS, (overviews) => {
         Result.compute(
           [ProductBrowsing.getBySearch(products, selection, 10)],
@@ -68,24 +60,66 @@ export const BrowseView = {
         );
       });
     };
+    const select = (set, value) => {
+      if (set.has(value)) {
+        set.delete(value);
+      } else {
+        set.add(value);
+      }
+
+      UIElements.getByIds([Identifiers.FILTERS], ([filters]) => {
+        const id = `${Identifiers.FILTERS}-${value.toLowerCase()}`;
+        const element = document.getElementById(id);
+
+        if (element) {
+          element.remove();
+        } else {
+          UIElements.create(filters, "button", (filter) => {
+            UIStyles.setText(filter, value);
+            UIClasses.set(filter, ["filter-delete"]);
+            UIElements.setId(
+              filter,
+              `${Identifiers.FILTERS}-${value.toLowerCase()}`,
+            );
+            UIEvents.listen([filter], "click", () => {
+              UIElements.getByIds(
+                [getDropdownIdentifier(value)],
+                ([button]) => {
+                  UIClasses.remove(button, ["selected"]);
+                  console.log(button);
+                },
+              );
+
+              filter.remove();
+            });
+          });
+        }
+      });
+
+      submit();
+    };
 
     BrowseSelector = {
       gender(gender) {
-        submit(selection.genders, gender);
+        select(selection.genders, gender);
       },
       category(category) {
-        submit(selection.categories, category);
+        select(selection.categories, category);
       },
       size(size) {
-        submit(selection.sizes, size);
+        select(selection.sizes, size);
       },
       color(color) {
-        submit(selection.colors, color);
+        select(selection.colors, color);
       },
       sort(type) {
         selection.sort = type;
+
+        submit();
       },
     };
+
+    BrowseSelector.sort("name");
   },
 };
 
@@ -99,6 +133,9 @@ const CreateSubview = {
       });
       UIElements.create(panel, "div", (dropdowns) => {
         const types = ProductBrowsing.getTypes(products);
+        const setId = (element, value) => {
+          UIElements.setId(element, getDropdownIdentifier(value));
+        };
 
         UIElements.create(dropdowns, "div", (genders) => {
           UIClasses.add(genders, ["browse-filter-group"]);
@@ -115,10 +152,13 @@ const CreateSubview = {
             UIClasses.add(contents, ["browse-filter-options"]);
             for (const value of types.genders) {
               UIElements.create(contents, "button", (gender) => {
+                setId(gender, value);
+
                 UIStyles.setText(gender, value);
-                UIStyles.setButtonToggleable(contents, gender);
                 UIEvents.listen([gender], "click", () => {
                   BrowseSelector.gender(value);
+
+                  UIClasses.toggle(gender, ["selected"]);
                 });
               });
             }
@@ -140,10 +180,13 @@ const CreateSubview = {
 
             for (const value of types.categories) {
               UIElements.create(contents, "button", (category) => {
+                setId(category, value);
+
                 UIStyles.setText(category, value);
-                UIStyles.setButtonToggleable(contents, category);
                 UIEvents.listen([category], "click", () => {
                   BrowseSelector.category(value);
+
+                  UIClasses.toggle(category, ["selected"]);
                 });
               });
             }
@@ -165,10 +208,13 @@ const CreateSubview = {
             UIClasses.add(contents, ["browse-filter-options"]);
             for (const value of types.sizes) {
               UIElements.create(contents, "button", (size) => {
+                setId(size, value);
+
                 UIStyles.setText(size, value);
-                UIStyles.setButtonToggleable(contents, size);
                 UIEvents.listen([size], "click", () => {
                   BrowseSelector.size(value);
+
+                  UIClasses.toggle(size, ["selected"]);
                 });
               });
             }
@@ -190,10 +236,11 @@ const CreateSubview = {
 
             for (const { name, hex } of types.colors) {
               UIElements.create(contents, "button", (color) => {
+                setId(color, name);
+
                 UIClasses.set(color, ["color-circle"]);
                 UIStyles.setBackgroundColor(color, hex);
                 UIAttributes.set(color, [["title", name]]);
-                UIStyles.setButtonToggleable(contents, color);
                 UIEvents.listen([color], "click", () => {
                   BrowseSelector.color(name);
                 });
@@ -221,42 +268,43 @@ const CreateSubview = {
             "has-text-weight-semibold",
             "mr-3",
           ]);
-        });
-        UIElements.create(sort, "select", (selection) => {
-          UIClasses.set(selection, ["select", "is-small"]);
-          ["Name", "Price", "Category"].forEach((value, index) => {
-            UIElements.create(selection, "option", (option) => {
-              UIAttributes.set(option, [["value", index]]);
-              UIStyles.setText(option, value);
+          UIElements.create(sort, "select", (selection) => {
+            UIClasses.set(selection, ["select", "is-small"]);
+
+            Object.values(ProductSortingTypes).forEach((value) => {
+              UIElements.create(selection, "option", (option) => {
+                UIAttributes.set(option, [["value", value]]);
+                UIStyles.setText(option, value);
+              });
+            });
+
+            UIEvents.listen([selection], "change", (event) => {
+              BrowseSelector.sort(event.target.value);
             });
           });
-
-          UIEvents.listen([selection], "change", (event) => {
-            BrowseSelector.sort(event.target.value);
+        });
+        UIElements.create(panel, "div", (filters) => {
+          UIClasses.set(filters, ["mb-4"]);
+          UIElements.create(filters, "h3", (title) => {
+            UIStyles.setText(title, "Filters");
+            UIClasses.set(title, [
+              "is-size-6",
+              "has-text-weight-semibold",
+              "mb-2",
+            ]);
           });
-        });
-      });
-      UIElements.create(panel, "div", (filters) => {
-        UIClasses.set(filters, ["mb-4"]);
-        UIElements.create(filters, "h3", (title) => {
-          UIStyles.setText(title, "Filters");
-          UIClasses.set(title, [
-            "is-size-6",
-            "has-text-weight-semibold",
-            "mb-2",
-          ]);
-        });
-        UIElements.create(filters, "button", (clear) => {
-          UIStyles.setText(clear, "Clear All");
-          UIClasses.set(clear, ["button", "is-small", "is-light", "mb-3"]);
-          UIEvents.listen([clear], "click", () => {
-            BrowseView.renew(products);
-            UIElements.renew(Identifiers.FILTERS);
+          UIElements.create(filters, "button", (clear) => {
+            UIStyles.setText(clear, "Clear All");
+            UIClasses.set(clear, ["button", "is-small", "is-light", "mb-3"]);
+            UIEvents.listen([clear], "click", () => {
+              BrowseView.renew(products);
+              UIElements.renew(Identifiers.FILTERS);
+            });
           });
-        });
-        UIElements.create(filters, "div", (contents) => {
-          UIElements.setId(contents, Identifiers.FILTERS);
-          UIClasses.set(contents, ["tags", "are-small"]);
+          UIElements.create(filters, "div", (contents) => {
+            UIElements.setId(contents, Identifiers.FILTERS);
+            UIClasses.set(contents, ["tags", "are-small"]);
+          });
         });
       });
     });
