@@ -85,7 +85,7 @@ export const ProductBrowsing = {
 
     return types;
   },
-  getScore(base, target) {
+  getScoreByBaseAssociation(base, target) {
     return Result.compute(
       [Validation.getObject(base), Validation.getObject(target)],
       ([base, target]) => {
@@ -108,7 +108,7 @@ export const ProductBrowsing = {
               },
             );
           } else if (typeof bvalue === "object") {
-            const subscore = this.getScore(bvalue, tvalue);
+            const subscore = this.getScoreByBaseAssociation(bvalue, tvalue);
 
             if (subscore.ok) {
               score += subscore.data.score;
@@ -126,6 +126,67 @@ export const ProductBrowsing = {
       },
     );
   },
+  getScoreBySelection(target, selection) {
+    return Result.compute(
+      [Validation.getObject(target), Validation.getObject(selection)],
+      ([selection]) => {
+        const evaluate = (target, values) => {
+          if (Array.isArray(target)) {
+            return target
+              .map((value) => {
+                return evaluate(value, values);
+              })
+              .reduce((accumulator, current) => {
+                return accumulator + current;
+              });
+          } else {
+            for (const value of values) {
+              if (value === target) {
+                return 1;
+              }
+            }
+
+            return 0;
+          }
+        };
+
+        const score = [
+          evaluate(target.gender, selection.genders),
+          evaluate(target.category, selection.categories),
+          evaluate(target.color, selection.colors),
+          evaluate(target.sizes, selection.sizes),
+        ].reduce((accumulator, current) => {
+          return accumulator + current;
+        });
+
+        return Result.ok({ score, product: target });
+      },
+    );
+  },
+  getSortedScores(scores, limit) {
+    const sorted = scores
+      .sort((a, b) => b.score - a.score)
+      .map(({ product }) => product);
+
+    if (limit) {
+      sorted.length = limit;
+    }
+
+    return Result.ok(sorted);
+  },
+  getBySearch(products, selection, limit) {
+    const scores = [];
+
+    for (const target of products) {
+      const { data: score } = this.getScoreBySelection(target, selection);
+
+      if (score) {
+        scores.push(score);
+      }
+    }
+
+    return this.getSortedScores(scores, limit);
+  },
   getRecommendations(base, limit) {
     if (!base) {
       return Result.error("No product found for recommendations", base);
@@ -140,7 +201,7 @@ export const ProductBrowsing = {
             [Validation.getObject(target)],
             ([target]) => {
               return Result.compute(
-                [this.getScore(base, target)],
+                [this.getScoreByBaseAssociation(base, target)],
                 ([score]) => {
                   scores.push(score);
 
@@ -155,15 +216,7 @@ export const ProductBrowsing = {
           }
         }
 
-        const sorted = scores
-          .sort((a, b) => b.score - a.score)
-          .map(({ product }) => product);
-
-        if (limit) {
-          sorted.length = limit;
-        }
-
-        return Result.ok(sorted);
+        return this.getSortedScores(scores, limit);
       });
     }
   },

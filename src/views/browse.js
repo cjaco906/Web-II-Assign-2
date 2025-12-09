@@ -7,6 +7,7 @@ import {
   UIEvents,
   UIStyles,
 } from "../utils";
+import { ProductOverview } from "./product";
 
 const Identifiers = {
   DROPDOWN_GENDERS: "browse-genders",
@@ -18,53 +19,105 @@ const Identifiers = {
   PRODUCT_OVERVIEWS: "browse-product-overviews",
 };
 
+let BrowseSelector;
+
 export const BrowseView = {
-  create(id, products) {
+  create(id) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "section", (section) => {
-         UIClasses.set(section, ["columns", "mt-6"]) 
+        UIClasses.set(section, ["columns", "mt-6"]);
 
- UIElements.create(section, "div", left => {
-        UIClasses.set(left, ["column", "is-3"])
-        CreateSubview.departments(left, products)
+        UIElements.create(section, "div", (left) => {
+          UIClasses.set(left, ["column", "is-3"]);
+          CreateSubview.departments(left);
 
-          UIElements.create(section, "div", right => {
-        UIClasses.set(right, ["column", "is-9"])
-        CreateSubview.top(right, products)
-        CreateSubview.overviews(right, products)
+          UIElements.create(section, "div", (right) => {
+            UIClasses.set(right, ["column", "is-9"]);
+            CreateSubview.top(right);
+            CreateSubview.overviews(right);
+          });
+        });
       });
     });
-  });
-  });
   },
-  update() {},
+  renew(products) {
+    const selection = {
+      genders: new Set(),
+      categories: new Set(),
+      sizes: new Set(),
+      colors: new Set(),
+    };
+    const submit = (set, value) => {
+      set.add(value);
+
+      UIElements.getByIds([Identifiers.FILTERS], ([filters]) => {
+        UIElements.create(filters, "button", (filter) => {
+          UIStyles.setText(filter, value);
+          UIEvents.listen([filter], "click", () => {
+            filter.remove();
+          });
+        });
+      });
+      UIElements.renew(Identifiers.PRODUCT_OVERVIEWS, (overviews) => {
+        Result.compute(
+          [ProductBrowsing.getBySearch(products, selection, 10)],
+          ([products]) => {
+            ProductOverview.create(overviews, "Products", products);
+          },
+        );
+      });
+    };
+
+    BrowseSelector = {
+      gender(gender) {
+        submit(selection.genders, gender);
+      },
+      category(category) {
+        submit(selection.category, category);
+      },
+      size(size) {
+        submit(selection.sizes, size);
+      },
+      color(color) {
+        submit(selection.colors, color);
+      },
+      sort(type) {
+        selection.sort = type;
+      },
+    };
+  },
 };
 
 const CreateSubview = {
   departments(section) {
     UIElements.create(section, "div", (panel) => {
-       UIClasses.set(panel, ["box", "p-5", "mb-5", "browse-sidebar"])
+      UIClasses.set(panel, ["box", "p-5", "mb-5", "browse-sidebar"]);
       UIElements.create(panel, "h2", (title) => {
-       
         UIStyles.setText(title, "Departments");
-         UIClasses.set(title, ["is-size-5", "has-text-weight-bold", "mb-4"]);
+        UIClasses.set(title, ["is-size-5", "has-text-weight-bold", "mb-4"]);
       });
       UIElements.create(panel, "div", (dropdowns) => {
         const types = ProductBrowsing.getTypes();
 
         UIElements.create(dropdowns, "div", (genders) => {
-           UIClasses.add(genders, ["mb-5"]); 
+          UIClasses.add(genders, ["mb-5"]);
           UIElements.create(genders, "h3", (title) => {
             UIStyles.setText(title, "Gender");
-            UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
+            UIClasses.set(title, [
+              "is-size-6",
+              "has-text-weight-semibold",
+              "mb-2",
+            ]);
           });
           UIElements.create(genders, "div", (contents) => {
-             UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
+            UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
             for (const value of types.genders) {
               UIElements.create(contents, "button", (gender) => {
                 UIStyles.setText(gender, value);
                 UIStyles.setButtonToggleable(contents, gender);
-                UIEvents.listen([gender], "click", () => {});
+                UIEvents.listen([gender], "click", () => {
+                  BrowseSelector.gender(value);
+                });
               });
             }
           });
@@ -73,7 +126,11 @@ const CreateSubview = {
           UIClasses.add(categories, ["mb-5"]);
           UIElements.create(categories, "h3", (title) => {
             UIStyles.setText(title, "Category");
-            UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
+            UIClasses.set(title, [
+              "is-size-6",
+              "has-text-weight-semibold",
+              "mb-2",
+            ]);
           });
           UIElements.create(categories, "div", (contents) => {
             UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
@@ -81,7 +138,9 @@ const CreateSubview = {
               UIElements.create(contents, "button", (category) => {
                 UIStyles.setText(category, value);
                 UIStyles.setButtonToggleable(contents, category);
-                UIEvents.listen([category], "click", () => {});
+                UIEvents.listen([category], "click", () => {
+                  BrowseSelector.category(value);
+                });
               });
             }
           });
@@ -90,7 +149,11 @@ const CreateSubview = {
           UIClasses.add(sizes, ["mb-5"]);
           UIElements.create(sizes, "h3", (title) => {
             UIStyles.setText(title, "Size");
-            UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
+            UIClasses.set(title, [
+              "is-size-6",
+              "has-text-weight-semibold",
+              "mb-2",
+            ]);
           });
 
           UIElements.create(sizes, "div", (contents) => {
@@ -99,7 +162,9 @@ const CreateSubview = {
               UIElements.create(contents, "button", (size) => {
                 UIStyles.setText(size, value);
                 UIStyles.setButtonToggleable(contents, size);
-                UIEvents.listen([size], "click", () => {});
+                UIEvents.listen([size], "click", () => {
+                  BrowseSelector.size(value);
+                });
               });
             }
           });
@@ -108,7 +173,11 @@ const CreateSubview = {
           UIClasses.add(colors, ["mb-5"]);
           UIElements.create(colors, "h3", (title) => {
             UIStyles.setText(title, "Size");
-            UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
+            UIClasses.set(title, [
+              "is-size-6",
+              "has-text-weight-semibold",
+              "mb-2",
+            ]);
           });
           UIElements.create(colors, "div", (contents) => {
             UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
@@ -116,7 +185,9 @@ const CreateSubview = {
               UIElements.create(contents, "button", (color) => {
                 UIStyles.setText(color, value);
                 UIStyles.setButtonToggleable(contents, color);
-                UIEvents.listen([color], "click", () => {});
+                UIEvents.listen([color], "click", () => {
+                  BrowseSelector.color(value);
+                });
               });
             }
           });
@@ -129,14 +200,18 @@ const CreateSubview = {
       UIClasses.set(panel, ["mb-5", "p-3", "browse-top-bar"]);
       UIElements.create(panel, "div", (sort) => {
         UIClasses.set(sort, [
-        "is-flex",
-        "is-align-items-center",
-        "is-justify-content-space-between",
-        "mb-4"
-      ]);
+          "is-flex",
+          "is-align-items-center",
+          "is-justify-content-space-between",
+          "mb-4",
+        ]);
         UIElements.create(sort, "h3", (title) => {
           UIStyles.setText(title, "Sort");
-          UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mr-3"]);
+          UIClasses.set(title, [
+            "is-size-6",
+            "has-text-weight-semibold",
+            "mr-3",
+          ]);
         });
         UIElements.create(sort, "select", (selection) => {
           UIClasses.set(selection, ["select", "is-small"]);
@@ -145,6 +220,9 @@ const CreateSubview = {
               UIAttributes.set(option, ["value", index]);
               UIStyles.setText(option, value);
             });
+            UIEvents.listen(selection, "change", (event) => {
+              BrowseSelector.sort(event.target.value);
+            });
           });
         });
       });
@@ -152,12 +230,17 @@ const CreateSubview = {
         UIClasses.set(filters, ["mb-4"]);
         UIElements.create(filters, "h3", (title) => {
           UIStyles.setText(title, "Filters");
-          UIClasses.set(title, ["is-size-6", "has-text-weight-semibold", "mb-2"]);
+          UIClasses.set(title, [
+            "is-size-6",
+            "has-text-weight-semibold",
+            "mb-2",
+          ]);
         });
         UIElements.create(filters, "button", (clear) => {
           UIStyles.setText(clear, "Clear All");
           UIClasses.set(clear, ["button", "is-small", "is-light", "mb-3"]);
           UIEvents.listen([clear], "click", () => {
+            BrowseView.renew();
             UIElements.renew(Identifiers.FILTERS);
           });
         });
@@ -175,10 +258,4 @@ const CreateSubview = {
       });
     });
   },
-};
-
-const UpdateSubview = {
-  departments(products) {},
-  top(products) {},
-  overviews(products) {},
 };
