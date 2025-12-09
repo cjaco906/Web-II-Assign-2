@@ -180,6 +180,7 @@ const CreateSubview = {
           });
         });
         UIElements.create(dropdowns, "div", (colors) => {
+          UIClasses.add(colors, ["browse-filter-group"]);
          
           UIElements.create(colors, "h3", (title) => {
             UIStyles.setText(title, "Colors");
@@ -190,6 +191,7 @@ const CreateSubview = {
             ]);
           });
           UIElements.create(colors, "div", (contents) => {
+            UIClasses.add(contents, ["browse-filter-options"]);
             
             for (const { name, hex } of types.colors) {
               UIElements.create(contents, "button", (color) => {
