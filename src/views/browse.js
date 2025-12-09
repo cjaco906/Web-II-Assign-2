@@ -89,6 +89,8 @@ export const BrowseView = {
 };
 
 const CreateSubview = {
+
+
   departments(products, section) {
     UIElements.create(section, "div", (panel) => {
       UIClasses.set(panel, ["box", "p-5", "mb-5", "browse-sidebar"]);
@@ -99,8 +101,12 @@ const CreateSubview = {
       UIElements.create(panel, "div", (dropdowns) => {
         const types = ProductBrowsing.getTypes(products);
 
+
+
         UIElements.create(dropdowns, "div", (genders) => {
-          UIClasses.add(genders, ["mb-5"]);
+          UIClasses.add(genders, ["browse-filter-group"]);
+
+          
           UIElements.create(genders, "h3", (title) => {
             UIStyles.setText(title, "Gender");
             UIClasses.set(title, [
@@ -110,7 +116,7 @@ const CreateSubview = {
             ]);
           });
           UIElements.create(genders, "div", (contents) => {
-            UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
+            UIClasses.add(contents, ["browse-filter-options"]);
             for (const value of types.genders) {
               UIElements.create(contents, "button", (gender) => {
                 UIStyles.setText(gender, value);
@@ -123,7 +129,8 @@ const CreateSubview = {
           });
         });
         UIElements.create(dropdowns, "div", (categories) => {
-          UIClasses.add(categories, ["mb-5"]);
+          UIClasses.add(categories, ["browse-filter-group"]);
+          
           UIElements.create(categories, "h3", (title) => {
             UIStyles.setText(title, "Category");
             UIClasses.set(title, [
@@ -133,7 +140,8 @@ const CreateSubview = {
             ]);
           });
           UIElements.create(categories, "div", (contents) => {
-            UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
+            UIClasses.add(contents, ["browse-filter-options"]);
+            
             for (const value of types.categories) {
               UIElements.create(contents, "button", (category) => {
                 UIStyles.setText(category, value);
@@ -146,7 +154,8 @@ const CreateSubview = {
           });
         });
         UIElements.create(dropdowns, "div", (sizes) => {
-          UIClasses.add(sizes, ["mb-5"]);
+          UIClasses.add(sizes, ["browse-filter-group"]);
+        
           UIElements.create(sizes, "h3", (title) => {
             UIStyles.setText(title, "Size");
             UIClasses.set(title, [
@@ -157,7 +166,8 @@ const CreateSubview = {
           });
 
           UIElements.create(sizes, "div", (contents) => {
-            UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
+
+            UIClasses.add(contents, ["browse-filter-options"]);
             for (const value of types.sizes) {
               UIElements.create(contents, "button", (size) => {
                 UIStyles.setText(size, value);
@@ -170,9 +180,9 @@ const CreateSubview = {
           });
         });
         UIElements.create(dropdowns, "div", (colors) => {
-          UIClasses.add(colors, ["mb-5"]);
+         
           UIElements.create(colors, "h3", (title) => {
-            UIStyles.setText(title, "Size");
+            UIStyles.setText(title, "Colors");
             UIClasses.set(title, [
               "is-size-6",
               "has-text-weight-semibold",
@@ -180,14 +190,15 @@ const CreateSubview = {
             ]);
           });
           UIElements.create(colors, "div", (contents) => {
-            UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
+            
             for (const { name, hex } of types.colors) {
               UIElements.create(contents, "button", (color) => {
-                UIStyles.setText(color, name);
-                UIStyles.setBackgroundColor(color, hex);
+                UIClasses.set(color, ["color-circle"]);
+UIStyles.setBackgroundColor(color, hex);
+UIAttributes.set(color, [["title", name]]);
                 UIStyles.setButtonToggleable(contents, color);
                 UIEvents.listen([color], "click", () => {
-                  BrowseSelector.color(value);
+                  BrowseSelector.color(name);
                 });
               });
             }
