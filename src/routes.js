@@ -11,71 +11,74 @@ import {
 /**
  * Responsible for allowing other parts of the website for switching between views.
  */
-export const Routes = Result.compute([ProductStorage.fetch()], ([products]) => {
-  const Views = {
-    HOME: HomeView.create("home"),
-    PRODUCT: ProductView.create("product"),
-    CART: ShoppingCartView.create("shopping-cart"),
-    BROWSE: BrowseView.create(products, "browse"),
-    ABOUT_US: AboutUsView.create("about-us"),
-  };
-  const NavigationBar = {
-    HOME: UIElements.getByIds(["nav-home"]),
-    HOME_LOGO: UIElements.getByIds(["nav-home-logo"]),
-    BROWSE: UIElements.getByIds(["nav-browse"]),
-    ABOUT_US: UIElements.getByIds(["nav-about"]),
-    CART: UIElements.getByIds(["nav-cart"]),
-  };
-  const paths = {
-    home() {
-      HomeView.update(products);
-      UpdateView.switch(Views.HOME);
-    },
-    aboutus() {
-      Result.compute([...Views.ABOUT_US], ([aboutus]) => {
-        aboutus.showModal();
-      });
-    },
-    browse() {
-      BrowseView.renew(products);
-      UpdateView.switch(Views.BROWSE);
-    },
-    product(product) {
-      ProductView.update(product);
-      UpdateView.switch(Views.PRODUCT);
-    },
-    cart(order) {
-      ShoppingCartView.update(order);
-      UpdateView.switch(Views.CART);
-    },
-  };
+export const Routes = Result.compute(
+  [await ProductStorage.fetch()],
+  ([products]) => {
+    const Views = {
+      HOME: HomeView.create("home"),
+      PRODUCT: ProductView.create("product", products),
+      CART: ShoppingCartView.create("shopping-cart"),
+      BROWSE: BrowseView.create("browse", products),
+      ABOUT_US: AboutUsView.create("about-us"),
+    };
+    const NavigationBar = {
+      HOME: UIElements.getByIds(["nav-home"]),
+      HOME_LOGO: UIElements.getByIds(["nav-home-logo"]),
+      BROWSE: UIElements.getByIds(["nav-browse"]),
+      ABOUT_US: UIElements.getByIds(["nav-about"]),
+      CART: UIElements.getByIds(["nav-cart"]),
+    };
+    const paths = {
+      home() {
+        HomeView.update(products);
+        UpdateView.switch(Views.HOME);
+      },
+      aboutus() {
+        Result.compute([...Views.ABOUT_US], ([aboutus]) => {
+          aboutus.showModal();
+        });
+      },
+      browse() {
+        BrowseView.renew(products);
+        UpdateView.switch(Views.BROWSE);
+      },
+      product(product) {
+        ProductView.update(products, product);
+        UpdateView.switch(Views.PRODUCT);
+      },
+      cart(order) {
+        ShoppingCartView.update(order);
+        UpdateView.switch(Views.CART);
+      },
+    };
 
-  Result.compute(
-    [...NavigationBar.HOME, ...NavigationBar.HOME_LOGO],
-    ([home, logo]) => {
-      UIEvents.listen([home, logo], "click", () => {
-        paths.home(products);
+    Result.compute(
+      [...NavigationBar.HOME, ...NavigationBar.HOME_LOGO],
+      ([home, logo]) => {
+        UIEvents.listen([home, logo], "click", () => {
+          paths.home(products);
+        });
+      },
+    );
+    Result.compute([...NavigationBar.BROWSE], ([browse]) => {
+      UIEvents.listen([browse], "click", () => {
+        paths.browse(products);
       });
-    },
-  );
-  Result.compute([...NavigationBar.BROWSE], ([browse]) => {
-    UIEvents.listen([browse], "click", () => {
-      paths.browse(products);
     });
-  });
-  Result.compute([...NavigationBar.ABOUT_US], ([aboutus]) => {
-    UIEvents.listen([aboutus], "click", () => {
-      paths.aboutus();
+    Result.compute([...NavigationBar.ABOUT_US], ([aboutus]) => {
+      UIEvents.listen([aboutus], "click", () => {
+        paths.aboutus();
+      });
     });
-  });
-  Result.compute([...NavigationBar.CART], ([cart]) => {
-    UIEvents.listen([cart], "click", () => {
-      paths.cart();
+    Result.compute([...NavigationBar.CART], ([cart]) => {
+      UIEvents.listen([cart], "click", () => {
+        paths.cart();
+      });
     });
-  });
 
-  return paths;
-});
+    return paths;
+  },
+);
 
 /**
  * Helper functions for switching views.

@@ -41,7 +41,7 @@ export const BrowseView = {
   /**
    * Creates the view skeleton (placeholders).
    */
-  create(products, id) {
+  create(id, products) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "section", (section) => {
         UIClasses.set(section, ["columns", "mt-6"]);

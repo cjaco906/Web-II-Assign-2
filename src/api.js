@@ -38,9 +38,16 @@ export const ProductStorage = {
                   [Validation.getArray(await response)],
                   ([products]) => {
                     try {
-                      return Validation.setByLocalStorage(
-                        LOCAL_STORAGE_KEY,
-                        JSON.stringify(products),
+                      return Result.compute(
+                        [
+                          Validation.setByLocalStorage(
+                            LOCAL_STORAGE_KEY,
+                            JSON.stringify(products),
+                          ),
+                        ],
+                        () => {
+                          return Result.ok(products);
+                        },
                       );
                     } catch (error) {
                       return Result.error(
@@ -263,37 +270,35 @@ export const ProductBrowsing = {
    * Uses a scoring algorithim (see above).
    * The given limit constrains the amount of scored products; the limit parameter is optional.
    */
-  getRecommendations(base, limit) {
+  getRecommendations(products, base, limit) {
     if (!base) {
       return Result.error("No product found for recommendations", base);
     } else {
-      return Result.compute([ProductStorage.fetch()], ([products]) => {
-        const scores = [];
+      const scores = [];
 
-        for (const target of products) {
-          if (base.id === target.id) continue;
+      for (const target of products) {
+        if (base.id === target.id) continue;
 
-          const result = Result.compute(
-            [Validation.getObject(target)],
-            ([target]) => {
-              return Result.compute(
-                [this.getScoreByBaseAssociation(base, target)],
-                ([score]) => {
-                  scores.push(score);
+        const result = Result.compute(
+          [Validation.getObject(target)],
+          ([target]) => {
+            return Result.compute(
+              [this.getScoreByBaseAssociation(base, target)],
+              ([score]) => {
+                scores.push(score);
 
-                  return Result.ok(score);
-                },
-              );
-            },
-          );
+                return Result.ok(score);
+              },
+            );
+          },
+        );
 
-          if (!result.ok) {
-            return result;
-          }
+        if (!result.ok) {
+          return result;
         }
+      }
 
-        return this.getSortedScores(scores, limit);
-      });
+      return this.getSortedScores(scores, limit);
     }
   },
 };

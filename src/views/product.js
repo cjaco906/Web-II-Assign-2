@@ -1,13 +1,13 @@
-import { ProductBrowsing, ProductStorage, ShoppingCart } from "../api";
+import { ProductBrowsing, ShoppingCart } from "../api";
 import { Routes } from "../routes";
 import { showToast } from "../toast";
 import {
-  UIClasses,
-  UIAttributes,
-  UIElements,
-  UIStyles,
-  UIEvents,
   Result,
+  UIAttributes,
+  UIClasses,
+  UIElements,
+  UIEvents,
+  UIStyles,
   Validation,
 } from "../utils";
 
@@ -40,7 +40,7 @@ function formatPrice(value) {
  * Responsible for managing the Product view page.
  */
 export const ProductView = {
-  create(id) {
+  create(id, products) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "div", (container) => {
         UIClasses.set(container, [
@@ -54,16 +54,16 @@ export const ProductView = {
         CreateSubviews.images(container);
 
         // right side details
-        CreateSubviews.details(container);
+        CreateSubviews.details(container, products);
       });
 
       // recommendations under it
       CreateSubviews.recommendations(view);
     });
   },
-  update(product) {
+  update(products, product) {
     UpdateSubview.details(product);
-    UpdateSubview.recommendations(product);
+    UpdateSubview.recommendations(products, product);
     UpdateSubview.updateBreadcrumb(product);
   },
 };
@@ -253,7 +253,7 @@ const CreateSubviews = {
     });
   },
 
-  details(view) {
+  details(view, products) {
     UIElements.create(view, "div", (details) => {
       UIClasses.set(details, ["column", "is-half", "product-details"]);
 
@@ -332,55 +332,53 @@ const CreateSubviews = {
         UIStyles.setText(button, "Add to Cart");
         UIElements.setId(button, Identifiers.ADD_TO_CART);
         UIEvents.listen([button], "click", () => {
-          Result.compute([ProductStorage.fetch()], ([products]) => {
-            let selection = {};
+          let selection = {};
 
-            UIClasses.select(`#${Identifiers.COLORS} .selected`).map(
-              (selected) => {
-                const [name, hex] = UIAttributes.get(selected, ["name", "hex"]);
-                const color = { name, hex };
-                const array = selection.color;
+          UIClasses.select(`#${Identifiers.COLORS} .selected`).map(
+            (selected) => {
+              const [name, hex] = UIAttributes.get(selected, ["name", "hex"]);
+              const color = { name, hex };
+              const array = selection.color;
+
+              if (!array) {
+                selection.color = [color];
+              } else {
+                array.push(color);
+              }
+            },
+          );
+          UIClasses.select(`#${Identifiers.SIZES} .selected`).map(
+            (selected) => {
+              Result.compute([UIStyles.getText(selected)], ([size]) => {
+                const array = selection.sizes;
 
                 if (!array) {
-                  selection.color = [color];
+                  selection.sizes = [size];
                 } else {
-                  array.push(color);
+                  array.push(size);
                 }
-              },
-            );
-            UIClasses.select(`#${Identifiers.SIZES} .selected`).map(
-              (selected) => {
-                Result.compute([UIStyles.getText(selected)], ([size]) => {
-                  const array = selection.sizes;
-
-                  if (!array) {
-                    selection.sizes = [size];
-                  } else {
-                    array.push(size);
-                  }
-                });
-              },
-            );
-            UIElements.getByIds([Identifiers.QUANTITY], ([quantity]) => {
-              Result.compute(
-                [Validation.getNumber(quantity.value)],
-                ([value]) => {
-                  selection.quantity = value;
-                },
-              );
-            });
-
-            const [id] = UIAttributes.get(button, ["product"]);
-
+              });
+            },
+          );
+          UIElements.getByIds([Identifiers.QUANTITY], ([quantity]) => {
             Result.compute(
-              [ProductBrowsing.getById(products, id)],
-              ([product]) => {
-                Routes.cart({ product, selection });
-
-                showToast("Product added to cart!");
+              [Validation.getNumber(quantity.value)],
+              ([value]) => {
+                selection.quantity = value;
               },
             );
           });
+
+          const [id] = UIAttributes.get(button, ["product"]);
+
+          Result.compute(
+            [ProductBrowsing.getById(products, id)],
+            ([product]) => {
+              Routes.cart({ product, selection });
+
+              showToast("Product added to cart!");
+            },
+          );
         });
       });
     });
@@ -496,10 +494,10 @@ const UpdateSubview = {
       UIAttributes.set(button, [["product", product.id]]);
     });
   },
-  recommendations(product) {
+  recommendations(products, product) {
     UIElements.renew(Identifiers.RECOMMENDATIONS, (recommendations) => {
       Result.compute(
-        [ProductBrowsing.getRecommendations(product, 4)],
+        [ProductBrowsing.getRecommendations(products, product, 4)],
         ([products]) => {
           ProductOverview.create(recommendations, "Related Products", products);
         },
