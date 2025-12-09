@@ -3,5 +3,5 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [tailwindcss()],
-  base: "/Web-II-Assign-2/",
+  base: "/",
 });
