@@ -140,7 +140,7 @@
   transform: scale(1.15);
   border: #000000 1.5px solid;
 }
- 
+
 .size-button {
   padding: 8px 14px;
   margin-right: 8px;
@@ -199,7 +199,6 @@
   margin-bottom: 20px;
 }
 
-
 .cart-row {
   border-bottom: 1px solid #eee;
   padding: 20px 0;
@@ -223,12 +222,10 @@
   font-weight: 600;
 }
 
-
 .cart-detail {
   font-size: 0.85rem;
   color: #666;
 }
-
 
 .summary {
   padding: 20px;
@@ -328,7 +325,6 @@
   border-radius: 12px;
 }
 
-
 #snackbar {
   visibility: hidden;
   min-width: 250px;
@@ -354,20 +350,20 @@
 
 .product-main {
   width: 100%;
-  max-height: 550px;     /* adjust this */
+  max-height: 550px; /* adjust this */
   object-fit: cover;
   border-radius: 8px;
 }
 
 .product-thumb {
   width: 100%;
-  max-height: 250px;     /* adjust this */
+  max-height: 250px; /* adjust this */
   object-fit: cover;
   border-radius: 8px;
 }
 
 .product-container {
-  padding: 3rem; 
+  padding: 3rem;
 }
 
 #about-us {
@@ -382,7 +378,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 #about-us::backdrop {
@@ -403,7 +399,7 @@
   top: 6px;
   right: 6px;
 
-  background-color: #000000;      
+  background-color: #000000;
   color: white;
 
   font-size: 1rem;
@@ -427,11 +423,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-   margin-right: 5px;
+  margin-right: 5px;
 }
-
-
-
 
 .cart-remove-button img {
   width: 16px;
@@ -487,16 +480,15 @@
   display: inline-block;
 }
 
-
 .browse-sidebar {
+  position: relative;
   background: #ffffff;
   border-radius: 10px;
   padding: 20px;
 }
 
-
 .browse-filter-group {
-  margin-bottom: 28px;     
+  margin-bottom: 28px;
 }
 
 .browse-filter-group h3 {
@@ -506,11 +498,10 @@
   color: #333;
 }
 
-
 .browse-filter-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;                 
+  gap: 8px;
 }
 
 /* --- Filter Buttons --- */
@@ -524,11 +515,11 @@
   transition: 0.15s;
 }
 
-
 .browse-filter-options button {
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
 }
-
 
 .browse-filter-options button:hover {
   transform: scale(1.06);
@@ -542,7 +533,6 @@
   transform: scale(1.06);
 }
 
-
 .color-circle {
   width: 22px;
   height: 22px;
@@ -552,13 +542,11 @@
   margin: 3px;
 }
 
-
 #browse-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
-
 
 .filter-delete {
   background: #f4f4f4;
@@ -570,10 +558,7 @@
   transition: 0.2s ease;
 }
 
-
 .filter-delete:hover {
-   background: #ffe5e5; 
+  background: #ffe5e5;
   border-color: #ffb3b3;
 }
-
-

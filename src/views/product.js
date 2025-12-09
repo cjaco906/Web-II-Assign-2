@@ -91,23 +91,28 @@ export const ProductOverview = {
                     ]);
                   });
                 });
+                UIEvents.listen([imagec], "click", () => {
+                  Routes.product(product);
+                });
               });
               UIElements.create(card, "div", (content) => {
-                UIClasses.add(content, ["card-content"]);
-                UIElements.create(content, "p", (title) => {
-                  UIClasses.add(title, [
-                    "title",
-                    "is-6",
-                    "has-text-weight-light",
-                  ]);
-                  UIStyles.setText(title, product.name);
-                });
-                UIElements.create(content, "p", (price) => {
-                  UIClasses.add(price, ["subtitle", "is-6", "has-text-grey"]);
-                  UIStyles.setText(price, formatPrice(product.price));
+                UIClasses.add(content, ["card-content", "flex"]);
+                UIElements.create(content, "div", (details) => {
+                  UIElements.create(details, "p", (title) => {
+                    UIClasses.add(title, [
+                      "title",
+                      "is-6",
+                      "has-text-weight-light",
+                    ]);
+                    UIStyles.setText(title, product.name);
+                  });
+                  UIElements.create(details, "p", (price) => {
+                    UIClasses.add(price, ["subtitle", "is-6", "has-text-grey"]);
+                    UIStyles.setText(price, formatPrice(product.price));
+                  });
                 });
                 UIElements.create(content, "a", (cart) => {
-                  UIClasses.set(cart, ["cart-wrapper"]);
+                  UIClasses.set(cart, ["cart-wrapper", "ml-auto"]);
                   UIElements.create(cart, "span", (icon) => {
                     UIClasses.set(icon, ["icon"]);
                     UIElements.create(icon, "img", (img) => {
@@ -115,13 +120,13 @@ export const ProductOverview = {
                         ["src", "/src/images/CartIcon.png"],
                         ["alt", "Cart"],
                       ]);
-                      UIClasses.set(img, "cart-icon");
+                      UIClasses.set(img, ["cart-icon"]);
                     });
                   });
+                  UIEvents.listen([cart], "click", () => {
+                    Routes.cart();
+                  });
                 });
-              });
-              UIEvents.listen([card], "click", () => {
-                Routes.product(product);
               });
             });
           });
@@ -313,7 +318,7 @@ const CreateSubviews = {
                 } else {
                   array.push(color);
                 }
-              }
+              },
             );
             UIClasses.select(`#${Identifiers.SIZES} .selected`).map(
               (selected) => {
@@ -326,14 +331,14 @@ const CreateSubviews = {
                     array.push(size);
                   }
                 });
-              }
+              },
             );
             UIElements.getByIds([Identifiers.QUANTITY], ([quantity]) => {
               Result.compute(
                 [Validation.getNumber(quantity.value)],
                 ([value]) => {
                   selection.quantity = value;
-                }
+                },
               );
             });
 
@@ -345,7 +350,7 @@ const CreateSubviews = {
                 Routes.cart({ product, selection });
 
                 showToast("Product added to cart!");
-              }
+              },
             );
           });
         });
@@ -380,7 +385,7 @@ const UpdateSubview = {
     UIElements.getByIds(["breadcrumb-category"], ([el]) => {
       UIStyles.setText(el, product.category);
       UIEvents.listen([el], "click", () =>
-        Routes.browseCategory(product.gender, product.category)
+        Routes.browseCategory(product.gender, product.category),
       );
     });
   },
@@ -466,7 +471,7 @@ const UpdateSubview = {
         [ProductBrowsing.getRecommendations(product, 4)],
         ([products]) => {
           ProductOverview.create(recommendations, "Related Products", products);
-        }
+        },
       );
     });
   },
