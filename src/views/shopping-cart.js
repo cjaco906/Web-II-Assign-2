@@ -93,7 +93,7 @@ const UpdateSubviews = {
                   UIClasses.set(remove, ['cart-remove-button'])
                   UIElements.create(remove, 'img', icon => {
                     UIAttributes.set(icon, [
-                      ['src', '/src/images/deleteIcon.png'],
+                      ['src', '/src/images/DeleteIcon.png'],
                       ['style', 'width:20px; height:20px;']
                     ])
                   })
