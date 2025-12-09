@@ -239,10 +239,11 @@ const CreateSubviews = {
       // Material
       UIElements.create(details, "p", (material) => {
         UIClasses.set(material, ["mt-3"]);
-        UIElements.create(material, "strong", (strong) => {
-          UIStyles.setText(strong, "Material");
-          UIElements.create(strong, "span", (span) => {
-            UIElements.setId(span, Identifiers.MATERIAL);
+        UIElements.create(material, "strong", (label) => {
+          UIStyles.setText(label, "Material: ");
+
+          UIElements.create(material, "span", (value) => {
+            UIElements.setId(value, Identifiers.MATERIAL);
           });
         });
       });
