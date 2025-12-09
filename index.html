@@ -12,10 +12,6 @@
     <title>spa-js</title>
   </head>
 
-
-
-
-
   <body>
     <button id="test-about" class="button is-black">Test About Us Page</button>
 
@@ -31,9 +27,7 @@
             />
           </a>
         </div>
-
         <div class="navbar-menu is-active">
-          
           <div
             class="navbar-start is-flex is-justify-content-center"
             style="flex: 1"
@@ -42,37 +36,33 @@
             <a class="navbar-item" id="nav-browse">Browse</a>
             <a class="navbar-item" id="nav-about">About Us</a>
           </div>
-
-          
           <div class="navbar-end">
-            <a class="navbar-item cart-wrapper" id="nav-cart" style="position: relative;">
-            <span class="icon">
-              <img src="/src/images/CartIcon.png" alt="Cart" class="cart-icon"/>
-            </span>
-
-  
-            <span id="nav-cart-quantity" class="cart-badge">0</span>
-          </a>
-
+            <a
+              class="navbar-item cart-wrapper"
+              id="nav-cart"
+              style="position: relative"
+            >
+              <span class="icon">
+                <img
+                  src="/src/images/CartIcon.png"
+                  alt="Cart"
+                  class="cart-icon"
+                />
+              </span>
+              <span id="nav-cart-quantity" class="cart-badge">0</span>
+            </a>
           </div>
         </div>
       </nav>
     </header>
-
     <main>
       <article id="home" class="is-hidden"></article>
       <article id="browse" class="is-hidden"></article>
       <article id="product" class="is-hidden product-page"></article>
       <article id="shopping-cart" class="is-hidden"></article>
-      <dialog id="about-us" >
-        
-      </dialog>
-   
+      <dialog id="about-us"></dialog>
       <div id="snackbar"></div>
-
-   
     </main>
-
     <footer class="footer has-background-light mt-6 py-4">
       <div class="has-text-centered">
         <figure class="is-inline-block" style="margin: 0">
@@ -82,153 +72,11 @@
             style="height: 70px; width: auto"
           />
         </figure>
-
         <p class="has-text-grey mt-1">Quality Clothing For Everyone</p>
-
         <p class="has-text-grey mt-1">Github links</p>
-
         <p class="has-text-grey mt-3">Made by Manjot and Ramos</p>
       </div>
     </footer>
-
-
-
     <script type="module" src="/src/main.js"></script>
-    <script type="module" src="/src/main.js"></script>
-
-<script>
-const btn = document.querySelector("#test-about");
-const dialog = document.querySelector("#about-us");
-
-const sections = [
-  {
-    title: "Team",
-    content: "The project is developed by Manjot Singh and Ramos Jacosalem"
-  },
-  {
-    title: "GitHub",
-    content: "Here is the GitHub repository link: https://github.com/cjaco906/Web-II-Assign-2"
-  },
-  {
-    title: "Technology Used",
-    content: "The project is built using JavaScript and Bulma CSS framework."
-  },
-  {
-    title: "Use of AI",
-    content:
-      "Logo is generated using AI tool website: logo.com. AI was used to style the website, particularly for generating the CSS and ensuring the correct Bulma classes were applied. The About us section is inspired by: https://shuffle.dev/components/bulma/all/faq, The cart view is inspired by: https://shuffle.dev/editor?project=d7d23cd7859ff084453659d0fb0bb25431febd7d"
-  }
-];
-
-btn.addEventListener("click", () => {
-  dialog.innerHTML = ""; 
-  const section = document.createElement("section");
-  section.classList.add("has-background-light", "py-24", "is-relative");
-
-  const container = document.createElement("div");
-  container.classList.add("container", "px-6");
-
-  const miniTitle = document.createElement("p");
-  miniTitle.classList.add(
-    "has-text-centered",
-    "has-text-weight-semibold",
-    "is-uppercase",
-    "mb-4"
-  );
-  miniTitle.textContent = "About Our Project";
-
-  const bigTitle = document.createElement("h2");
-  bigTitle.classList.add(
-    "title",
-    "is-size-1",
-    "has-text-centered",
-    "has-text-weight-bold",
-    "mb-6"
-  );
-  bigTitle.textContent = "Learn More About Us";
-
-  container.appendChild(miniTitle);
-  container.appendChild(bigTitle);
-
-  const div = document.createElement("div");
-  div.classList.add("mb-6");
-
-  sections.forEach(({ title, content }) => {
-    const itemDiv = document.createElement("div");
-    itemDiv.classList.add("mb-3");
-
-    const box = document.createElement("div");
-    box.classList.add("box", "py-5", "px-6", "is-clickable");
-    box.style.cursor = "pointer";
-
-    const row = document.createElement("div");
-    row.classList.add(
-      "is-flex",
-      "is-justify-content-space-between",
-      "is-align-items-center"
-    );
-
-    const header = document.createElement("h3");
-    header.classList.add("has-text-weight-semibold", "is-size-4");
-    header.textContent = title;
-
-    const arrow = document.createElement("span");
-    arrow.innerHTML = "▼";
-
-    row.appendChild(header);
-    row.appendChild(arrow);
-
-    const contentBox = document.createElement("div");
-    contentBox.style.maxHeight = "0px";
-    contentBox.style.overflow = "hidden";
-    contentBox.style.transition = "max-height 0.3s ease";
-
-    const text = document.createElement("p");
-    text.classList.add("has-text-grey", "mt-3");
-    text.textContent = content;
-
-    contentBox.appendChild(text);
-
-    box.addEventListener("click", () => {
-      const open = contentBox.style.maxHeight !== "0px";
-      contentBox.style.maxHeight = open ? "0px" : text.scrollHeight + 20 + "px";
-    });
-
-    box.appendChild(row);
-    box.appendChild(contentBox);
-    itemDiv.appendChild(box);
-    div.appendChild(itemDiv);
-  });
-
-  container.appendChild(div);
-  section.appendChild(container);
-
- 
-  const closeBtn = document.createElement("button");
-  closeBtn.classList.add("button", "is-black", "mt-5");
-  closeBtn.textContent = "Close";
-  closeBtn.addEventListener("click", () => dialog.close());
-
-  container.appendChild(closeBtn);
-
-  dialog.appendChild(section);
-
-  dialog.showModal();
-});
-
-
-dialog.addEventListener("click", (e) => {
-  if (e.target === dialog) dialog.close();
-});
-
-</script>
-
-
-
-
-</body>
-
   </body>
 </html>
-
-

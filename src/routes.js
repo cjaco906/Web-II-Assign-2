@@ -1,12 +1,18 @@
 import { Result, UIClasses, UIElements, UIEvents } from "./utils";
-import { HomeView, ProductView, ShoppingCartView } from "./views";
-import { BrowseView } from "./views/browse";
+import {
+  HomeView,
+  ProductView,
+  ShoppingCartView,
+  BrowseView,
+  AboutUsView,
+} from "./views";
 
 const Views = {
   HOME: HomeView.create("home"),
   PRODUCT: ProductView.create("product"),
   CART: ShoppingCartView.create("shopping-cart"),
   BROWSE: BrowseView.create("browse"),
+  ABOUT_US: AboutUsView.create("about-us"),
 };
 
 const NavigationBar = {
@@ -38,7 +44,7 @@ export const Routes = {
     });
     Result.compute([...NavigationBar.ABOUT_US], ([aboutus]) => {
       UIEvents.listen([aboutus], "click", () => {
-        console.log("test");
+        this.aboutus();
       });
     });
     Result.compute([...NavigationBar.CART], ([cart]) => {
@@ -51,7 +57,11 @@ export const Routes = {
     HomeView.update(products);
     UpdateView.switch(Views.HOME);
   },
-  aboutus() { },
+  aboutus() {
+    Result.compute([...Views.ABOUT_US], ([aboutus]) => {
+      aboutus.showModal();
+    });
+  },
   browse() {
     BrowseView.update();
     UpdateView.switch(Views.BROWSE);
