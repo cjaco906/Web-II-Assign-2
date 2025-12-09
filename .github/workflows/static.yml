@@ -21,6 +21,7 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+# https://github.com/vitejs/vite/discussions/13910
 jobs:
   # Single deploy job since we're just deploying
   deploy:
@@ -31,10 +32,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install Nodejs
+        uses: actions/setup-node@v6
+      - name: Install dependencies
+        run: npm ci
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-        # https://github.com/vitejs/vite/discussions/13910
       - name: Build
         run: npm run build -- --base "${{ steps.pages.outputs.base_path }}"
       - name: Upload artifact
