@@ -551,3 +551,29 @@
   cursor: pointer;
   margin: 3px;
 }
+
+
+#browse-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+
+.filter-delete {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+
+.filter-delete:hover {
+   background: #ffe5e5; 
+  border-color: #ffb3b3;
+}
+
+
