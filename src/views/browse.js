@@ -211,7 +211,7 @@ const CreateSubview = {
         UIClasses.set(sort, [
           'is-flex',
           'is-align-items-center',
-          'is-justify-content-space-between',
+          'is-justify-content-flex-end',
           'mb-4'
         ])
         UIElements.create(sort, 'h3', title => {
