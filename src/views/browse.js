@@ -1,4 +1,5 @@
-import { ProductBrowsing, ProductSortingTypes } from "../api";
+import { ProductBrowsing, ProductSortingTypes, ShoppingCart } from "../api";
+import { showToast } from "../toast";
 import {
   Result,
   UIAttributes,
@@ -56,7 +57,7 @@ export const BrowseView = {
           [ProductBrowsing.getBySearch(products, selection, 10)],
           ([products]) => {
             ProductOverview.create(overviews, "Products", products);
-          }
+          },
         );
       });
     };
@@ -79,7 +80,7 @@ export const BrowseView = {
             UIClasses.set(filter, ["filter-delete"]);
             UIElements.setId(
               filter,
-              `${Identifiers.FILTERS}-${value.toLowerCase()}`
+              `${Identifiers.FILTERS}-${value.toLowerCase()}`,
             );
             UIEvents.listen([filter], "click", () => {
               UIElements.getByIds(
@@ -87,7 +88,7 @@ export const BrowseView = {
                 ([button]) => {
                   UIClasses.remove(button, ["selected"]);
                   console.log(button);
-                }
+                },
               );
 
               filter.remove();
@@ -237,6 +238,7 @@ const CreateSubview = {
             for (const { name, hex } of types.colors) {
               UIElements.create(contents, "button", (color) => {
                 setId(color, name);
+
                 UIClasses.set(color, ["color-circle"]);
                 UIStyles.setBackgroundColor(color, hex);
                 UIAttributes.set(color, [["title", name]]);

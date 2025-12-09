@@ -1,5 +1,5 @@
-import { ProductStorage } from "./api";
-import { Result, UIClasses, UIElements, UIEvents } from "./utils";
+import { ProductStorage, ShoppingCart } from "./api";
+import { Result, UIClasses, UIElements, UIEvents, UIStyles } from "./utils";
 import {
   HomeView,
   ProductView,

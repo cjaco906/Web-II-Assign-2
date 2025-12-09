@@ -1,4 +1,4 @@
-import { ProductBrowsing, ProductStorage } from "../api";
+import { ProductBrowsing, ProductStorage, ShoppingCart } from "../api";
 import { Routes } from "../routes";
 import { showToast } from "../toast";
 import {
@@ -60,7 +60,7 @@ export const ProductView = {
 };
 
 export const ProductOverview = {
-  create(parent, title, products) {
+  create(parent, title, products, order) {
     UIElements.create(parent, "div", (container) => {
       UIClasses.set(container, ["container, is-variable, is-8"]);
 
@@ -124,7 +124,9 @@ export const ProductOverview = {
                     });
                   });
                   UIEvents.listen([cart], "click", () => {
-                    Routes.cart();
+                    if (order) {
+                      order(product);
+                    }
                   });
                 });
               });

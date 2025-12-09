@@ -1,4 +1,4 @@
-import { Result, Validation } from "./utils";
+import { Result, UIElements, UIStyles, Validation } from "./utils";
 
 export const ProductStorage = {
   fetch() {
@@ -170,7 +170,7 @@ export const ProductBrowsing = {
         const score = [
           evaluate(target.gender, selection.genders),
           evaluate(target.category, selection.categories),
-          evaluate(target.color, selection.colors),
+          evaluate(target.color, selection.color),
           evaluate(target.sizes, selection.sizes),
         ].reduce((accumulator, current) => {
           return accumulator + current;
@@ -260,6 +260,17 @@ export const ProductBrowsing = {
 };
 
 export const ShoppingCart = {
+  update(cart) {
+    if (cart) {
+      UIElements.getByIds(["nav-cart-quantity"], ([quantity]) => {
+        UIStyles.setText(quantity, cart.length);
+      });
+    } else {
+      Result.compute([this.get()], ([cart]) => {
+        this.update(cart);
+      });
+    }
+  },
   getKey() {
     return "shopping-cart";
   },
@@ -337,9 +348,11 @@ export const ShoppingCart = {
 
         cart.push(order);
 
-        return Validation.setByLocalStorage(
-          this.getKey(),
-          JSON.stringify(cart),
+        return Result.compute(
+          [Validation.setByLocalStorage(this.getKey(), JSON.stringify(cart))],
+          () => {
+            this.update();
+          },
         );
       },
     );
@@ -348,9 +361,16 @@ export const ShoppingCart = {
     return Result.compute(
       [this.get(), Validation.getObject(order)],
       ([cart, target]) => {
-        return Validation.setByLocalStorage(
-          this.getKey(),
-          JSON.stringify(cart.filter((order) => order.id !== target.id)),
+        return Result.compute(
+          [
+            Validation.setByLocalStorage(
+              this.getKey(),
+              JSON.stringify(cart.filter((order) => order.id !== target.id)),
+            ),
+          ],
+          () => {
+            this.update();
+          },
         );
       },
     );
