@@ -156,7 +156,9 @@ export const UIElements = {
         renewed.id = id;
         renewed.className = classes;
 
-        callback(renewed);
+        if (callback) {
+          callback(renewed);
+        }
       });
 
       return Result.ok(change);
@@ -246,6 +248,19 @@ export const UIStyles = {
   setBackgroundColor(element, value) {
     return Result.compute([Validation.getString(value)], ([color]) => {
       element.style.backgroundColor = color;
+    });
+  },
+  setButtonToggleable(parent, button) {
+    UIEvents.listen([button], "click", () => {
+      Result.compute([UIElements.getChildrens(parent)], ([children]) => {
+        if (children.length > 1) {
+          for (const button of children) {
+            UIClasses.remove(button, ["selected"]);
+          }
+        }
+      });
+
+      UIClasses.toggle(button, ["selected"]);
     });
   },
 };

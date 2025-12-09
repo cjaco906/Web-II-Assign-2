@@ -61,6 +61,30 @@ export const ProductBrowsing = {
       return Validation.getObject(products[index]);
     });
   },
+  // https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-a-javascript-array
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+  getTypes(products) {
+    const types = {
+      genders: new Set(),
+      categories: new Set(),
+      colors: new Set(),
+      sizes: new Set(),
+    };
+
+    for (const product of products) {
+      types.genders.add(product.gender);
+      types.categories.add(product.category);
+
+      product.colors.map((color) => {
+        types.colors.add(color);
+      });
+      product.sizes.map((size) => {
+        types.sizes.add(size);
+      });
+    }
+
+    return types;
+  },
   getScore(base, target) {
     return Result.compute(
       [Validation.getObject(base), Validation.getObject(target)],
