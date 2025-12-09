@@ -75,7 +75,7 @@ export const ProductBrowsing = {
       types.genders.add(product.gender);
       types.categories.add(product.category);
 
-      product.colors.map((color) => {
+      product.color.map((color) => {
         types.colors.add(color);
       });
       product.sizes.map((size) => {

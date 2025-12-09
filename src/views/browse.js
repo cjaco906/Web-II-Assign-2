@@ -22,18 +22,18 @@ const Identifiers = {
 let BrowseSelector;
 
 export const BrowseView = {
-  create(id) {
+  create(products, id) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "section", (section) => {
         UIClasses.set(section, ["columns", "mt-6"]);
 
         UIElements.create(section, "div", (left) => {
           UIClasses.set(left, ["column", "is-3"]);
-          CreateSubview.departments(left);
+          CreateSubview.departments(products, left);
 
           UIElements.create(section, "div", (right) => {
             UIClasses.set(right, ["column", "is-9"]);
-            CreateSubview.top(right);
+            CreateSubview.top(products, right);
             CreateSubview.overviews(right);
           });
         });
@@ -89,7 +89,7 @@ export const BrowseView = {
 };
 
 const CreateSubview = {
-  departments(section) {
+  departments(products, section) {
     UIElements.create(section, "div", (panel) => {
       UIClasses.set(panel, ["box", "p-5", "mb-5", "browse-sidebar"]);
       UIElements.create(panel, "h2", (title) => {
@@ -97,7 +97,7 @@ const CreateSubview = {
         UIClasses.set(title, ["is-size-5", "has-text-weight-bold", "mb-4"]);
       });
       UIElements.create(panel, "div", (dropdowns) => {
-        const types = ProductBrowsing.getTypes();
+        const types = ProductBrowsing.getTypes(products);
 
         UIElements.create(dropdowns, "div", (genders) => {
           UIClasses.add(genders, ["mb-5"]);
@@ -181,9 +181,10 @@ const CreateSubview = {
           });
           UIElements.create(colors, "div", (contents) => {
             UIClasses.add(contents, ["buttons", "are-small", "are-rounded"]);
-            for (const value of types.colors) {
+            for (const { name, hex } of types.colors) {
               UIElements.create(contents, "button", (color) => {
-                UIStyles.setText(color, value);
+                UIStyles.setText(color, name);
+                UIStyles.setBackgroundColor(color, hex);
                 UIStyles.setButtonToggleable(contents, color);
                 UIEvents.listen([color], "click", () => {
                   BrowseSelector.color(value);
@@ -195,7 +196,7 @@ const CreateSubview = {
       });
     });
   },
-  top(section) {
+  top(products, section) {
     UIElements.create(section, "div", (panel) => {
       UIClasses.set(panel, ["mb-5", "p-3", "browse-top-bar"]);
       UIElements.create(panel, "div", (sort) => {
@@ -215,14 +216,16 @@ const CreateSubview = {
         });
         UIElements.create(sort, "select", (selection) => {
           UIClasses.set(selection, ["select", "is-small"]);
+
           ["Name", "Price", "Category"].forEach((value, index) => {
             UIElements.create(selection, "option", (option) => {
-              UIAttributes.set(option, ["value", index]);
+              UIAttributes.set(option, [["value", index]]);
               UIStyles.setText(option, value);
             });
-            UIEvents.listen(selection, "change", (event) => {
-              BrowseSelector.sort(event.target.value);
-            });
+          });
+
+          UIEvents.listen([selection], "change", (event) => {
+            BrowseSelector.sort(event.target.value);
           });
         });
       });
@@ -240,7 +243,7 @@ const CreateSubview = {
           UIStyles.setText(clear, "Clear All");
           UIClasses.set(clear, ["button", "is-small", "is-light", "mb-3"]);
           UIEvents.listen([clear], "click", () => {
-            BrowseView.renew();
+            BrowseView.renew(products);
             UIElements.renew(Identifiers.FILTERS);
           });
         });

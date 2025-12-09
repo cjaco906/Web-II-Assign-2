@@ -1,3 +1,4 @@
+import { ProductStorage } from "./api";
 import { Result, UIClasses, UIElements, UIEvents } from "./utils";
 import {
   HomeView,
@@ -7,87 +8,85 @@ import {
   AboutUsView,
 } from "./views";
 
-const Views = {
-  HOME: HomeView.create("home"),
-  PRODUCT: ProductView.create("product"),
-  CART: ShoppingCartView.create("shopping-cart"),
-  BROWSE: BrowseView.create("browse"),
-  ABOUT_US: AboutUsView.create("about-us"),
-};
-
-const NavigationBar = {
-  HOME: UIElements.getByIds(["nav-home"]),
-  HOME_LOGO: UIElements.getByIds(["nav-home-logo"]),
-  BROWSE: UIElements.getByIds(["nav-browse"]),
-  ABOUT_US: UIElements.getByIds(["nav-about"]),
-  CART: UIElements.getByIds(["nav-cart"]),
-};
-
-const Router = {
-  view: null,
-};
-
-export const Routes = {
-  init(products) {
-    Result.compute(
-      [...NavigationBar.HOME, ...NavigationBar.HOME_LOGO],
-      ([home, logo]) => {
-        UIEvents.listen([home, logo], "click", () => {
-          this.home(products);
-        });
-      },
-    );
-    Result.compute([...NavigationBar.BROWSE], ([browse]) => {
-      UIEvents.listen([browse], "click", () => {
-        this.browse();
+export const Routes = Result.compute([ProductStorage.fetch()], ([products]) => {
+  const Views = {
+    HOME: HomeView.create(products, "home"),
+    PRODUCT: ProductView.create(products, "product"),
+    CART: ShoppingCartView.create(products, "shopping-cart"),
+    BROWSE: BrowseView.create(products, "browse"),
+    ABOUT_US: AboutUsView.create("about-us"),
+  };
+  const NavigationBar = {
+    HOME: UIElements.getByIds(["nav-home"]),
+    HOME_LOGO: UIElements.getByIds(["nav-home-logo"]),
+    BROWSE: UIElements.getByIds(["nav-browse"]),
+    ABOUT_US: UIElements.getByIds(["nav-about"]),
+    CART: UIElements.getByIds(["nav-cart"]),
+  };
+  const methods = {
+    home() {
+      HomeView.update(products);
+      UpdateView.switch(Views.HOME);
+    },
+    aboutus() {
+      Result.compute([...Views.ABOUT_US], ([aboutus]) => {
+        aboutus.showModal();
       });
-    });
-    Result.compute([...NavigationBar.ABOUT_US], ([aboutus]) => {
-      UIEvents.listen([aboutus], "click", () => {
-        this.aboutus();
+    },
+    browse() {
+      BrowseView.renew(products);
+      UpdateView.switch(Views.BROWSE);
+    },
+    product(product) {
+      ProductView.update(product);
+      UpdateView.switch(Views.PRODUCT);
+    },
+    cart(order) {
+      ShoppingCartView.update(order);
+      UpdateView.switch(Views.CART);
+    },
+  };
+
+  Result.compute(
+    [...NavigationBar.HOME, ...NavigationBar.HOME_LOGO],
+    ([home, logo]) => {
+      UIEvents.listen([home, logo], "click", () => {
+        methods.home(products);
       });
+    },
+  );
+  Result.compute([...NavigationBar.BROWSE], ([browse]) => {
+    UIEvents.listen([browse], "click", () => {
+      methods.browse(products);
     });
-    Result.compute([...NavigationBar.CART], ([cart]) => {
-      UIEvents.listen([cart], "click", () => {
-        this.cart();
-      });
+  });
+  Result.compute([...NavigationBar.ABOUT_US], ([aboutus]) => {
+    UIEvents.listen([aboutus], "click", () => {
+      methods.aboutus();
     });
-  },
-  home(products) {
-    HomeView.update(products);
-    UpdateView.switch(Views.HOME);
-  },
-  aboutus() {
-    Result.compute([...Views.ABOUT_US], ([aboutus]) => {
-      aboutus.showModal();
+  });
+  Result.compute([...NavigationBar.CART], ([cart]) => {
+    UIEvents.listen([cart], "click", () => {
+      methods.cart();
     });
-  },
-  browse() {
-    BrowseView.update();
-    UpdateView.switch(Views.BROWSE);
-  },
-  product(product) {
-    ProductView.update(product);
-    UpdateView.switch(Views.PRODUCT);
-  },
-  cart(order) {
-    ShoppingCartView.update(order);
-    UpdateView.switch(Views.CART);
-  },
-};
+  });
+
+  return methods;
+});
 
 const UpdateView = {
+  selected: null,
   // https://stackoverflow.com/questions/1144805/scroll-to-the-top-of-the-page-using-javascript
-  switch([{ data: view }]) {
-    if (view) {
+  switch([{ data: selected }]) {
+    if (selected) {
       window.scrollTo(0, 0);
 
-      if (Router.view) {
-        UIClasses.toggle(view, ["is-hidden"]);
+      if (this.selected) {
+        UIClasses.toggle(selected, ["is-hidden"]);
       }
 
-      UIClasses.toggle(Router.view ?? view, ["is-hidden"]);
-      Router.view = view;
+      UIClasses.toggle(this.selected ?? selected, ["is-hidden"]);
+      this.selected = selected;
     }
   },
 };

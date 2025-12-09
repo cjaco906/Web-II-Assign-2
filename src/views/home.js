@@ -17,7 +17,7 @@ const Identifiers = {
 };
 
 export const HomeView = {
-  create(id) {
+  create(products, id) {
     return UIElements.getByIds([id], ([view]) => {
       CreateSubviews.hero(view);
       CreateSubviews.featured(view);

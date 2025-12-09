@@ -31,7 +31,7 @@ function formatPrice(value) {
 }
 
 export const ProductView = {
-  create(id) {
+  create(product, id) {
     return UIElements.getByIds([id], ([view]) => {
       UIElements.create(view, "div", (container) => {
         UIClasses.set(container, [
