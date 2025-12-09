@@ -1,10 +1,12 @@
 import { Result, UIClasses, UIElements, UIEvents } from "./utils";
 import { HomeView, ProductView, ShoppingCartView } from "./views";
+import { BrowseView } from "./views/browse";
 
 const Views = {
   HOME: HomeView.create("home"),
   PRODUCT: ProductView.create("product"),
   CART: ShoppingCartView.create("shopping-cart"),
+  BROWSE: BrowseView.create("browse"),
 };
 
 const NavigationBar = {
@@ -31,7 +33,7 @@ export const Routes = {
     );
     Result.compute([...NavigationBar.BROWSE], ([browse]) => {
       UIEvents.listen([browse], "click", () => {
-        console.log("test");
+        this.browse();
       });
     });
     Result.compute([...NavigationBar.ABOUT_US], ([aboutus]) => {
@@ -47,22 +49,25 @@ export const Routes = {
   },
   home(products) {
     HomeView.update(products);
-    UpdateView.toggle(Views.HOME);
+    UpdateView.switch(Views.HOME);
   },
-  aboutus() {},
-  browse() {},
+  aboutus() { },
+  browse() {
+    BrowseView.update();
+    UpdateView.switch(Views.BROWSE);
+  },
   product(product) {
     ProductView.update(product);
-    UpdateView.toggle(Views.PRODUCT);
+    UpdateView.switch(Views.PRODUCT);
   },
   cart(order) {
     ShoppingCartView.update(order);
-    UpdateView.toggle(Views.CART);
+    UpdateView.switch(Views.CART);
   },
 };
 
 const UpdateView = {
-  toggle([{ data: view }]) {
+  switch([{ data: view }]) {
     if (view) {
       if (Router.view) {
         UIClasses.toggle(view, ["is-hidden"]);
