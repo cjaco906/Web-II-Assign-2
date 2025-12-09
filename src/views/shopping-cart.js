@@ -93,13 +93,18 @@ const UpdateSubviews = {
 
               UIElements.create(colInfo, "p", (size) => {
                 UIClasses.set(size, ["cart-detail"]);
-                size.innerHTML = `<strong>Size:</strong> ${order.sizes.join(", ")}`;
+                UIElements.create(size, "strong", (label) => {
+                  UIStyles.setText(label, "Size");
+                });
+                UIStyles.setText(order.sizes.join(", "));
               });
 
               UIElements.create(colInfo, "p", (color) => {
                 UIClasses.set(color, ["cart-detail"]);
-
-                color.innerHTML = `<strong>Color:</strong> ${order.color[0].name}`;
+                UIElements.create(color, "strong", (label) => {
+                  UIStyles.setText(label, "Color");
+                });
+                UIStyles.setText(color, order.color[0].name);
               });
             });
 
