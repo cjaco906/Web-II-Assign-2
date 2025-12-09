@@ -12,6 +12,7 @@ const NavigationBar = {
   HOME_LOGO: UIElements.getByIds(["nav-home-logo"]),
   BROWSE: UIElements.getByIds(["nav-browse"]),
   ABOUT_US: UIElements.getByIds(["nav-about"]),
+  CART: UIElements.getByIds(["nav-cart"]),
 };
 
 const Router = {
@@ -38,13 +39,18 @@ export const Routes = {
         console.log("test");
       });
     });
+    Result.compute([...NavigationBar.CART], ([cart]) => {
+      UIEvents.listen([cart], "click", () => {
+        this.cart();
+      });
+    });
   },
   home(products) {
     HomeView.update(products);
     UpdateView.toggle(Views.HOME);
   },
-  aboutus() { },
-  browse() { },
+  aboutus() {},
+  browse() {},
   product(product) {
     ProductView.update(product);
     UpdateView.toggle(Views.PRODUCT);
