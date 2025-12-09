@@ -1,3 +1,4 @@
+import { ShoppingCart } from "../api";
 import { Routes } from "../routes";
 import {
   UIClasses,
@@ -5,6 +6,7 @@ import {
   UIElements,
   UIStyles,
   UIEvents,
+  Result,
 } from "../utils";
 import { ProductOverview } from "./product";
 
@@ -34,6 +36,11 @@ const CreateSubviews = {
     });
   },
   hero(view) {
+    Result.compute([ShoppingCart.get()], ([cart]) => {
+      UIElements.getByIds(["nav-cart-quantity"], ([quantity]) => {
+        UIStyles.setText(quantity, cart.length);
+      });
+    });
     UIElements.create(view, "section", (container) => {
       UIClasses.set(container, ["section", "py-0", "mt-4"]);
       UIElements.create(container, "div", (container) => {
@@ -109,7 +116,7 @@ const UpdateSubviews = {
       ProductOverview.create(
         picks,
         "Featured Picks",
-        products.slice(range, range + limit)
+        products.slice(range, range + limit),
       );
     });
   },
