@@ -6,6 +6,7 @@ import {
   UIStyles,
   UIEvents,
   Result,
+  Validation,
 } from "../utils";
 
 const Identifiers = {
@@ -16,6 +17,11 @@ const Identifiers = {
   SUMMARY_SHIPPING: "cart-summary-shipping",
   SUMMARY_TAX: "cart-summary-tax",
   SUMMARY_TOTAL: "cart-summary-total",
+};
+
+const summaries = {
+  subtotal: 0,
+  total: 0,
 };
 
 export const ShoppingCartView = {
@@ -49,11 +55,6 @@ export const ShoppingCartView = {
     if (order) {
       ShoppingCart.order(order);
     }
-
-    const summaries = {
-      subtotal: 0,
-      total: 0,
-    };
 
     UpdateSubviews.orders(summaries);
     UpdateSubviews.summary(summaries);
@@ -94,17 +95,27 @@ const UpdateSubviews = {
               UIElements.create(colInfo, "p", (size) => {
                 UIClasses.set(size, ["cart-detail"]);
                 UIElements.create(size, "strong", (label) => {
-                  UIStyles.setText(label, "Size");
+                  UIStyles.setText(label, "Size: ");
                 });
-                UIStyles.setText(order.sizes.join(", "));
+                Result.compute(
+                  [Validation.getArray(order.sizes)],
+                  ([sizes]) => {
+                    UIElements.append(size, sizes.join(", "));
+                  },
+                );
               });
 
               UIElements.create(colInfo, "p", (color) => {
                 UIClasses.set(color, ["cart-detail"]);
                 UIElements.create(color, "strong", (label) => {
-                  UIStyles.setText(label, "Color");
+                  UIStyles.setText(label, "Color: ");
                 });
-                UIStyles.setText(color, order.color[0].name);
+                Result.compute(
+                  [Validation.getArray(order.color)],
+                  ([[{ name }]]) => {
+                    UIElements.append(color, name);
+                  },
+                );
               });
             });
 
@@ -238,7 +249,7 @@ const CreateSubviews = {
         });
         UIElements.setId(type, Identifiers.SELECT_SHIPPING_TYPE);
         UIEvents.listen([type], "change", () => {
-          this.show();
+          UpdateSubviews.summary(summaries);
         });
       });
 
@@ -252,7 +263,7 @@ const CreateSubviews = {
         });
         UIElements.setId(destination, Identifiers.SELECT_SHIPPING_DEST);
         UIEvents.listen([destination], "change", () => {
-          this.show();
+          UpdateSubviews.summary(summaries);
         });
       });
     });

@@ -164,6 +164,20 @@ export const UIElements = {
       return Result.error("Invalid element renewal target", { id, target });
     }
   },
+  append(parent, target) {
+    if (!parent) {
+      return Result.error("No parent element to append", { parent, target });
+    } else if (!target) {
+      return Result.error("No target element to append to parent element", {
+        parent,
+        target,
+      });
+    } else {
+      parent.append(target);
+
+      return Result.ok(target);
+    }
+  },
   setId(element, id) {
     if (!element) {
       return Result.error("No element found", { element, id });
